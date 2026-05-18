@@ -1,0 +1,10 @@
+RewriteEngine On
+
+# Hilangkan ekstensi .php dari URL
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^([^\.]+)$ $1.php [NC,L]
+
+# Aturan khusus untuk modul
+RewriteRule ^cv$ modules/cv_site/index.php [L]
+RewriteRule ^event$ modules/event_site/index.php [L]

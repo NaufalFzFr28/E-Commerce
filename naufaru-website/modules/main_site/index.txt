@@ -1,0 +1,408 @@
+<?php
+session_start(); // Membaca sesi dari Splash Screen 
+
+include '../../config.php';
+include '../../functions.php';
+
+// --- LOGIKA PENGATURAN BAHASA PERSISTEN ---
+if (isset($_GET['lang'])) {
+    $lang = $_GET['lang'];
+    $_SESSION['lang'] = $lang; // Update session jika ganti bahasa di main site 
+} elseif (isset($_SESSION['lang'])) {
+    $lang = $_SESSION['lang']; // Ambil bahasa yang sudah terpilih sebelumnya 
+} else {
+    $lang = 'id'; // Fallback default 
+}
+
+// Ambil data pengaturan site
+$settings = $conn->query("SELECT * FROM site_settings WHERE id = 1")->fetch_assoc();
+
+// Tentukan path file JSON berdasarkan bahasa
+$json_file = "../../languages/{$lang}.json";
+
+if (file_exists($json_file)) {
+    $json_data = file_get_contents($json_file);
+    $text = json_decode($json_data, true);
+} else {
+    // Fallback ke bahasa Indonesia jika file spesifik tidak ditemukan
+    $fallback_file = "../../languages/id.json";
+    $json_data = file_exists($fallback_file) ? file_get_contents($fallback_file) : "{}";
+    $text = json_decode($json_data, true);
+}
+
+// Mengambil data teks hero dari tabel site_hero
+$hero_query = mysqli_query($conn, "SELECT * FROM site_hero WHERE id = 1");
+$hero = mysqli_fetch_assoc($hero_query);
+
+// Mengambil data slideshow dari tabel site_hero_slides
+$slides_query = mysqli_query($conn, "SELECT * FROM site_hero_slides ORDER BY id ASC LIMIT 3");
+
+?>
+
+<!DOCTYPE html>
+<html lang="<?php echo $lang; ?>">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NaufaRu - Main Site</title>
+    
+    <link rel="stylesheet" href="../../assets/vendors/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Style -->
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    
+    <style>
+
+    </style>
+</head>
+<body class="">
+
+    <script>
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+        }
+    </script>
+
+    <!-- Menu Dropdown -->
+    <header class="header-nav">
+        <div class="nav-logo">
+            <a href="../../index.php" class="logo-container">
+                <img src="../../assets/imgs/logo-white.png" alt="NaufaRu" class="top-logo logo-white">
+                <img src="../../assets/imgs/logo-dark.png" alt="NaufaRu" class="top-logo logo-dark">
+            </a>
+        </div>
+
+        <div class="dropdown-wrapper">
+            <button class="burger-btn" id="burgerToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <div class="main-menu" id="menuDrop">
+                <div class="menu-slider">
+                    <div class="menu-content">
+                        <a href="#home" class="menu-item"><i class="fas fa-home"></i> <?php echo $text['menu_home']; ?></a>
+                        <a href="#about" class="menu-item"><i class="fas fa-user"></i> <?php echo $text['menu_about']; ?></a>
+                        <a href="#services" class="menu-item"><i class="fas fa-th-list"></i> <?php echo $text['menu_service']; ?></a>
+                        <a href="#gallery-work" class="menu-item"><i class="fas fa-paint-brush"></i> <?php echo $text['menu_gallery_work']; ?></a>
+                        <a href="#gallery-video" class="menu-item"><i class="fas fa-video"></i> <?php echo $text['menu_gallery_video']; ?></a>
+                        <a href="#testimonial" class="menu-item"><i class="fas fa-comment-dots"></i> <?php echo $text['menu_testimonial']; ?></a>
+                        <a href="#documentation" class="menu-item"><i class="fas fa-camera-retro"></i> <?php echo $text['menu_documentation']; ?></a>
+                        <a href="#gallery-hunting" class="menu-item"><i class="fas fa-train"></i> <?php echo $text['menu_gallery_hunting']; ?></a>
+                        <a href="#calligraphy" class="menu-item"><i class="fas fa-pen-nib"></i> <?php echo $text['menu_calligraphy']; ?></a>
+                        
+                        <div class="divider"></div>
+                        
+                        <div class="menu-item" onclick="toggleMainMode()" 
+                            id="modeToggleBtn" 
+                            data-dark="<?php echo $text['mode_dark']; ?>" 
+                            data-light="<?php echo $text['mode_light']; ?>">
+                            <i class="fas fa-circle-half-stroke" id="modeIcon"></i> 
+                            <span id="modeText"><?php echo $text['mode_dark']; ?></span>
+                        </div>
+
+                        <div class="menu-item" id="openLang">
+                            <i class="fas fa-language"></i> <?php echo $text['lang_select']; ?> 
+                            <i class="fas fa-chevron-right ms-auto" style="font-size: 0.7rem;"></i>
+                        </div>
+                        
+                        <div class="divider"></div>
+                        
+                        <a href="../../index.php" class="menu-item btn-exit">
+                            <i class="fas fa-sign-out-alt"></i> <?php echo $text['menu_exit']; ?>
+                        </a>
+
+                        <div class="menu-footer-info">
+                            <strong>NaufaRu Visuals</strong><br>
+                            Creative Photography & Design
+                            <div class="info-socials">
+                                <a href="#"><i class="fab fa-instagram"></i></a>
+                                <a href="#"><i class="fab fa-behance"></i></a>
+                                <a href="#"><i class="fab fa-youtube"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lang-submenu">
+                        <div class="menu-item" id="backToMain" style="background: rgba(0,0,0,0.03);">
+                            <i class="fas fa-chevron-left"></i> <?php echo $text['back']; ?>
+                        </div>
+                        <div class="divider"></div>
+                        <div class="menu-item" onclick="changeMainLang('id')">
+                            <img src="https://flagcdn.com/w20/id.png" class="me-2" style="width:20px"> Indonesia
+                        </div>
+                        <div class="menu-item" onclick="changeMainLang('en')">
+                            <img src="https://flagcdn.com/w20/us.png" class="me-2" style="width:20px"> English
+                        </div>
+                        <div class="menu-item" onclick="changeMainLang('jp')">
+                            <img src="https://flagcdn.com/w20/jp.png" class="me-2" style="width:20px"> Japanese
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- <div class="hero-section">
+        <h1 class="animate__animated animate__fadeInUp">NaufaRu Main Site</h1>
+        <p class="animate__animated animate__fadeInUp animate__delay-1s">Eksplorasi karya melalui menu navigasi di atas.</p>
+    </div> -->
+
+    <!-- Home Section -->
+    <section id="home" class="home-section">
+        <div class="container">
+            <div class="row align-items-center justify-content-center">
+
+                <div class="col-lg-6 col-md-10 home-text text-lg-start text-center">
+                    
+                    <p class="intro scramble-text"><?php echo $text['home_intro'] ?? 'Halo, Nama saya'; ?></p>
+                    
+                    <h1 class="name scramble-text"><?php echo $text['home_name'] ?? 'Naufal FzFr'; ?></h1>
+                    
+                    <p class="desc scramble-text"><?php echo $text['home_desc'] ?? 'Seorang Editor, Fotografer, & Kaligrafer'; ?></p>
+
+                    <div class="btn-group-custom mt-4">
+                        <a href="#" class="btn btn-primary custom-btn shadow-sm"><?php echo $text['btn_event_history'] ?? 'Event History'; ?></a>
+                        <a href="#" class="btn btn-danger custom-btn shadow-sm"><?php echo $text['btn_watch_story'] ?? 'Watch Story'; ?></a>
+                    </div>
+
+                    <div class="social-icons mt-4 justify-content-center justify-content-lg-start d-flex">
+                        <a href="#"><i class="bi bi-facebook"></i></a>
+                        <a href="#"><i class="bi bi-instagram"></i></a>
+                        <a href="#"><i class="bi bi-youtube"></i></a>
+                        <a href="#"><i class="bi bi-camera"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-8 text-center home-image d-none d-lg-block">
+                    <div class="swiper master-wpap-slider">
+                        <div class="swiper-wrapper">
+                            <?php 
+                            if (mysqli_num_rows($slides_query) > 0):
+                                while($s = mysqli_fetch_assoc($slides_query)): 
+                            ?>
+                                <div class="swiper-slide">
+                                    <img src="../../assets/imgs/<?php echo $s['image_path']; ?>" alt="WPAP Slide">
+                                </div>
+                            <?php 
+                                endwhile; 
+                            else: 
+                                // Fallback jika database belum ada isinya (Default NaufaRu)
+                                for($i=1; $i<=3; $i++):
+                            ?>
+                                <div class="swiper-slide">
+                                    <img src="../../assets/imgs/man-<?php echo $i; ?>.png" alt="WPAP Default">
+                                </div>
+                            <?php 
+                                endfor;
+                            endif; 
+                            ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats-box shadow-lg border-0">
+                <div id="triggerStats" class="text-center py-2">
+                    <button class="btn btn-outline-danger rounded-pill px-4 fw-bold" onclick="startStatsAnimation()">
+                        <i class="fas fa-chart-bar me-2"></i> <?php echo $text['stats_btn'] ?? 'Lihat Statistik'; ?>
+                    </button>
+                </div>
+
+                <div id="statsData" class="row text-center g-3 d-none reveal">
+                    <div class="col-4">
+                        <h3 class="text-danger fw-bold stat-number" data-target="675">0</h3>
+                        <p class="mb-0 small stat-label"><?php echo $text['stats_subscribers'] ?? 'Subscribers'; ?></p>
+                    </div>
+                    <div class="col-4 border-start border-end">
+                        <h3 class="text-warning fw-bold stat-number" data-target="796">0</h3>
+                        <p class="mb-0 small stat-label"><?php echo $text['stats_followers'] ?? 'Followers'; ?></p>
+                    </div>
+                    <div class="col-4">
+                        <h3 class="text-primary fw-bold stat-number" data-target="150">0</h3>
+                        <p class="mb-0 small stat-label"><?php echo $text['stats_orders'] ?? 'Orders'; ?></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+        <div class="container-fluid" style="padding: 100px 10%;"> 
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="flip-box reveal">
+                        <div class="flip-box-inner">
+                            <div class="flip-box-front">
+                                <img src="../../assets/imgs/avatar-naufaru-1.jpg" alt="Naufal" class="img-thumbnail">
+                            </div>
+                            <div class="flip-box-back">
+                                <img src="../../assets/imgs/avatar-naufaru-2.jpg" alt="Naufal" class="img-thumbnail">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-9 pl-md-4">
+                    <div class="about-header mb-4 reveal">
+                        <h2 class="fw-bold mb-0 scramble-text" style="color: var(--text-main);"><?php echo $text['about_title']; ?></h2>
+                        <p class="text-danger fw-bold scramble-text"><?php echo $text['about_subtitle']; ?></p>
+                    </div>
+                    
+                    <div class="about-text" style="color: var(--text-main); text-align: justify;">
+                        <p class="about-p reveal"><?php echo $text['about_p1']; ?></p>
+                        <p class="about-p reveal"><?php echo $text['about_p2']; ?></p>
+
+                        <p class="about-p p-desktop-only reveal"><?php echo $text['about_p3']; ?></p>
+
+                        <div id="extraContent" class="more-content">
+                            <p class="about-p reveal"><?php echo $text['about_p4']; ?></p>
+                            <p class="about-p reveal"><?php echo $text['about_p5']; ?></p>
+                        </div>
+
+                        <button id="readMoreBtn" class="btn-read-more-minimal" 
+                                onclick="toggleReadMore()" 
+                                data-more="<?php echo $text['btn_read_more']; ?>" 
+                                data-less="<?php echo $text['btn_read_less']; ?>">
+                            <span id="btnText"><?php echo $text['btn_read_more']; ?></span> 
+                            <i id="btnIcon" class="fas fa-chevron-down ms-1"></i>
+                        </button>
+                    </div>
+
+                    <a href="https://naufaru-curriculumvitae.netlify.app/" target="_blank" class="btn btn-danger rounded-pill px-4 mt-4 shadow-sm">
+                        <?php echo $text['btn_view_cv']; ?>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Promo Section -->
+    <section class="reveal">
+        <div id="promo-section" class="promo-section shadow-sm">
+            <span class="tutup-btn">&times;</span>
+            <div class="promo-content">
+                
+                <div class="images-group">
+                    <div class="image-container">
+                        <img src="../../assets/imgs/promo-1.jpg" alt="Promo 1">
+                    </div>
+                    <div class="image-container">
+                        <img src="../../assets/imgs/promo-2.jpg" alt="Promo 2">
+                    </div>
+                </div>
+
+                <div class="text-container">
+                    <h2 class="title fw-bold scramble-text"><?php echo $text['promo_title']; ?></h2>
+                    <p class="caption">
+                        <?php echo $text['promo_caption']; ?>
+                    </p>
+                    <a href="https://www.instagram.com/reel/DHOQBxKTPCr/" 
+                    class="see-more-btn" 
+                    target="_blank" 
+                    rel="noopener noreferrer">
+                        <?php echo $text['promo_btn']; ?>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Service Section -->
+    <section id="services" class="section reveal">
+        <div class="container-fluid" style="padding: 50px 10%;"> 
+            <div class="text-center mb-5">
+                <h6 class="subtitle reveal"><?php echo $text['service_subtitle']; ?></h6>
+                <h2 class="section-title mb-4 reveal scramble-text scramble-main-title">
+                    <?php echo $text['service_title']; ?>
+                </h2>
+                <p class="reveal mx-auto" style="max-width: 600px;"><?php echo $text['service_desc']; ?></p>
+            </div>
+
+                <div class="row g-4"> <div class="col-sm-6 col-md-3 reveal">
+                    <div class="custom-card card border-0 shadow-sm">
+                        <div class="card-body">
+                            <i class="bi bi-camera icon-service"></i>
+                            <h5 class="scramble-text scramble-service"><?php echo $text['service_photo']; ?></h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3 reveal">
+                    <div class="custom-card card border-0 shadow-sm">
+                        <div class="card-body">
+                            <i class="bi bi-camera-reels icon-service"></i>
+                            <h5 class="scramble-text scramble-service"><?php echo $text['service_video']; ?></h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3 reveal">
+                    <div class="custom-card card border-0 shadow-sm">
+                        <div class="card-body">
+                            <i class="bi bi-film icon-service"></i>
+                            <h5 class="scramble-text scramble-service"><?php echo $text['service_editor']; ?></h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3 reveal">
+                    <div class="custom-card card border-0 shadow-sm">
+                        <div class="card-body">
+                            <i class="bi bi-palette icon-service"></i>
+                            <h5 class="scramble-text scramble-service"><?php echo $text['service_calligraphy']; ?></h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="section reveal">
+        <div class="container-fluid" style="padding: 60px 10%;">
+            <div class="text-center mb-5">
+                <h6 class="subtitle reveal"><?php echo $text['skills_subtitle']; ?></h6>
+                <h2 class="section-title mb-4 reveal"><?php echo $text['skills_title']; ?></h2>
+                <p class="reveal mx-auto" style="max-width: 700px;"><?php echo $text['skills_desc']; ?></p>
+            </div>
+
+            <div class="row skills-wrapper text-left">
+                <?php 
+                $skills_data = [
+                // Keahlian Penggunaan Software/Proses
+                ['label' => 'skill_photo_edit', 'pct' => '95'],
+                ['label' => 'skill_video_edit', 'pct' => '92'],
+                ['label' => 'service_editor', 'pct' => '94'],
+                
+                // Keahlian Peran/Lapangan
+                ['label' => 'service_photo', 'pct' => '93'],
+                ['label' => 'service_video', 'pct' => '90'],
+                ['label' => 'service_calligraphy', 'pct' => '90']
+                ];
+                
+                foreach ($skills_data as $s) : ?>
+                <div class="col-md-6 skill mb-4 reveal">
+                    <p class="mb-2 fw-bold skill-label">
+                        <?php echo isset($text[$s['label']]) ? $text[$s['label']] : $s['label']; ?>
+                    </p>
+                    <div class="skill-bar">
+                        <div class="skill-percentage" data-percentage="<?php echo $s['pct']; ?>%"></div>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Script -->
+    <script src="../../assets/js/script.js"></script>
+</body>
+</html>

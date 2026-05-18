@@ -1,0 +1,1887 @@
+/* * File: assets/css/style.css
+ * Deskripsi: Master Stylesheet untuk ekosistem NaufaRu
+ * Konsep: Minimalist, Clean, & Professional
+ */
+        :root {
+            --accent: #EF4C4D;
+            --nav-bg: #ffffff; /* Ubah ke solid white */
+            --text-main: #2d3436;
+            /* Shadow tipis yang lebih tegas di bawah navbar */
+            --shadow-nav: 0 1px 10px rgba(0, 0, 0, 0.1);
+            --bg-body: #ffffff;
+            --bg-glass: rgba(255, 255, 255, 0.1);
+        }
+
+        body.dark-mode {
+            --bg-body: #0a0c0e; 
+            --nav-bg: rgba(16, 18, 20, 0.95);
+            --text-main: #f0f0f0;
+            --shadow-nav: 0 4px 20px rgba(0, 0, 0, 0.6);
+            
+            /* Gambar nempel di body agar benar-benar statis saat scroll */
+            background-image: url('../../assets/imgs/bg-dark-profile.jpeg'); 
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed; /* Kunci gambar */
+        }
+
+        /* Tambahkan lapisan gelap agar gambar tidak mengganggu keterbacaan teks */
+        body.dark-mode::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(10, 12, 14, 0.85); 
+            z-index: -1; /* Di belakang konten tapi di depan background-image body */
+        }
+
+        body.dark-mode section, 
+        body.dark-mode .home-section {
+            background: transparent !important;
+        }
+
+        /* Scramble Text Effect*/
+        .scramble-text {
+            display: block; 
+            min-height: 1.2em;
+            cursor: default;
+            /* Jaga margin agar layout tetap sama seperti sebelum dipasang efek */
+            margin-bottom: 0.5rem; 
+        }
+
+        /* Pastikan align teks mengikuti container (kiri di desktop, tengah di mobile) */
+        @media (max-width: 991px) {
+            .scramble-text {
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+
+        .scramble-text .dud {
+            color: var(--accent);
+            opacity: 0.7;
+            font-family: inherit; /* Gunakan font yang sama dengan teks asli */
+        }
+
+        /* Reveal Effect */
+        /* Keadaan awal elemen sebelum terlihat */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+            will-change: transform, opacity;
+        }
+
+        /* Keadaan setelah aktif */
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Memberikan jeda (delay) otomatis jika elemen reveal berurutan */
+        /* Sebagai anak IT, kita gunakan loop CSS sederhana untuk staggered effect */
+        .reveal.active:nth-child(1) { transition-delay: 0.1s; }
+        .reveal.active:nth-child(2) { transition-delay: 0.2s; }
+        .reveal.active:nth-child(3) { transition-delay: 0.3s; }
+        .reveal.active:nth-child(4) { transition-delay: 0.4s; }
+
+        /* Scroll Halaman */
+        section[id] {
+            scroll-margin-top: 50px; 
+        }
+
+        /* Pseudo-element untuk Background Gambar (Hanya Muncul di Dark Mode) */
+        body.dark-mode .home-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+
+            /* KUNCI UTAMA: Agar gambar tetap statis saat di-scroll */
+            background-attachment: fixed;
+            
+            /* OPACITY KECIL (5%-10%) AGAR TETAP GELAP */
+            opacity: 0.2; 
+            
+            z-index: -1; /* Berada di paling belakang konten */
+            /* Hilangkan transisi filter agar tidak berat saat scrolling */
+             will-change: transform;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            transition: background 0.5s ease;
+            overflow-x: hidden;
+            margin: 0; padding: 0;
+        }
+
+        /* Memperbaiki Kontras Teks Nama di Mode Gelap */
+        body.dark-mode .name {
+            color: #ffffff;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+        }
+
+        body.dark-mode .intro, 
+        body.dark-mode .desc {
+            color: #b0b0b0; /* Abu-abu terang agar teks pembantu tidak balapan dengan nama */
+        }
+
+        /* Mengecilkan nama khusus di mode Jepang agar tidak menabrak stats box */
+        html[lang="jp"] .name {
+            font-size: 45px; /* Sesuaikan dari default 60px */
+            line-height: 1.2;
+            margin-bottom: 15px;
+        }
+
+        /* Responsif untuk Mobile Jepang */
+        @media (max-width: 768px) {
+            html[lang="jp"] .name {
+                font-size: 32px; /* Lebih kecil lagi di mobile agar aman */
+            }
+        }
+        
+        /* Perbaikan Stats Box di Mode Gelap */
+        body.dark-mode .stats-box {
+            background: rgba(28, 31, 34, 0.95); /* Sedikit transparan agar background web mengintip */
+            border: 1px solid rgba(255, 255, 255, 0.05); /* Border tipis agar terlihat premium */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        body.dark-mode .stats-box p {
+            color: #999; /* Teks keterangan (Subscribers dll) dibuat agak redup */
+        }
+
+        /* Memperbaiki Icon Medsos di Mode Gelap */
+        body.dark-mode .social-icons a {
+            border-color: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        body.dark-mode .social-icons a:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        /* Berikan glow tipis di belakang slider hanya saat mode gelap */
+        body.dark-mode .home-image {
+            position: relative;
+        }
+
+        body.dark-mode .home-image::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 80%;
+            height: 80%;
+            background: radial-gradient(circle, rgba(239, 76, 77, 0.05) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            z-index: -1;
+        }
+
+        /* HEADER & NAVBAR - Perbaikan agar tidak transparan dan full width */
+        .header-nav {
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            right: 0;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            z-index: 1000; 
+            transition: 0.5s ease;
+            padding: 30px 70px; /* Sesuaikan padding agar tetap rapi */
+            background: var(--nav-bg);
+            box-shadow: var(--shadow-nav);
+        }
+
+        .top-logo { 
+            max-width: 120px; 
+            height: auto;
+            transition: 0.3s ease;
+        }
+
+        .logo-white { display: none; }
+        .logo-dark { display: block; }
+
+        body.dark-mode .logo-white { display: block; }
+        body.dark-mode .logo-dark { display: none; }
+
+        /* Efek Logo Siang */
+        body:not(.dark-mode) .logo-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 60%;
+            height: 100%;
+            background: linear-gradient(
+                to right, 
+                rgba(255, 255, 255, 0) 0%, 
+                rgba(255, 255, 255, 0.6) 50%, 
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: skewX(-25deg);
+            transition: none;
+        }
+
+        body:not(.dark-mode) .logo-container:hover::after {
+            left: 150%;
+            transition: left 0.6s ease-in-out;
+        }
+
+        /* Efek Logo Malam */
+        /* Definisikan Animasi Kedip */
+        @keyframes fastBlink {
+            0% { opacity: 1; }
+            30% { opacity: 0.1; }
+            60% { opacity: 0.8; }
+            80% { opacity: 0.2; }
+            100% { opacity: 1; }
+        }
+
+        /* Kedipan aktif jika body memiliki class dark-mode */
+        body.dark-mode .logo-container:hover .top-logo {
+            animation: fastBlink 0.25s ease-in-out 1;
+        }
+
+        /* Pastikan kilatan siang tidak muncul di mode malam */
+        body.dark-mode .logo-container::after {
+            display: none;
+        }
+
+        /* BURGER BUTTON */
+        .burger-btn {
+            background: transparent; 
+            border: 1px solid rgba(0,0,0,0.08);
+            color: var(--text-main); 
+            width: 55px; height: 55px; border-radius: 12px;
+            cursor: pointer; 
+            transition: 0.3s;
+        }
+        body.dark-mode .burger-btn { border-color: rgba(255,255,255,0.1); }
+        .burger-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+        body.dark-mode section, 
+        body.dark-mode .home-section,
+        body.dark-mode #about {
+            background: transparent !important;
+        }
+
+        body.dark-mode .stats-box {
+            /* Glassmorphism agar background statis tetap mengintip sedikit di bawah box */
+            background: rgba(28, 31, 34, 0.85); 
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* DROPDOWN MENU */
+        .main-menu {
+            position: absolute; 
+            top: 130px; /* Sesuaikan jarak dari navbar yang sekarang menempel ke atas */
+            right: 70px;
+            background: var(--nav-bg); 
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            border-radius: 18px;
+            width: 280px; 
+            display: none; 
+            overflow: hidden; 
+            box-shadow: var(--shadow-nav);
+            max-height: 85vh; 
+        }
+
+        .menu-slider { 
+            display: flex; 
+            width: 200%; 
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .menu-content, .lang-submenu { 
+            width: 100%; 
+            height: auto; 
+            max-height: 70vh; 
+            overflow-y: auto;  
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch; 
+
+            scrollbar-width: thin; 
+            scrollbar-color: var(--accent) transparent;
+            
+            -ms-overflow-style: none;
+        }
+
+        .menu-content::-webkit-scrollbar { 
+            width: 0px; 
+        }
+
+        .main-menu.show-lang .menu-slider { transform: translateX(-50%); }
+
+        .menu-item {
+            padding: 15px 25px; 
+            color: var(--text-main); 
+            display: flex; 
+            align-items: center;
+            cursor: pointer; 
+            transition: 0.2s; 
+            text-decoration: none; 
+            border: none; 
+            background: none; 
+            width: 100%; 
+            font-weight: 500; 
+            font-size: 0.95rem;
+        }
+        .menu-item:hover { background: rgba(239, 76, 77, 0.1); color: var(--accent); }
+        .menu-item i { width: 30px; font-size: 1.1rem; margin-right: 12px; opacity: 0.8; }
+
+        .divider { border-top: 1px solid rgba(0,0,0,0.05); margin: 8px 0; }
+        body.dark-mode .divider { border-color: rgba(255,255,255,0.1); }
+
+        .btn-exit { color: var(--accent) !important; font-weight: 700 !important; }
+
+        .menu-footer-info {
+            padding: 20px 25px;
+            margin-top: 10px;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+        body.dark-mode .menu-footer-info { border-color: rgba(255,255,255,0.1); }
+
+        .info-socials {
+            display: flex; gap: 15px; margin-top: 10px; font-size: 1.1rem;
+        }
+        .info-socials a { color: var(--text-main); transition: 0.3s; }
+
+        .hero-section { padding-top: 150px; text-align: center; height: 100vh; }
+
+        /* RESPONSIVE - ANDROID/MOBILE MODE */
+        @media (max-width: 768px) {
+            /* Navbar Container */
+            .header-nav { 
+                padding: 12px 20px; 
+                height: 95px;
+            }
+
+            .main-menu { 
+                position: fixed; 
+                top: 70px;
+                left: 0;
+                right: 0;
+                width: 100vw; 
+                height: calc(100vh - 70px); 
+                max-width: none;
+                max-height: none;
+                border-radius: 0; 
+                border: none;
+                display: none; 
+                z-index: 999;
+            }
+
+            .menu-item {
+                border-bottom: 1px solid rgba(0,0,0,0.05);
+                padding: 18px 25px;
+            }
+            body.dark-mode .menu-item {
+                border-bottom: 1px solid rgba(255,255,255,0.05);
+            }
+
+            .lang-submenu {
+                display: block !important;
+                background: transparent;
+            }
+            body.dark-mode .lang-submenu {
+                background: rgba(255,255,255,0.02);
+            }
+
+            .main-menu.active .menu-item {
+                animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+                opacity: 0;
+            }
+
+            .menu-item:nth-child(1) { animation-delay: 0.1s; }
+            .menu-item:nth-child(2) { animation-delay: 0.18s; }
+            .menu-item:nth-child(3) { animation-delay: 0.26s; }
+            .menu-item:nth-child(4) { animation-delay: 0.34s; }
+            .menu-item:nth-child(5) { animation-delay: 0.42s; }
+
+            @keyframes fadeInUp {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+
+            .burger-btn.is-active i {
+                transform: rotate(90deg);
+            }
+            .burger-btn.is-active i::before {
+                content: "\f00d"; 
+            }
+
+            .menu-content {
+                width: 100%;
+                padding: 20px 0;
+            }
+
+            .burger-btn { 
+                width: 55px; 
+                height: 55px; 
+                border-radius: 10px;
+                font-size: 0.9rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .main-menu { 
+                top: 95px;
+            }
+            
+            .hero-section {
+                padding-top: 100px;
+            }
+        }
+
+        /* Home Section */
+        /* ================================== */
+        .home-section {
+            min-height: 100vh;
+            background: var(--bg-body);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+            padding: 100px 10%; 
+        }
+
+        .home-section .container {
+            width: 100%;
+        }
+
+        /* TEXT */
+        .intro {
+            font-size: 18px;
+            color: #777;
+        }
+
+        .name {
+            font-size: 60px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .desc {
+            font-size: 20px;
+            color: #555;
+        }
+
+        /* BUTTON */
+        .custom-btn {
+            border-radius: 30px;
+            padding: 10px 20px;
+            margin-right: 10px;
+            font-size: 14px;
+        }
+
+        /* SOCIAL */
+        .social-icons {
+            display: flex;
+            justify-content: center; 
+            align-items: center;
+            gap: 15px; 
+            width: 100%; 
+        }
+        .social-icons a {
+            display: flex; 
+            justify-content: center;
+            align-items: center; 
+            width: 45px; 
+            height: 45px;
+            border-radius: 50%;
+            border: 2px solid #ddd;
+            color: #555;
+            transition: 0.3s;
+            text-decoration: none;
+            flex-shrink: 0; 
+        }
+
+        .social-icons a:hover {
+            background: #0d6efd;
+            color: #fff;
+            border-color: #0d6efd;
+        }
+
+        /* IMAGE */
+        .home-image img {
+            max-width: 100%;
+            animation: fadeUp 1s ease;
+        }
+
+        .home-text {
+            animation: fadeUp 1s ease;
+        }
+
+        .home-image {
+            position: relative;
+            overflow: hidden;
+            /* Masking untuk efek fade di pinggir foto */
+            -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        }
+
+        .master-wpap-slider {
+            width: 100%;
+            height: auto;
+            cursor: grab;
+        }
+
+        .master-wpap-slider:active {
+            cursor: grabbing;
+        }
+
+        .swiper-slide img {
+            width: 100%;
+            max-width: 500px; /* Sesuaikan dengan ukuran WPAP kamu */
+            height: auto;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
+        }
+
+        
+        /* Efek Hover pada Gambar */
+        .wpap-img {
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+        }
+
+        /* Saat mouse di atas slide, gambar bergeser sedikit ke atas dan membesar */
+        .swiper-slide:hover .wpap-img {
+            transform: scale(1.05) translateY(-15px) rotate(2deg);
+            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.5));
+        }
+
+        /* Memastikan Swiper tidak memotong gambar saat bergeser ke atas */
+        .master-wpap-slider {
+            padding-top: 30px !important;
+            padding-bottom: 30px !important;
+            overflow: visible !important; /* Agar gambar yang bergeser tidak terpotong */
+        }
+
+        /* FLOATING BOX */
+        .stats-box {
+            position: absolute;
+            bottom: 30px;
+            left: 0;
+            right: 0;
+            margin: 0 auto; 
+            background: #fff;
+            padding: 20px 40px;
+            border-radius: 50px; 
+            width: 70%;
+            max-width: 800px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            animation: fadeUpStats 1.2s cubic-bezier(0.2, 1, 0.3, 1);
+            z-index: 10;
+        }
+
+        /* ANIMATION */
+        @keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        }
+
+        @keyframes fadeUpStats {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+        .home-section {
+            padding-top: 140px !important; 
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .intro {
+            margin-bottom: 15px;
+            font-size: 16px;
+            letter-spacing: 1px;
+            opacity: 0.9;
+        }
+
+        .name {
+            font-size: 48px; 
+            font-weight: 800; 
+            line-height: 1.1; 
+            letter-spacing: -1.5px; 
+            color: var(--text-main);
+            margin-bottom: 20px;
+            text-transform: uppercase;        
+        }
+
+        .desc {
+            font-size: 18px;
+            line-height: 1.4;
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+
+        .btn-group-custom {
+            display: flex;
+            flex-direction: column;
+            gap: 12px; 
+            align-items: center;
+        }
+
+        .custom-btn {
+            width: 80%; 
+            margin-right: 0 !important; 
+        }
+
+        .social-icons {
+            margin-top: 30px !important;
+            margin-bottom: 40px; 
+        }
+
+        .stats-box {
+            position: relative; 
+            bottom: 0;
+            left: 0;
+            transform: none;
+            width: 90%;
+            margin: 20px auto;
+            padding: 25px 15px;
+            border-radius: 25px;
+        }
+
+        .stats-box {
+            transition: all 0.4s ease;
+            min-height: 80px; /* Menjaga tinggi agar tidak kaget saat berganti isi */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stats-box .row {
+            flex-direction: column; 
+            gap: 20px;
+        }
+
+        .stats-box .row div[class^="col-"] {
+            width: 100%;
+            border: none !important;
+            border-bottom: 1px solid rgba(0,0,0,0.05); 
+            padding-bottom: 15px;
+        }
+
+        .stats-box .row div:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .name {
+            font-size: 45px;
+            margin-bottom: 10px;
+        }
+    }
+
+    /* About Section */
+    /* ================================== */
+
+    /* Flip Foto Profil */
+    .flip-box {
+        background-color: transparent;
+        width: 100%;
+        max-width: 280px;
+        height: 320px;
+        perspective: 1000px;
+        margin-top: 5px; /* Menurunkan sedikit agar sejajar dengan huruf kapital teks */
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    .flip-box .img-thumbnail {
+        padding: 0 !important;
+        background-color: transparent !important;
+        border: none !important;
+    }
+
+    .flip-box-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        transform-style: preserve-3d;
+    }
+
+    /* Container fluid untuk mengikuti padding home-section */
+    .container-fluid {
+        width: 100%;
+    }
+
+    /* Perbaikan untuk teks rata kanan-kiri (Justify) */
+    .about-text p {
+        text-align: justify;
+        text-justify: inter-word; /* Memberikan spasi antar kata yang lebih rapi */
+        margin-bottom: 1.5rem;
+    }
+
+    /* Hover & Scroll Logic */
+    .flip-box:hover .flip-box-inner, 
+    .flip-box.scrolled .flip-box-inner {
+        transform: rotateY(180deg);
+    }
+
+    .flip-box-front, .flip-box-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        border-radius: 20px; /* Membuat sudut lebih melengkung */
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+
+    .flip-box-back {
+        transform: rotateY(180deg);
+    }
+
+    .img-thumbnail {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border: none;
+    }
+
+    /* Responsif Mobile */
+    @media (max-width: 768px) {
+        #about .container-fluid {
+            padding: 40px 10% !important; /* Padding lebih kecil di mobile agar tidak sempit */
+        }
+        
+        .flip-box {
+            margin: 0 auto 30px auto; /* Foto pindah ke tengah atas di mobile */
+            width: 180px !important; /* Lebih kecil agar proporsional */
+            height: 230px !important;
+            margin-bottom: 20px !important;
+        }
+        
+        .about-header {
+            text-align: center;
+            font-size: 1.8rem !important;
+        }
+
+        .about-text p {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            text-align: justify !important; /* Rata tengah lebih estetik di mobile */
+        }
+
+        /* Fitur Lihat Selengkapnya */
+        .about-text-content {
+            max-height: 150px; /* Batas tinggi teks sebelum di-expand */
+            overflow: hidden;
+            position: relative;
+            transition: max-height 0.5s ease;
+        }
+
+        /* Efek fade pada teks yang terpotong */
+        .about-text-content.collapsed::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            background: linear-gradient(transparent, var(--bg-body));
+        }
+
+        .btn-read-more {
+            display: block !important; /* Hanya muncul di mobile */
+            margin: 10px auto;
+            color: var(--accent);
+            font-weight: bold;
+            background: none;
+            border: none;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .more-content {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.8s ease, opacity 0.8s ease;
+        }
+
+        /* Saat aktif (dibuka) */
+        .more-content.open {
+            max-height: 2000px; /* Angka besar agar menampung semua teks */
+            opacity: 1;
+            margin-top: 15px;
+        }
+
+        .btn-read-more-minimal {
+            display: inline-block;
+            background: none;
+            border: none;
+            color: var(--accent);
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 5px 0;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: 0.3s;
+        }
+
+        .btn-read-more-minimal:hover {
+            opacity: 1;
+            /* text-decoration: underline; */
+        }
+
+        /* Sembunyikan paragraf ke-3 di mobile saat awal */
+        .p-desktop-only {
+            display: none;
+        }
+        
+        /* Jika menu 'open' aktif, munculkan kembali paragraf ke-3 di mobile */
+        .more-content.open + .p-desktop-only, 
+        .is-expanded .p-desktop-only {
+            display: block;
+        }
+    }
+
+    /* Sembunyikan tombol read more di desktop */
+    .btn-read-more {
+        display: none;
+    }
+
+    .more-content {
+        display: none; /* Sembunyi secara default */
+        transition: all 0.5s ease;
+    }
+
+    .more-content.open {
+        display: block;
+        animation: fadeIn 0.5s ease;
+    }
+
+    .btn-read-more-minimal {
+        display: inline-block;
+        background: none;
+        border: none;
+        color: var(--accent);
+        font-size: 0.9rem;
+        font-weight: 600;
+        padding: 10px 0;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Promo Section */
+    /* ================================== */
+
+    .promo-section {
+        position: relative;
+        background: var(--accent);
+        width: 100%;
+        min-height: auto;
+        display: flex;
+        align-items: center;
+        /* Padding 10% agar sejajar secara vertikal dengan section About */
+        padding: 80px 10%; 
+        overflow: hidden;
+        transition: all 0.5s ease;
+    }
+
+    /* Dark Mode Appearance */
+    body.dark-mode .promo-section {
+        background: rgba(239, 76, 77, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+
+    .promo-section .promo-content {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        /* Merapatkan teks ke arah gambar */
+        justify-content: flex-start; 
+        gap: 60px; /* Jarak antara gambar dan teks */
+    }
+
+    /* Sisi Kiri: Group Gambar */
+    .promo-section .images-group {
+        flex: 0 0 60%; /* Lebar proporsional untuk gambar */
+        display: flex;
+        gap: 15px;
+    }
+
+    .promo-section .image-container {
+        flex: 1;
+        max-height: 60vh; /* Tinggi yang pas agar tidak memenuhi layar berlebih */
+        border-radius: 15px;
+        box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        overflow: hidden;
+    }
+
+    .promo-section .image-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    /* Sisi Ranan: Kontainer Teks */
+    .promo-section .text-container {
+        flex: 1;
+        max-width: 450px; /* Mencegah teks terlalu lebar ke kanan */
+        color: #fff;
+        text-align: left;
+    }
+
+    .promo-section .title {
+        font-size: 2.2rem;
+        margin-bottom: 15px;
+        line-height: 1.2;
+    }
+
+    .promo-section .caption {
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-bottom: 25px;
+        opacity: 0.9;
+    }
+
+    /* Tombol Tutup (Hanya Silang di Pojok) */
+    .promo-section .tutup-btn {
+        position: absolute;
+        top: 30px;
+        right: 5%; /* Mengikuti proporsi padding halaman */
+        font-size: 32px;
+        color: rgba(255, 255, 255, 0.7);
+        cursor: pointer;
+        line-height: 1;
+        z-index: 10;
+        transition: 0.3s;
+    }
+
+    .promo-section .tutup-btn:hover {
+        color: #fff;
+        transform: rotate(90deg) scale(1.1); /* Sedikit rotasi saat hover agar interaktif */
+    }
+
+    /* Tombol Read More Minimalis (Underline Only) */
+    .promo-section .see-more-btn {
+        display: inline-block;
+        background: none;
+        color: #fff;
+        padding: 0 0 5px 0;
+        border: none;
+        border-bottom: 2px solid #fff;
+        border-radius: 0;
+        font-weight: bold;
+        text-decoration: none;
+        transition: 0.3s ease;
+        box-shadow: none;
+        font-size: 1rem;
+    }
+
+    .promo-section .see-more-btn:hover {
+        color: rgba(255, 255, 255, 0.8);
+        border-bottom-color: rgba(255, 255, 255, 0.5);
+        padding-left: 8px; /* Efek geser kecil */
+    }
+
+    /* Responsif Mobile & Tablet */
+    @media (max-width: 991px) {
+        .promo-section {
+            padding: 60px 5%;
+        }
+        
+        .promo-section .promo-content {
+            flex-direction: column;
+            gap: 35px;
+            text-align: center;
+        }
+
+        .promo-section .images-group {
+            flex: 0 0 100%;
+            width: 100%;
+        }
+
+        .promo-section .text-container {
+            flex: 0 0 100%;
+            max-width: 100%;
+            text-align: center;
+        }
+
+        .promo-section .image-container {
+            max-height: 45vh;
+        }
+
+        .promo-section .tutup-btn {
+            top: 15px;
+            right: 20px;
+        }
+    }
+
+    /* =========================================
+    PROMO IMAGE HOVER EFFECTS (DUAL MODE)
+    ========================================= */
+
+    /* --- Keadaan Dasar Kontainer Gambar --- */
+    .promo-section .image-container {
+        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smooth transition */
+        will-change: transform, box-shadow;
+        position: relative; /* Untuk efek shine di siang hari */
+    }
+
+    .promo-section .image-container img {
+        transition: transform 0.6s ease, filter 0.4s ease;
+        will-change: transform, filter;
+    }
+
+    /* =========================================
+    [MODE SIANG] - EFEK HOVER
+    ========================================= */
+    /* Terangkat, Berwarna, dan Berkilat */
+
+    body:not(.dark-mode) .promo-section .image-container:hover {
+        transform: translateY(-10px) scale(1.02); /* Terangkat sedikit */
+        box-shadow: 0 25px 50px rgba(0,0,0,0.3); /* Bayangan lebih dalam */
+    }
+
+    body:not(.dark-mode) .promo-section .image-container:hover img {
+        filter: saturate(1.2); /* Sedikit lebih berwarna/hidup */
+    }
+
+    /* Membuat lapisan kilatan putih tipis */
+    body:not(.dark-mode) .promo-section .image-container::after {
+        content: '';
+        position: absolute;
+        top: 0; left: -150%;
+        width: 80%; height: 100%;
+        background: linear-gradient(
+            to right, 
+            rgba(255, 255, 255, 0) 0%, 
+            rgba(255, 255, 255, 0.4) 50%, 
+            rgba(255, 255, 255, 0) 100%
+        );
+        transform: skewX(-20deg);
+        transition: none;
+    }
+
+    body:not(.dark-mode) .promo-section .image-container:hover::after {
+        left: 150%;
+        transition: left 0.7s ease-in-out;
+    }
+
+    /* =========================================
+    [MODE MALAM] - EFEK HOVER
+    ========================================= */
+    /* Zoom In, Glow, dan Monokrom */
+
+    body.dark-mode .promo-section .image-container:hover {
+        transform: scale(1.03); /* Membesar sedikit */
+        /* Memberikan efek pendar cahaya aksen (merah) di belakangnya */
+        box-shadow: 0 0 30px rgba(239, 76, 77, 0.5); 
+    }
+
+    body.dark-mode .promo-section .image-container img {
+        transform: scale(1.1); /* Zoom di dalam bingkai */
+        filter: saturate(0.8) contrast(1.1); /* Sedikit memudar, kontras naik */
+    }
+
+    /* Service Section */
+    /* ================================== */
+
+    #service {
+        width: 100%;
+        background-color: transparent;
+        scroll-margin-top: 90px;
+        
+        /* Menaikkan section agar menempel ke Promo Section */
+        margin-top: -80px; 
+        position: relative;
+        z-index: 5;
+    }
+
+    /* Pengaturan Padding Kontainer disamakan dengan section lain */
+    #service .service-container {
+        padding: 100px 10% 40px 10% !important;
+    }
+
+    /* Header Text Styling */
+    #service .subtitle {
+        color: var(--accent);
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    #service .section-title {
+        font-weight: 800;
+        font-size: 2.2rem;
+        color: var(--text-main);
+    }
+
+    /* --- Card Styling --- */
+    .custom-card {
+        background-color: #fff;
+        border-radius: 15px;
+        padding: 45px 20px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        
+        /* REVISI: Stroke tipis untuk mode siang */
+        border: 1px solid rgba(0, 0, 0, 0.05) !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+    }
+
+    .custom-card .card-body {
+        text-align: center;
+        padding: 0;
+    }
+
+    /* Icon Styling */
+    .icon-service {
+        font-size: 3rem;
+        color: var(--accent);
+        margin-bottom: 25px;
+        display: inline-block;
+        /* Durasi transisi untuk efek miring */
+        transition: transform 0.4s ease; 
+    }
+
+    .custom-card h5 {
+        font-size: 1.15rem;
+        font-weight: 700;
+        margin: 0;
+        color: #333;
+    }
+
+    /* --- Hover Effects --- */
+    .custom-card:hover {
+        transform: translateY(-12px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08) !important;
+        background-color: #fff;
+        /* Stroke sedikit lebih jelas saat di-hover */
+        border-color: rgba(0, 0, 0, 0.1) !important;
+    }
+
+    /* REVISI: Efek Ikon Miring (Rotate) saat Hover */
+    .custom-card:hover .icon-service {
+        transform: scale(1.1) rotate(15deg);
+    }
+
+    /* --- Dark Mode Adaptation --- */
+    body.dark-mode .custom-card {
+        /* Background semi-transparan (glassmorphism) */
+        background-color: rgba(255, 255, 255, 0.03);
+        
+        /* REVISI: Stroke tipis untuk mode malam */
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+
+    body.dark-mode .custom-card h5 {
+        color: #efefef;
+    }
+
+    body.dark-mode .custom-card:hover {
+        background-color: rgba(255, 255, 255, 0.06);
+        /* Stroke lebih terang saat di-hover di mode malam */
+        border-color: rgba(255, 255, 255, 0.2) !important;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4) !important;
+    }
+
+    /* --- Responsif --- */
+    @media (max-width: 991px) {
+        #service {
+            margin-top: -40px;
+        }
+        #service .service-container {
+            padding: 80px 5% 30px 5% !important;
+        }
+    }
+
+    /* Scramble Effect*/
+    h5.scramble-service {
+        display: block !important; /* Paksa jadi block agar mengisi lebar kartu */
+        width: 100%;
+        text-align: center;
+        margin: 0 auto;
+        position: relative;
+    }
+
+    /* Pastikan karakter acak (dud) tidak merubah tinggi baris */
+    .scramble-text .dud {
+        color: var(--accent);
+        opacity: 0.7;
+        font-family: monospace; /* Monospace membantu menjaga lebar karakter tetap konsisten */
+    }
+
+    /* Skills Section */
+    /* ================================== */
+
+    .skill-label {
+        color: var(--text-main);
+        transition: color 0.3s ease;
+    }
+
+    .skill-bar {
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.05);
+        border-radius: 20px;
+        overflow: hidden;
+        height: 12px; /* Sedikit lebih tebal agar hover lebih terasa */
+        position: relative;
+    }
+
+    .skill-percentage {
+        height: 100%;
+        background-color: var(--accent);
+        border-radius: 20px;
+        width: 0 !important; /* Default 0 */
+        /* Transisi gabungan: width untuk animasi scroll, background untuk hover */
+        transition: width 2.5s cubic-bezier(0.1, 0.5, 0.2, 1), 
+                    background-color 0.5s ease, 
+                    box-shadow 0.3s ease;
+    }
+
+    /* Hover Effect yang Halus */
+    .skill:hover .skill-percentage {
+        background-color: #2980b9; /* Biru referensi anda */
+        box-shadow: 0 0 10px rgba(41, 128, 185, 0.5); /* Efek pendaran halus */
+    }
+
+    .skill:hover .skill-label {
+        color: #2980b9;
+    }
+
+    /* Mode Gelap */
+    body.dark-mode .skill-bar {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Responsif untuk Mobile (Android) */
+    @media (max-width: 767px) {
+        #skills .container-fluid {
+            padding: 60px 5% !important;
+        }
+        .skill {
+            margin-bottom: 20px;
+        }
+        .skill-bar {
+            height: 6px; /* Dibuat lebih tipis (ramping) untuk mobile */
+            margin-bottom: 15px;
+        }
+
+        .skill-label {
+            font-size: 0.9rem; /* Mengecilkan teks label sedikit agar seimbang */
+            margin-bottom: 5px !important;
+        }
+    }
+
+/* ================================== */
+/* Portfolio Section Master Styles */
+/* ================================== */
+
+/* 1. Container & Grid Adjustment */
+#photo-portfolio .container {
+    padding-left: 80px !important;
+    padding-right: 80px !important;
+    max-width: 1140px;
+    margin: 0 auto;
+}
+
+#portfolio-container-parent {
+    margin-left: -10px;
+    margin-right: -10px;
+    display: flex;
+    flex-wrap: wrap;
+    transition: all 0.4s ease-in-out;
+}
+
+.portfolio-item {
+    padding: 10px;
+    transition: all 0.4s ease;
+}
+
+/* 2. Portfolio Alert Info (Precision Aligned) */
+.portfolio-alerts-container {
+    width: 100%;
+    margin: 0 auto 30px auto;
+}
+
+.alert-naufaru {
+    /* State Dasar & Mode Siang */
+    background-color: #f1f8e9; 
+    border: 1px solid #dcedc8;
+    border-radius: 15px;
+    padding: 15px 50px 15px 25px;
+    margin-bottom: 15px;
+    display: flex !important; /* Paksa muncul */
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #33691e; 
+    box-shadow: none;
+    transition: all 0.3s ease;
+    position: relative;
+    opacity: 1 !important;
+    visibility: visible !important;
+    min-height: 50px;
+    transition: opacity 0.5s ease, transform 0.5s ease, margin 0.5s ease;
+    transform: translateY(0);
+}
+
+.alert-naufaru.fade-out {
+    opacity: 0;
+    transform: translateY(-20px); /* Sedikit bergerak ke atas saat menghilang */
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    height: 0;
+    overflow: hidden;
+    border: none;
+}
+
+.alert-link-custom {
+    color: #ef4c4d; /* Aksen merah NaufaRu */
+    font-weight: 800;
+    text-decoration: none;
+    margin-left: 10px;
+    border-bottom: 2px solid transparent;
+    transition: 0.3s;
+}
+
+.alert-link-custom:hover {
+    color: #d43f40;
+    border-bottom-color: #ef4c4d;
+    text-decoration: none;
+}
+
+.btn-close-naufaru {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #7cb342; 
+    opacity: 0.6;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-close-naufaru:hover {
+    opacity: 1;
+    color: #ef4c4d;
+    transform: translateY(-50%) rotate(90deg);
+}
+
+/* 3. Portfolio Card Styling */
+.portfolio-card {
+    position: relative;
+    border-radius: 15px;
+    overflow: hidden;
+    aspect-ratio: 1/1;
+    background: #1a1a1a;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+.portfolio-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.portfolio-card:hover .portfolio-img {
+    transform: scale(1.1);
+}
+
+/* 4. Glassmorphic Overlay (Hover Card) */
+.portfolio-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: all 0.4s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+}
+
+.portfolio-card:hover .portfolio-overlay {
+    opacity: 1;
+}
+
+.overlay-title {
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    padding: 0 15px;
+    text-align: center;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* 5. Modal Styling */
+.portfolio-modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    z-index: 10000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.portfolio-modal-content {
+    width: 100%;
+    max-width: 850px;
+    background: var(--nav-bg); 
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 40px;
+    position: relative;
+    color: var(--text-main);
+    animation: portfolioZoomIn 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+#modalPrice { color: #2ecc71; font-weight: 700; }
+
+/* 6. Controls & Dropdowns */
+.btn-naufaru {
+    background-color: var(--accent) !important;
+    color: white !important;
+    border: 1px solid var(--accent);
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.btn-naufaru:hover {
+    background-color: #d43f40 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(239, 76, 77, 0.4);
+}
+
+.glass-dropdown {
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0,0,0,0.1) !important;
+    border-radius: 12px !important;
+}
+
+/* 7. Mode Gelap (Dark Mode) Overrides */
+body.dark-mode .alert-naufaru {
+    /* Glassmorphism Hijau Transparan */
+    background: rgba(46, 125, 50, 0.1) !important; 
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #a5d6a7 !important; 
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-mode .btn-close-naufaru {
+    color: #a5d6a7;
+}
+
+body.dark-mode .glass-dropdown {
+    background: rgba(30, 30, 30, 0.95) !important;
+}
+
+/* 8. Animations & Responsive */
+@keyframes portfolioZoomIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+@media (max-width: 768px) {
+    .alert-naufaru { padding: 15px 45px 15px 20px; flex-direction: column; }
+    .alert-link-custom { margin-left: 0; margin-top: 5px; }
+    .portfolio-modal-content { padding: 25px; max-height: 90vh; overflow-y: auto; }
+}
+
+@media (max-width: 576px) {
+    .portfolio-item { flex: 0 0 100%; max-width: 100%; }
+}
+
+/* 8. Minimalist Glassmorphic Info Button */
+.btn-info-modal {
+    width: 42px; 
+    height: 42px;
+    border-radius: 50%;
+    /* Efek Glassmorphism */
+    background: rgba(255, 255, 255, 0.2) !important; 
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    
+    color: #ffffff !important;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.btn-info-modal:hover {
+    transform: scale(1.15) rotate(15deg);
+    background: rgba(255, 255, 255, 0.4) !important;
+    border: 1px solid rgba(255, 255, 255, 0.5) !important;
+    color: #ffffff !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Memastikan icon di dalamnya pas di tengah */
+.btn-info-modal i {
+    line-height: 0;
+    pointer-events: none;
+}
+
+/* Mode Malam: Sedikit lebih gelap agar menyatu */
+body.dark-mode .btn-info-modal {
+    background: rgba(0, 0, 0, 0.3) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* --- Portfolio Modal Styling --- */
+.portfolio-modal-content {
+    position: relative;
+    color: #2d3436; /* Default terang */
+    transition: background 0.3s, color 0.3s;
+}
+
+/* Tombol Close Modal (Custom Style) */
+.close-modal-naufaru {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: inherit;
+    opacity: 0.5;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.close-modal-naufaru:hover {
+    opacity: 1;
+    color: #ef4c4d; /* Warna identitas NaufaRu */
+    transform: rotate(90deg);
+}
+
+/* Deskripsi Modal */
+.modal-description {
+    color: #636e72;
+    line-height: 1.6;
+}
+
+/* Badge Kategori */
+/* --- Perbaikan Teks Kategori (Modal) --- */
+.badge-custom-naufaru {
+    display: inline-block;
+    max-width: 100%; /* Agar tidak melebihi container modal */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Muncul titik tiga jika teks terlalu panjang */
+    vertical-align: middle;
+    /* Style minimalis opsi vertical accent */
+    padding-left: 12px;
+    border-left: 3px solid #ef4c4d;
+    color: var(--text-main);
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+/* --- Animasi Dropdown Filter --- */
+.custom-dropdown .dropdown-menu {
+    display: block; /* Diperlukan agar animasi terbaca */
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+}
+
+.custom-dropdown .dropdown-menu.show {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+/* Lebar Dropdown Sama dengan Tombol */
+.glass-dropdown {
+    width: 100% !important;
+    min-width: 100% !important;
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0,0,0,0.1) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+    font-size: medium;
+}
+
+/* Mode Malam Dropdown */
+body.dark-mode .glass-dropdown {
+    background: rgba(30, 30, 30, 0.95) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Mode Malam */
+body.dark-mode .badge-custom-naufaru {
+    color: #ffffff;
+    border-left-color: #ef4c4d;
+}
+
+/* Mode Malam */
+body.dark-mode .badge-custom-naufaru {
+    background: rgba(255, 255, 255, 0.05) !important;
+    color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Mode Malam */
+body.dark-mode .badge-custom-naufaru {
+    color: #ffffff;
+    border-bottom-color: rgba(255, 255, 255, 0.5);
+}
+
+/* --- Dark Mode Support --- */
+body.dark-mode .portfolio-modal-content {
+    color: #ffffff !important;
+}
+
+body.dark-mode #modalTitle {
+    color: #ffffff !important;
+}
+
+body.dark-mode .modal-description {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+body.dark-mode .close-modal-naufaru {
+    color: #ffffff;
+}
+
+body.dark-mode .close-modal-naufaru:hover {
+    color: #ef4c4d;
+}
+
+/* --- Custom Dropdown Filter --- */
+.custom-dropdown {
+    position: relative;
+    /* Memastikan container dropdown mengikuti lebar tombol di dalamnya */
+    display: inline-block; 
+}
+
+.custom-dropdown .btn-naufaru {
+    min-width: 300px; /* Ukuran minimal agar seragam */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.glass-dropdown {
+    /* SAMAKAN LEBAR: Mengikuti lebar parent tombol */
+    width: 100% !important; 
+    min-width: 100% !important;
+    
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0,0,0,0.1) !important;
+    border-radius: 12px !important;
+    padding: 8px !important;
+    margin-top: 5px !important;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+}
+
+/* Style Item di Dalam Dropdown */
+.glass-dropdown .dropdown-item {
+    color: #2d3436 !important; /* Warna teks gelap untuk mode siang */
+    font-weight: 500;
+    padding: 10px 15px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.glass-dropdown .dropdown-item:hover {
+    background-color: var(--accent) !important;
+    color: #ffffff !important;
+}
+
+/* --- Mode Malam (Dark Mode) --- */
+body.dark-mode .glass-dropdown {
+    background: rgba(30, 30, 30, 0.9) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+}
+
+body.dark-mode .glass-dropdown .dropdown-item {
+    color: #ffffff !important; /* Teks putih jelas di mode malam */
+}
+
+body.dark-mode .glass-dropdown .dropdown-item:hover {
+    background-color: var(--accent) !important;
+}
+
+/* --- Tampilan Grid Portofolio --- */
+#portfolio-container-parent {
+    margin-top: 20px;
+}
+
+.portfolio-item {
+    /* Memastikan padding antar grid simetris */
+    padding: 12px !important;
+}
+
+/* Sembunyikan item secara default untuk sistem Load More */
+.portfolio-item.d-none-load-more {
+    display: none !important;
+}
+
+/* Animasi khusus saat item muncul */
+.animate-load-more {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+#load-more-container {
+    transition: all 0.3s ease;
+}
+
+/* Styling Dasar Tombol (Mode Desktop) */
+#btn-load-more {
+    min-width: 280px; /* Menjaga agar tombol tidak terlalu kecil secara horizontal */
+    padding: 15px 40px;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* Jarak antara icon dan teks */
+}
+
+#btn-load-more:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 10px 20px rgba(239, 76, 77, 0.3);
+}
+
+/* Penyesuaian untuk Mode Android/Mobile (max-width: 768px) */
+@media (max-width: 768px) {
+    #btn-load-more {
+        width: 85%; /* Tombol melebar mengikuti layar ponsel agar mudah ditekan jari */
+        padding: 5px 10px; /* Padding lebih tebal secara vertikal untuk kenyamanan touch */
+        font-size: 0.95rem; /* Sedikit lebih kecil namun tetap jelas */
+        min-width: unset; /* Lepaskan min-width desktop */
+        border-radius: 15px !important; /* Membuat sudut lebih modern di mobile */
+    }
+
+    #load-more-container {
+        margin-top: 30px !important;
+        margin-bottom: 50px;
+    }
+}
+
+/* Style Glassmorphic untuk Label Kategori di Modal */
+#modalCat {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 50px; /* Membuat bentuk kapsul */
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-bottom: 20px;
+    
+    /* Efek Glassmorphism Dasar */
+    background: rgba(239, 76, 77, 0.1); /* Warna aksen merah tipis */
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(239, 76, 77, 0.2);
+    color: var(--accent); /* Menggunakan variabel warna merah NaufaRu */
+    
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+/* Penyesuaian saat Mode Gelap Aktif */
+body.dark-mode #modalCat {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* Tambahkan icon kecil sebelum teks kategori (opsional lewat CSS) */
+#modalCat::before {
+    content: '\f02b'; /* FontAwesome tag icon */
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    margin-right: 8px;
+    font-size: 0.75rem;
+    opacity: 0.8;
+} 
