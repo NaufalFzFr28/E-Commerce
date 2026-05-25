@@ -48,14 +48,14 @@ $total_pending = $pending_data['total'] ?? 0;
             <a href="logout.php" class="nav-link logout-link"><i class="fas fa-sign-out-alt"></i> <span class="scramble-text" data-value="Logout">Logout</span></a>
         </nav>
     </aside>
-
+// test fal
+    
     <main class="main-content">
         <div class="glass-card welcome-card">
             <h1>Selamat Datang, <b>Admin</b></h1>
             <p>Kelola ekosistem digital NaufaRu dari panel kendali terpusat.</p>
         </div>
     </main>
-
     <script src="admin_script.js"></script>
 </body>
 </html>
