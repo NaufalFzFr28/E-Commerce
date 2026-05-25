@@ -1,32 +1,12 @@
 <?php 
 /**
  * File: admin/admin_member.php
- * Pembaruan: Rata Tengah Tanggal & Style Tombol Hapus Premium
+ * Pembaruan: Full Sinkronisasi AJAX Premium Dark Mode, Deteksi Fitur Survei Onboarding & Jendela Info Komparatif
  */
 
 // 1. Proteksi Sesi dan Koneksi
 include 'cek_login.php'; 
 include '../config.php'; 
-
-// --- LOGIKA HAPUS MEMBER ---
-if (isset($_GET['delete_member'])) {
-    $id_del = intval($_GET['delete_member']); 
-    
-    $check_foto = mysqli_query($conn, "SELECT foto_profil FROM users_member WHERE id = $id_del");
-    $data_foto = mysqli_fetch_assoc($check_foto);
-    
-    if ($data_foto) {
-        $file_lama = $data_foto['foto_profil'];
-        if (!empty($file_lama) && $file_lama != 'default-member.png') {
-            $full_path = "../assets/imgs/profiles/" . $file_lama;
-            if (file_exists($full_path)) { @unlink($full_path); }
-        }
-    }
-    
-    mysqli_query($conn, "DELETE FROM users_member WHERE id = $id_del");
-    header("Location: admin_member.php?status=success_delete");
-    exit(); 
-}
 
 // --- LOGIKA UPDATE DATA MEMBER ---
 if (isset($_POST['update_member'])) {
@@ -61,9 +41,14 @@ $total_pending = $pending_data['total'] ?? 0;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NaufaRu Admin | Daftar Member</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    
+    <!-- LOAD CORE SCRIPT & JQUERY DI ATAS UNTUK MENCEGAH RETAKNYA INTERAKSI EVENT LISTENER -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <link rel="stylesheet" href="admin_style.css">
+    
     <style>
         .member-avatar-wrapper {
             width: 50px; height: 50px;
@@ -79,7 +64,6 @@ $total_pending = $pending_data['total'] ?? 0;
         .table-glass th { background: rgba(239, 76, 77, 0.1); padding: 15px; text-align: left; font-size: 0.7rem; color: var(--accent); text-transform: uppercase; }
         .table-glass td { padding: 15px; border-bottom: 1px solid var(--glass-border); font-size: 0.85rem; color: white; vertical-align: middle; }
         
-        /* Pengaturan Rata Tengah Kolom Tertentu */
         .text-center-cell { text-align: center !important; }
 
         .wa-link { color: #4cd137; text-decoration: none; font-weight: 700; transition: 0.3s; }
@@ -97,8 +81,8 @@ $total_pending = $pending_data['total'] ?? 0;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 40px;
-            height: 40px;
+            width: 38px;
+            height: 38px;
         }
         .btn-delete-member:hover {
             background: #ef4c4d;
@@ -119,15 +103,38 @@ $total_pending = $pending_data['total'] ?? 0;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 40px;
-            height: 40px;
-            margin-right: 5px;
+            width: 38px;
+            height: 38px;
+            margin-right: 4px;
         }
         .btn-edit-member:hover {
             background: #ffc107;
             color: #111;
             transform: translateY(-3px);
             box-shadow: 0 5px 15px rgba(255, 193, 7, 0.4);
+        }
+
+        /* STYLE BARU: Tombol Info Kuesioner Survey Pemasaran (Cyan Premium) */
+        .btn-survey-info {
+            background: rgba(0, 210, 211, 0.1);
+            color: #00d2d3;
+            border: 1px solid rgba(0, 210, 211, 0.2);
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            margin-right: 4px;
+        }
+        .btn-survey-info:hover {
+            background: #00d2d3;
+            color: #111;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 210, 211, 0.4);
         }
 
         /* --- Animasi Popup NaufaRu Premium --- */
@@ -155,7 +162,7 @@ $total_pending = $pending_data['total'] ?? 0;
             align-items: center;
             justify-content: space-between;
             font-size: 1rem;
-            color: #ffc107; /* Diubah menjadi Emas untuk aksi Edit/Modifikasi data */
+            color: #ffc107; 
             font-weight: 900;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             padding-bottom: 10px;
@@ -175,7 +182,7 @@ $total_pending = $pending_data['total'] ?? 0;
         }
 
         .info-box-modal-small {
-            background: rgba(255, 193, 7, 0.05); /* Menggunakan aksen emas */
+            background: rgba(255, 193, 7, 0.05); 
             border-left: 3px solid #ffc107;
             padding: 8px 12px;
             border-radius: 10px;
@@ -215,6 +222,89 @@ $total_pending = $pending_data['total'] ?? 0;
         }
         .btn-action:hover {
             transform: translateY(-2px);
+        }
+
+        /* HARD-FIX INLINE SELECTION OVERRIDE FOR SWEETALERT2 DOCKING CONTAINER */
+        .swal-custom-premium-popup {
+            width: 450px !important;
+            background: #1a1a1a !important;
+            border: 1px solid rgba(255,255,255,0.08) !important;
+            border-radius: 25px !important;
+            padding: 30px !important;
+            box-shadow: 0 20px 45px rgba(0,0,0,0.6) !important;
+        }
+        .swal-custom-title-text {
+            color: #ffffff !important;
+            font-weight: 800 !important;
+            font-size: 1.35rem !important;
+            margin-top: 15px !important;
+        }
+        .swal-custom-html-content {
+            color: rgba(255,255,255,0.75) !important;
+            font-size: 0.92rem !important;
+            line-height: 1.5 !important;
+            margin-top: 8px !important;
+        }
+
+        /* ==============================================================
+        NAUFARU SURVEY MODAL: TEXTBOX TERPISAH & RATA TENGAH
+        ============================================================== */
+
+        /* Kontainer boks teks terpisah untuk masing-masing info */
+        .swal-info-box-split {
+            background: rgba(255, 255, 255, 0.03) !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            border-radius: 14px !important;
+            padding: 14px 20px !important;
+            margin-bottom: 12px !important;
+            text-align: center !important; /* Memaksa isi teks rata tengah */
+            width: 100% !important;
+            box-sizing: border-box !important;
+        }
+
+        .swal-info-box-label {
+            font-size: 0.7rem !important;
+            opacity: 0.4 !important;
+            letter-spacing: 0.8px !important;
+            text-transform: uppercase !important;
+            font-weight: 800 !important;
+            margin-bottom: 5px !important;
+        }
+
+        .swal-info-box-value-name {
+            color: #ffffff !important;
+            font-weight: 700 !important;
+            font-size: 1rem !important;
+            margin: 0 !important;
+        }
+
+        .swal-info-box-value-source {
+            color: #ef4c4d !important; /* Gunakan warna merah NaufaRu sebagai aksen */
+            font-weight: 800 !important;
+            font-size: 1.05rem !important;
+            margin: 0 !important;
+        }
+
+        /* FIX UTAMA: Tombol tutup kustom warna merah dengan efek hover gelap */
+        .swal-btn-close-red {
+            background-color: #ef4c4d !important; /* Merah NaufaRu */
+            color: #ffffff !important;
+            font-weight: 700 !important;
+            letter-spacing: 0.5px !important;
+            border-radius: 12px !important;
+            padding: 12px 30px !important;
+            font-size: 0.85rem !important;
+            border: none !important;
+            transition: all 0.25s ease-in-out !important;
+            cursor: pointer !important;
+            box-shadow: 0 4px 15px rgba(239, 76, 77, 0.2) !important;
+        }
+
+        /* Efek saat kursor berada di atas tombol tutup */
+        .swal-btn-close-red:hover {
+            background-color: #bd3a3b !important; /* Merah maroon lebih gelap */
+            transform: translateY(-1px) !important;
+            box-shadow: 0 6px 20px rgba(239, 76, 77, 0.35) !important;
         }
     </style>
 </head>
@@ -264,12 +354,17 @@ $total_pending = $pending_data['total'] ?? 0;
                         <th>WhatsApp</th>
                         <th>Alamat</th>
                         <th class="text-center-cell">Tanggal Daftar</th>
-                        <th class="text-center-cell" width="100">Opsi</th>
+                        <th class="text-center-cell" width="140">Opsi</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
-                    $exec_get = mysqli_query($conn, "SELECT * FROM users_member ORDER BY created_at DESC");
+                    // PENYESUAIAN SQL JOIN: Menghubungkan users_member dengan hasil data kuesioner onboarding
+                    $sql_query = "SELECT m.*, s.source_answer, s.custom_answer 
+                                  FROM users_member m 
+                                  LEFT JOIN member_surveys s ON m.id = s.member_id 
+                                  ORDER BY m.created_at DESC";
+                    $exec_get = mysqli_query($conn, $sql_query);
                     
                     while($m = mysqli_fetch_assoc($exec_get)):
                         $img_name = !empty($m['foto_profil']) ? $m['foto_profil'] : 'default-member.png';
@@ -295,6 +390,11 @@ $total_pending = $pending_data['total'] ?? 0;
                         <td><?= htmlspecialchars($m['alamat']) ?></td>
                         <td class="text-center-cell"><?= date('d M Y', strtotime($m['created_at'])) ?></td>
                         <td class="text-center-cell">
+                            <!-- TOMBOL BARU: Informasi Data Kuesioner Saluran Komunikasi (Cyan Premium) -->
+                            <button class="btn-survey-info" title="Lihat Sumber Informasi" 
+                                    onclick='bukaInfoSurvey(<?= json_encode($m['source_answer']); ?>, <?= json_encode($m['custom_answer']); ?>, <?= json_encode($m['nama_lengkap']); ?>)'>
+                                <i class="fas fa-question-circle"></i>
+                            </button>
                             <button class="btn-edit-member" title="Edit Member" onclick='bukaModalEdit(<?= json_encode($m); ?>)'>
                                 <i class="fas fa-edit"></i>
                             </button>
@@ -309,6 +409,7 @@ $total_pending = $pending_data['total'] ?? 0;
         </div>
     </main>
 
+    <!-- CONTAINER MODAL BOX: EDIT DATA INDIVIDUAL -->
     <div id="modalEditMember" class="modal-overlay-glass" onclick="closeEditMemberModal(event)">
         <div class="modal-content-card" onclick="event.stopPropagation()">
             <div class="modal-header-naufaru">
@@ -354,8 +455,8 @@ $total_pending = $pending_data['total'] ?? 0;
     </div>
     
     <script src="admin_script.js"></script>
-    <script>
 
+    <script>
         // Fungsi Membuka Modal Edit Member & Menyuntikkan Data Form
         function bukaModalEdit(data) {
             document.getElementById('edit_id').value = data.id;
@@ -370,54 +471,176 @@ $total_pending = $pending_data['total'] ?? 0;
         // Fungsi Menutup Modal Edit Member dengan Animasi Zoom-Out Progresif
         function closeEditMemberModal(e) {
             const modal = document.getElementById('modalEditMember');
-            
-            // Validasi apakah penutupan dipicu tombol silang/batal (null) atau klik luar area overlay
             if (e === null || e.target === modal) {
                 const content = modal.querySelector('.modal-content-card');
-                
-                // Menyuntikkan animasi keluar dari CSS
                 content.style.animation = "popupZoomOut 0.3s ease forwards";
-                
-                // Menunggu durasi animasi selesai (300ms) sebelum menyembunyikan kontainer
                 setTimeout(() => {
                     modal.style.display = 'none';
-                    content.style.animation = ""; // Reset animasi agar dapat digunakan kembali
+                    content.style.animation = ""; 
                 }, 300);
             }
         }
 
-        // Integrasi Alert Status Operasi CRUD Database
-        document.addEventListener('DOMContentLoaded', function() {
-            const params = new URLSearchParams(window.location.search);
-            if (params.get('status') === 'success_update') {
-                Swal.fire({ icon: 'success', title: 'Berhasil', text: 'Profil member berhasil diperbarui.', timer: 2000, showConfirmButton: false, background: '#1a1a1a', color: '#fff' });
-                window.history.replaceState({}, document.title, window.location.pathname);
-            } else if (params.get('status') === 'failed_update') {
-                Swal.fire({ icon: 'error', title: 'Gagal', text: 'Terjadi kesalahan internal sistem.', timer: 2000, showConfirmButton: false, background: '#1a1a1a', color: '#fff' });
-                window.history.replaceState({}, document.title, window.location.pathname);
+        // BASE CONFIG OBJECT: Penentu ukuran solid anti-menciut di framework manapun
+        const baseSwalPremium = {
+            width: '450px',
+            background: '#1a1a1a',
+            color: '#ffffff',
+            timerProgressBar: true,
+            confirmButtonColor: '#ef4c4d',
+            cancelButtonColor: 'rgba(255, 255, 255, 0.08)',
+            customClass: {
+                popup: 'swal-custom-premium-popup',
+                title: 'swal-custom-title-text',
+                htmlContainer: 'swal-custom-html-content'
             }
-        });
+        };
 
-        function hapusMember(id) {
+        // NEW INTERFACE LOGIC: Render Jendela Popup Info Sumber Kuesioner Member Terpisah & Rata Tengah
+        function bukaInfoSurvey(source, custom, namaMember) {
+            let infoHtml = "";
+            
+            if (source === null || source === "") {
+                // PERBAIKAN: Membungkus pemberitahuan belum mengisi ke dalam boks teks terpisah rata tengah
+                infoHtml = `
+                    <div style="width: 100%;">
+                        <!-- Box 1: Informasi Nama Lengkap Member -->
+                        <div class="swal-info-box-split">
+                            <div class="swal-info-box-label">Nama Lengkap Member</div>
+                            <div class="swal-info-box-value-name">${namaMember}</div>
+                        </div>
+                        
+                        <!-- Box 2: Status Kuesioner (Belum Mengisi dengan Ikon dan Textbox Terpisah) -->
+                        <div class="swal-info-box-split" style="margin-bottom: 5px !important; background: rgba(255, 193, 7, 0.02) !important; border-color: rgba(255, 193, 7, 0.15) !important;">
+                            <div class="swal-info-box-label" style="color: #ffc107 !important;">Status Kuesioner Onboarding</div>
+                            <div style="color: #ffc107; font-weight: 700; font-size: 0.9rem; margin-top: 5px; line-height: 1.5;">
+                                <i class="fas fa-hourglass-half me-2 animate__animated animate__pulse animate__infinite" style="font-size: 1rem;"></i> 
+                                Member terdaftar belum mengisi data kuesioner onboarding.
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                let detailJawaban = source;
+                if (source === 'Lainnya' && custom !== '') {
+                    detailJawaban = `Lainnya: "${custom}"`;
+                }
+                
+                infoHtml = `
+                    <div style="width: 100%;">
+                        <!-- Box 1: Informasi Nama Lengkap Member -->
+                        <div class="swal-info-box-split">
+                            <div class="swal-info-box-label">Nama Lengkap Member</div>
+                            <div class="swal-info-box-value-name">${namaMember}</div>
+                        </div>
+                        
+                        <!-- Box 2: Informasi Saluran Pemasaran -->
+                        <div class="swal-info-box-split" style="margin-bottom: 5px !important;">
+                            <div class="swal-info-box-label">Darimana Mengetahui NaufaRu</div>
+                            <div class="swal-info-box-value-source">
+                                <i class="fas fa-bullhorn me-2"></i>${detailJawaban}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
             Swal.fire({
-                title: 'Hapus Member?',
-                text: "Data akun ini akan dihapus secara permanen.",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#ef4c4d',
-                cancelButtonColor: 'rgba(255,255,255,0.1)',
-                confirmButtonText: 'Ya, Hapus',
-                reverseButtons: true,
-                background: '#1a1a1a', color: '#fff'
-            }).then((result) => {
-                if (result.isConfirmed) { window.location.href = 'admin_member.php?delete_member=' + id; }
+                ...baseSwalPremium,
+                title: 'Info Asal Informasi Member',
+                html: infoHtml,
+                confirmButtonText: 'TUTUP JENDELA',
+                customClass: {
+                    popup: 'swal-custom-premium-popup',
+                    title: 'swal-custom-title-text',
+                    htmlContainer: 'swal-custom-html-content',
+                    confirmButton: 'swal-btn-close-red'
+                },
+                buttonsStyling: false
             });
         }
 
+        // ==========================================
+        // CORE CONTROLLER: KONFIRMASI HAPUS (AJAX)
+        // ==========================================
+        function hapusMember(id) {
+            Swal.fire({
+                ...baseSwalPremium,
+                title: 'Hapus Member?',
+                text: "Data akun keanggotaan ini akan dihapus secara permanen dari database.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'YA, HAPUS PERMANEN',
+                cancelButtonText: 'BATAL',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: 'proses_hapus_member.php',
+                        type: 'POST',
+                        data: { id: id },
+                        success: function(response) {
+                            if (response.trim() === "success") {
+                                Swal.fire({
+                                    ...baseSwalPremium,
+                                    icon: 'success',
+                                    title: 'Berhasil Dihapus!',
+                                    text: 'Data member beserta berkas fotonya telah dibersihkan.',
+                                    timer: 2000,
+                                    showConfirmButton: false
+                                }).then(() => {
+                                    location.reload(); 
+                                });
+                            } else {
+                                Swal.fire({
+                                    ...baseSwalPremium,
+                                    icon: 'error',
+                                    title: 'Gagal Menghapus',
+                                    text: 'Terjadi kegagalan komunikasi kueri pada server internal.',
+                                    timer: 2000,
+                                    showConfirmButton: false
+                                });
+                            }
+                        },
+                        error: function() {
+                            Swal.fire({
+                                ...baseSwalPremium,
+                                icon: 'error',
+                                title: 'Network Error',
+                                text: 'Gagal menghubungkan ke berkas eksekutor PHP.',
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+        // SINKRONISASI EVALUASI: Detektor Tunggal Notifikasi Operasi UPDATE
         document.addEventListener('DOMContentLoaded', function() {
             const params = new URLSearchParams(window.location.search);
-            if (params.get('status') === 'success_delete') {
-                Swal.fire({ icon: 'success', title: 'Berhasil', text: 'Data member telah dihapus.', timer: 2000, showConfirmButton: false });
+            const status = params.get('status');
+
+            if (status === 'success_update') {
+                Swal.fire({
+                    ...baseSwalPremium,
+                    icon: 'success',
+                    title: 'Berhasil',
+                    text: 'Profil member berhasil diperbarui.',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+                window.history.replaceState({}, document.title, window.location.pathname);
+            } else if (status === 'failed_update') {
+                Swal.fire({
+                    ...baseSwalPremium,
+                    icon: 'error',
+                    title: 'Gagal',
+                    text: 'Terjadi kesalahan internal sistem data.',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
         });

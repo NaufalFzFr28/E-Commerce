@@ -546,3 +546,101 @@ window.onclick = function(event) {
         closeAddModal();
     }
 }
+
+/* =================================================== */
+/* Script Admin Team */
+/* =================================================== */
+
+/**
+ * Fungsi Centralized Notifikasi Modul Team (Premium Dark Mode)
+ * File Target: admin/admin_script.js (Murni JavaScript)
+ */
+function tampilkanAlertTeam(status) {
+    // Konfigurasi dasar SweetAlert premium bertema gelap NaufaRu
+    let config = {
+        timer: 2500,
+        showConfirmButton: false,
+        timerProgressBar: true,
+        background: '#1a1a1a',
+        color: '#fff',
+        confirmButtonColor: '#EF4C4D'
+    };
+
+    // 1. Deteksi Status Berhasil Tambah Anggota Tim
+    if (status === 'success_team') {
+        config.icon = 'success';
+        config.title = 'Anggota Ditambahkan!';
+        config.text = 'Profil baru anggota tim kolaborator sukses dipublikasikan.';
+
+    // 2. Deteksi Status Berhasil Memperbarui Warna Gradasi Hover
+    } else if (status === 'success_team_color') {
+        config.icon = 'success';
+        config.title = 'Tema Disimpan!';
+        config.text = 'Variabel gradasi hover global tim sukses diperbarui.';
+
+    // 3. Deteksi Status Berhasil Mengubah Visibilitas (Aktif/Sembunyi)
+    } else if (status === 'success_team_toggle') {
+        config.icon = 'success';
+        config.title = 'Visibilitas Berubah!';
+        config.text = 'Status grid anggota tim berhasil disesuaikan di layar utama.';
+
+    // 4. Deteksi Status Berhasil Menghapus Anggota Permanen
+    } else if (status === 'success_team_delete') {
+        config.icon = 'success';
+        config.title = 'Berhasil Dihapus!';
+        config.text = 'Data anggota beserta file fotonya telah dibersihkan secara permanen.';
+
+    // 5. UPDATE FITUR: Deteksi Status Berhasil Mengubah Rincian & Urutan Grid Anggota Tim (Edit Save)
+    } else if (status === 'success_team_update') {
+        config.icon = 'success';
+        config.title = 'Perubahan Disimpan!';
+        config.text = 'Rincian data keahlian dan profil urutan anggota tim berhasil diperbarui.';
+
+    // 6. Deteksi Gagal dengan Pesan Error Dinamis dari HTML Bridge
+    } else if (status === 'failed_team_msg') {
+        // Ambil data error PHP yang sudah dititipkan di HTML Bridge
+        const sessionBridge = document.getElementById('php-session-bridge');
+        let errorMessage = 'Periksa kembali berkas atau data inputan Anda.';
+        
+        if (sessionBridge) {
+            const phpError = sessionBridge.getAttribute('data-team-error');
+            if (phpError && phpError.trim() !== '') {
+                errorMessage = phpError;
+            }
+        }
+
+        config.icon = 'error';
+        config.title = 'Operasi Gagal!';
+        config.html = `<span style="font-size:0.85rem; opacity:0.8;">${errorMessage}</span>`;
+        config.showConfirmButton = true;
+        config.timer = null; // Admin harus klik OK untuk menutup
+
+    // 7. Deteksi Gagal Umum (Sistem/Database Error)
+    } else if (status === 'failed_team') {
+        config.icon = 'error';
+        config.title = 'Sistem Error!';
+        config.text = 'Terjadi kendala kueri database atau file pemroses hilang.';
+    }
+
+    // Jalankan SweetAlert jika status parameter valid
+    if (status) {
+        Swal.fire(config);
+    }
+}
+
+/**
+ * Pemicu Otomatis saat Halaman Selesai Dimuat (DOMContentLoaded)
+ * Berfungsi mendeteksi parameter '?status=' pada URL browser
+ */
+document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('status')) {
+        const statusValue = urlParams.get('status');
+        
+        // Panggil fungsi alert utama
+        tampilkanAlertTeam(statusValue);
+        
+        // Bersihkan parameter URL tanpa refresh halaman agar alert tidak muncul kembali saat di-refresh
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+});

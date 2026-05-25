@@ -1,7 +1,7 @@
 <?php
 include '../config.php'; // Mengambil koneksi database 
 
-// Ambil aksi dari POST atau GET [cite: 108, 109]
+// Ambil aksi dari POST atau GET 
 $action = isset($_POST['action']) ? $_POST['action'] : (isset($_GET['delete_id']) ? 'delete' : '');
 
 /**

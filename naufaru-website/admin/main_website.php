@@ -48,7 +48,6 @@ $q_pending = mysqli_query($conn, "SELECT COUNT(*) as total FROM orders WHERE sta
 $pending_data = mysqli_fetch_assoc($q_pending);
 $total_pending = $pending_data['total'] ?? 0;
 
-
 ?>
 
 <!DOCTYPE html>
@@ -668,154 +667,31 @@ $total_pending = $pending_data['total'] ?? 0;
             </form>
         </div>
         
-        <!-- Konfigurasi Info -->
-        <div class="glass-card welcome-card">
-            <h1>Konfigurasi Pesan Info Portfolio</h1>
-            <p style="font-size: 0.85rem; opacity: 0.8;">Atur pesan promosi atau pemberitahuan penting yang akan tampil di atas galeri.</p>
-        </div>
-
-        <div class="glass-card mb-5">
-            <h4 style="font-size: 1rem; border-bottom: 1px solid var(--glass-border); padding-bottom: 15px; margin-bottom: 10px; margin-top: 0px;">
-                <i class="fas fa-plus-circle me-2"></i> Tambah Info Baru
-            </h4>
-            <form action="proses_update_portfolio_info.php" method="POST">
-                <input type="hidden" name="action" value="add_info">
-                
-                <div class="input-stack-box">
-                    <div class="row g-4">
-                        <div class="col-md-4">
-                            <label class="label-text-desc mb-3">PESAN UTAMA (ID)</label>
-                            <input type="text" name="text_id" class="input-glass" placeholder="Contoh: Punya rencana desain?" required>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="label-text-desc mb-3">MAIN MESSAGE (EN)</label>
-                            <input type="text" name="text_en" class="input-glass" placeholder="Example: Have a design plan?">
-                        </div>
-                        <div class="col-md-4">
-                            <label class="label-text-desc mb-3">メインメッセージ (JP)</label>
-                            <input type="text" name="text_jp" class="input-glass" placeholder="例：デザイン案はありますか？">
-                        </div>
-                    </div>
-
-                    <div class="row g-4 py-4"> <div class="col-md-4">
-                            <label class="label-text-desc mb-3">TEKS LINK (ID)</label>
-                            <input type="text" name="link_text_id" class="input-glass" placeholder="Contoh: Chat sekarang!">
-                        </div>
-                        <div class="col-md-4">
-                            <label class="label-text-desc mb-3">LINK TEXT (EN)</label>
-                            <input type="text" name="link_text_en" class="input-glass" placeholder="Example: Chat now!">
-                        </div>
-                        <div class="col-md-4">
-                            <label class="label-text-desc mb-3">リンクテキスト (JP)</label>
-                            <input type="text" name="link_text_jp" class="input-glass" placeholder="例：今すぐチャット！">
-                        </div>
-                    </div>
-
-                    <div class="row g-4">
-                        <div class="col-12">
-                            <label class="label-text-desc mb-3">URL TUJUAN (WHATSAPP / EXTERNAL LINK)</label>
-                            <input type="url" name="link_url" class="input-glass" placeholder="https://wa.me/62895...">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mt-5">
-                    <button type="submit" class="btn-action" style="background: var(--accent); width: 100%; padding: 18px; margin-top: 20px;">
-                        <i class="fas fa-upload me-2"></i> UNGGAH INFO BARU
-                    </button>
-                </div>
-            </form>
-        </div>
-
-        <div class="glass-card">
-            <h4 style="font-size: 1rem; border-bottom: 1px solid var(--glass-border); padding-bottom: 15px; margin-bottom: 30px; margin-top: 0px;">
-                <i class="fas fa-tasks me-2"></i> Kelola Info Aktif
-            </h4>
-            
-            <form action="proses_update_portfolio_info.php" method="POST">
-                <input type="hidden" name="action" value="update_info">
-                
-                <div id="info-list-container">
-                    <?php 
-                    $q_list_info = mysqli_query($conn, "SELECT * FROM site_portfolio_alerts ORDER BY id DESC");
-                    while($ai = mysqli_fetch_assoc($q_list_info)):
-                    ?>
-                    <div class="info-manage-item">
-                        <input type="hidden" name="info_ids[]" value="<?php echo $ai['id']; ?>">
-                        
-                        <!-- Grup Kontrol Kanan Atas Glassmorphic -->
-                        <div class="info-item-controls">
-                            <!-- Checkbox Kustom (Status Aktif) -->
-                            <label class="custom-check-container">
-                                <input type="checkbox" name="is_active[]" class="custom-check-input" <?php echo $ai['is_active'] ? 'checked' : ''; ?>>
-                                <span class="checkmark">
-                                    <i class="fas fa-check"></i>
-                                </span>
-                            </label>
-
-                            <!-- Tombol Hapus -->
-                            <button type="button" class="btn-delete-info-alt glass-control" onclick="confirmDeleteInfo(<?php echo $ai['id']; ?>)">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-
-                        <!-- Baris 1: Pesan -->
-                        <div class="row g-4">
-                            <div class="col-md-4">
-                                <label class="label-text-desc mb-2">PESAN (ID)</label>
-                                <input type="text" name="text_id[]" class="input-glass" value="<?php echo htmlspecialchars($ai['text_id']); ?>">
-                            </div>
-                            <div class="col-md-4">
-                                <label class="label-text-desc mb-2">MESSAGE (EN)</label>
-                                <input type="text" name="text_en[]" class="input-glass" value="<?php echo htmlspecialchars($ai['text_en']); ?>">
-                            </div>
-                            <div class="col-md-4">
-                                <label class="label-text-desc mb-2">メッセージ (JP)</label>
-                                <input type="text" name="text_jp[]" class="input-glass" value="<?php echo htmlspecialchars($ai['text_jp']); ?>">
-                            </div>
-                        </div>
-
-                        <!-- Baris 2: Link -->
-                        <div class="row g-4 py-3"> <!-- Dipersempit dari py-4 ke py-3 -->
-                            <div class="col-md-4">
-                                <label class="label-text-desc mb-2">LINK (ID)</label>
-                                <input type="text" name="link_text_id[]" class="input-glass" value="<?php echo htmlspecialchars($ai['link_text_id']); ?>">
-                            </div>
-                            <div class="col-md-4">
-                                <label class="label-text-desc mb-2">LINK (EN)</label>
-                                <input type="text" name="link_text_en[]" class="input-glass" value="<?php echo htmlspecialchars($ai['link_text_en']); ?>">
-                            </div>
-                            <div class="col-md-4">
-                                <label class="label-text-desc mb-2">LINK (JP)</label>
-                                <input type="text" name="link_text_jp[]" class="input-glass" value="<?php echo htmlspecialchars($ai['link_text_jp']); ?>">
-                            </div>
-                        </div>
-
-                        <!-- Baris 3: URL -->
-                        <div class="row g-4">
-                            <div class="col-12">
-                                <label class="label-text-desc mb-2">URL LINK</label>
-                                <input type="url" name="link_url[]" class="input-glass" value="<?php echo htmlspecialchars($ai['link_url']); ?>">
-                            </div>
-                        </div>
-                    </div>
-                    <?php endwhile; ?>
-                </div>
-
-                <div class="mt-4">
-                    <button type="submit" class="btn-action" style="background: var(--accent); width: 100%; padding: 18px;">
-                        <i class="fas fa-save me-2"></i> SIMPAN PERUBAHAN INFO
-                    </button>
-                </div>
-            </form>
-        </div>
-
-        <!-- Portfolio Section -->
+        <!-- Konfigurasi Info Karya -->
+        <?php include 'sections/section_karya_info.php'; ?>
+        
+        <!-- Portfolio Karya Section -->
         <?php include 'sections/section_karya.php'; ?>
 
         <!-- Portfolio Video Section --> 
+        <?php include 'sections/section_video.php'; ?>   
+        
+        <!-- Konfigurasi Info Video -->
+        <?php include 'sections/section_video_info.php'; ?>
 
-        <?php include 'sections/section_video.php'; ?>     
+        <!-- Konfigurasi Team -->
+        <?php include 'sections/section_team.php'; ?>
+
+        <!-- Konfigurasi Testimoni -->
+        <?php include 'sections/section_testimonial.php'; ?>
+
+        <!-- Konfigurasi Info Testimoni -->
+        <?php include 'sections/section_testimonial_info.php'; ?>
+
+        <div id="php-session-bridge" 
+            data-team-error="<?= isset($_SESSION['team_errors']) ? htmlspecialchars($_SESSION['team_errors']) : ''; ?>">
+        </div>
+        <?php unset($_SESSION['team_errors']); // Langsung bersihkan session setelah dipindahkan ke data attribute ?>
     </div>
 
     </main>
@@ -884,11 +760,12 @@ $total_pending = $pending_data['total'] ?? 0;
                     confirmButtonColor: '#ef4c4d' 
                 };
 
-                // Tambahkan status baru ke dalam array successStatuses
+                // UPDATED: Menambahkan parameter status sukses video info ke dalam array
                 const successStatuses = [
                     'success', 'success_about', 'success_promo', 'success_skill', 
                     'success_portfolio', 'success_delete_portfolio', 
-                    'success_info', 'success_info_delete', 'success_grid'
+                    'success_info', 'success_info_delete', 'success_grid',
+                    'success_video_info', 'success_update_video_info', 'success_delete_video_info'
                 ]; 
 
                 if (successStatuses.includes(status)) {
@@ -906,7 +783,7 @@ $total_pending = $pending_data['total'] ?? 0;
                         case 'success_delete_portfolio': 
                             config.text = 'Katalog karya telah berhasil dihapus.'; 
                             break;
-                        // Pesan Khusus Alert Info & Grid
+                        // Pesan Khusus Alert Info Foto & Grid
                         case 'success_info': 
                             config.text = 'Pengaturan pesan info berhasil disimpan.'; 
                             break;
@@ -915,6 +792,16 @@ $total_pending = $pending_data['total'] ?? 0;
                             break;
                         case 'success_grid': 
                             config.text = 'Tampilan grid portfolio berhasil diubah.'; 
+                            break;
+                        // UPDATED: Handler pesan sukses popup khusus untuk manajemen alert video
+                        case 'success_video_info': 
+                            config.text = 'Pesan info video baru berhasil diunggah.'; 
+                            break;
+                        case 'success_update_video_info': 
+                            config.text = 'Perubahan pengaturan info video berhasil disimpan.'; 
+                            break;
+                        case 'success_delete_video_info': 
+                            config.text = 'Pesan info video telah dihapus dari sistem.'; 
                             break;
                     }
                 } else {
@@ -965,6 +852,8 @@ $total_pending = $pending_data['total'] ?? 0;
                 }
             })
         }
-    </script> 
+    </script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 </html>
