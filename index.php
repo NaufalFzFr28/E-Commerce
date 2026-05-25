@@ -19,10 +19,10 @@ $settings = $conn->query("SELECT * FROM site_settings WHERE id = 1")->fetch_asso
 
 $translations = [
 'id' => [
-        'tagline' => 'Eksplorasi Kreativitas Tanpa Batas Melalui Lensa dan Teknologi.',
-        'btn_main' => 'Website Utama',
+        'tagline' => 'Eksplorasi Kreativitas Anda Melalui Layanan Multimedia & Finishing Terbaik dari NaufaRu.',
+        'btn_main' => 'Portofolio Utama',
         'btn_cv' => 'Curriculum Vitae',
-        'btn_event' => 'Event Site',
+        'btn_event' => 'Dokumentasi Acara',
         'menu_lang' => 'Pilih Bahasa',
         'menu_login' => 'Login',
         'back' => 'Kembali',
@@ -41,10 +41,10 @@ $translations = [
         'not_admin' => 'Bukan Admin?'
     ],
     'en' => [
-        'tagline' => 'Exploring Limitless Creativity Through Lens and Technology.',
-        'btn_main' => 'Main Website',
-        'btn_cv' => 'Curriculum Vitae',
-        'btn_event' => 'Event Site',
+        'tagline' => 'Unleash Your Creativity with the Best Multimedia & Finishing Services from NaufaRu.',
+        'btn_main' => 'Primary Portfolio',
+        'btn_cv' => 'Resume',
+        'btn_event' => 'Event Coverage',
         'menu_lang' => 'Select Language',
         'menu_login' => 'Login',
         'back' => 'Back',
@@ -63,10 +63,10 @@ $translations = [
         'not_admin' => 'Not an Admin?'
     ],
     'jp' => [
-        'tagline' => 'レンズとテクノロジーを通じて無限の創造性を探求する。',
-        'btn_main' => 'メインサイト',
-        'btn_cv' => '履歴書',
-        'btn_event' => 'イベントサイト',
+        'tagline' => 'NaufaRuの最高峰マルチメディア＆フィニッシングサービスで、あなたの創造性を解き放つ。',
+        'btn_main' => 'メインポートフォリオ',
+        'btn_cv' => '職務経歴書',
+        'btn_event' => 'イベント撮影',
         'menu_lang' => '言語を選択',
         'menu_login' => 'ログイン',
         'back' => '戻る',
@@ -88,12 +88,23 @@ $translations = [
 
 $text = $translations[$lang];
 
-// Ambil data wallpaper
-$slides = $conn->query("SELECT * FROM site_wallpaper WHERE is_active = 1 ORDER BY sort_order ASC");
+// --- AMBIL DATA WALLPAPER DENGAN VALIDASI AMAN ---
 $slides_data = [];
-if ($slides && $slides->num_rows > 0) {
-    while($row = $slides->fetch_assoc()) { $slides_data[] = $row['image_path']; }
-} else {
+
+// Pastikan koneksi database ($conn) tersedia sebelum melakukan kueri
+if (isset($conn) && $conn) {
+    $slides = $conn->query("SELECT * FROM site_wallpaper WHERE is_active = 1 ORDER BY sort_order ASC");
+    
+    // Cek apakah $slides sukses mengembalikan objek kueri (bukan false)
+    if ($slides instanceof mysqli_result && $slides->num_rows > 0) {
+        while ($row = $slides->fetch_assoc()) {
+            $slides_data[] = $row['image_path'];
+        }
+    }
+}
+
+// Fallback: Jika database error, tabel kosong, atau kolom belum ada, gunakan gambar default
+if (empty($slides_data)) {
     $slides_data = ['bg-1.jpg', 'bg-2.jpg', 'bg-3.jpg'];
 }
 ?>
@@ -105,7 +116,6 @@ if ($slides && $slides->num_rows > 0) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>NaufaRu - Professional Identity</title>
     
-    <link rel="stylesheet" href="assets/vendors/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
@@ -179,7 +189,7 @@ if ($slides && $slides->num_rows > 0) {
             text-decoration: none; 
             border: none; 
             background: none; 
-            width: 100%; 
+            /* width: 80%;  */
             font-size: 1.05rem; 
             font-weight: 500;
         }
@@ -190,15 +200,35 @@ if ($slides && $slides->num_rows > 0) {
 
         /* WALLPAPER & OVERLAY */
         .splash-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+
         .ken-burns-slide {
-            position: absolute; width: 100%; height: 100%;
-            background-size: cover; background-position: center;
-            opacity: 0; transition: opacity 3s ease-in-out;
-            transform: scale(1.1);
+            position: absolute; 
+            width: 100%; 
+            height: 100%;
+            background-size: cover; 
+            background-position: center;
+            opacity: 0; 
+            z-index: 1;
+            /* Transisi opacity diatur selama 3 detik agar efek cross-dissolve sangat lembut */
+            transition: opacity 3000ms ease-in-out; 
+            /* Semua gambar langsung melakukan pembesaran konstan sejak awal */
+            animation: kenburns-smooth 36s linear infinite;
         }
-        .ken-burns-slide.active { opacity: 1; animation: kenburns-infinite 20s linear infinite; }
-        @keyframes kenburns-infinite { 0% { transform: scale(1); } 100% { transform: scale(1.3); } }
-        .overlay-dark { position: absolute; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.55); z-index: 2; }
+
+        /* Slide yang aktif akan naik ke atas tumpukan dan muncul penuh */
+        .ken-burns-slide.active { 
+            opacity: 1; 
+            z-index: 2;
+        }
+
+        /* Animasi pembesaran konstan tanpa interupsi reset skala saat ganti slide */
+        @keyframes kenburns-smooth { 
+            0% { transform: scale(1.05); } 
+            50% { transform: scale(1.20); }
+            100% { transform: scale(1.05); } 
+        }
+
+        .overlay-dark { position: absolute; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.70); z-index: 1000; }
 
         /* CONTENT */
         .splash-content {
@@ -209,7 +239,7 @@ if ($slides && $slides->num_rows > 0) {
         body.login-active .splash-content { filter: blur(15px); opacity: 0.3; transform: scale(0.95); }
         .typed-heading { font-size: 3.8rem; font-weight: 800; }
         #typed-text { color: var(--accent); }
-        .tagline-desc { font-weight: 300; max-width: 650px; margin: 0 auto 30px; line-height: 1.6; }
+        .tagline-desc { font-weight: 300; max-width: 700px; margin: 0 auto 30px; line-height: 1.6; }
 
         .btn-group-nav { display: flex; gap: 15px; justify-content: center; margin-top: 40px; }
         .btn-glass {
@@ -446,6 +476,13 @@ if ($slides && $slides->num_rows > 0) {
             width: 100%;
             background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent);
         }
+
+        .lang-arrow {
+            margin-left: 90px;
+            margin-right: 5px;
+            font-size: 1rem !important;
+        }
+        
     </style>
 </head>
 <body>
@@ -457,19 +494,22 @@ if ($slides && $slides->num_rows > 0) {
             <div class="main-menu" id="menuDrop">
                 <div class="menu-slider">
                     <div class="menu-content">
-                        <div class="menu-item" id="openLang">
+                        <div class="menu-item" id="openLang" style="background: rgba(255,255,255,0.05);">
                             <i class="fas fa-language"></i> 
-                            <?php echo $text['menu_lang']; ?> 
-                            <i class="fas fa-chevron-right ms-auto" style="font-size: 0.7rem;"></i>
+                            <?php echo $text['menu_lang']; ?>
+
+                            <i class="fas fa-chevron-right lang-arrow"></i>
                         </div>
                         <div class="menu-divider"></div>
                         <div class="menu-item" onclick="openLogin()">
-                            <i class="fas fa-user-shield"></i> <?php echo $text['menu_login']; ?>
+                            <i class="fas fa-user-shield"></i> 
+                            <?php echo $text['menu_login']; ?>
                         </div>
                     </div>
                     <div class="lang-submenu">
-                        <div class="menu-item" id="backToMain" style="background: rgba(255,255,255,0.03);">
-                            <i class="fas fa-chevron-left"></i> <?php echo $text['back']; ?>
+                        <div class="menu-item" id="backToMain" style="background: rgba(255,255,255,0.05);">
+                            <i class="fas fa-chevron-left"></i> 
+                            <?php echo $text['back']; ?>
                         </div>
                         <div class="menu-divider"></div>
                         <div class="menu-item" onclick="changeLang('id')">Indonesia</div>
@@ -484,12 +524,13 @@ if ($slides && $slides->num_rows > 0) {
     </header>
 
     <div class="splash-container">
-        <div class="overlay-dark"></div>
         <?php foreach ($slides_data as $index => $img): ?>
             <div class="ken-burns-slide <?php echo ($index == 0) ? 'active' : ''; ?>" 
                  style="background-image: url('assets/imgs/<?php echo $img; ?>');">
             </div>
         <?php endforeach; ?>
+        
+        <div class="overlay-dark"></div>
     </div>
 
     <div class="splash-content">
@@ -498,8 +539,8 @@ if ($slides && $slides->num_rows > 0) {
             <p class="tagline-desc"><?php echo $text['tagline']; ?></p>
             <div class="btn-group-nav">
                 <a href="modules/main_site/" class="btn-glass"><?php echo $text['btn_main']; ?></a>
-                <a href="modules/cv_site/" class="btn-glass"><?php echo $text['btn_cv']; ?></a>
-                <a href="modules/event_site/" class="btn-glass"><?php echo $text['btn_event']; ?></a>
+                <a href="" class="btn-glass"><?php echo $text['btn_cv']; ?></a>
+                <a href="" class="btn-glass"><?php echo $text['btn_event']; ?></a>
             </div>
         </div>
     </div>
@@ -625,16 +666,30 @@ if ($slides && $slides->num_rows > 0) {
             });
         }
 
-        // 3. Slideshow Logic
+        // 3. Slideshow Logic (Perbaikan: Elegant Cross-Dissolve)
         let slides = $('.ken-burns-slide');
         let current = 0;
+
         if (slides.length > 0) {
             setInterval(() => {
                 let next = (current + 1) % slides.length;
-                slides.eq(current).css('opacity', '0').removeClass('active');
-                slides.eq(next).addClass('active').css('opacity', '1');
-                current = next;
-            }, 8000);
+                
+                // 1. Tempatkan slide berikutnya tepat di atas slide saat ini dengan opacity 0
+                slides.eq(next).css({ 'z-index': '3', 'opacity': '0' }).addClass('active');
+                
+                // 2. Trigger pemicu animasi fade-in pada slide baru
+                setTimeout(() => {
+                    slides.eq(next).css('opacity', '1');
+                }, 50); // Delay mikro agar browser sempat menangkap perubahan state dom
+                
+                // 3. Setelah transisi fade-in selesai (3000ms sesuai durasi CSS), bersihkan status slide lama
+                setTimeout(() => {
+                    slides.eq(current).removeClass('active').css({ 'opacity': '0', 'z-index': '1' });
+                    slides.eq(next).css('z-index', '2'); // Kembalikan ke stack standar aktif
+                    current = next;
+                }, 3000); // Harus sinkron dengan durasi transition opacity di CSS
+                
+            }, 8000); // Berganti gambar setiap 8 detik
         }
 
         // 4. Dropdown Toggle

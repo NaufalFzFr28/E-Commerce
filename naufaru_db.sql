@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 16 Bulan Mei 2026 pada 05.10
+-- Waktu pembuatan: 22 Bulan Mei 2026 pada 08.53
 -- Versi server: 10.4.32-MariaDB
 -- Versi PHP: 8.2.12
 
@@ -53,7 +53,9 @@ CREATE TABLE `orders` (
   `order_number` varchar(20) NOT NULL,
   `invoice_number` varchar(50) DEFAULT NULL,
   `invoice_date` date DEFAULT NULL,
-  `member_id` int(11) NOT NULL,
+  `member_id` int(11) DEFAULT NULL,
+  `guest_name` varchar(255) DEFAULT NULL,
+  `guest_address` text DEFAULT NULL,
   `total_price` decimal(15,2) DEFAULT 0.00,
   `discount` decimal(15,2) DEFAULT 0.00,
   `status` enum('Pending','Process','Finished','Canceled') DEFAULT 'Pending',
@@ -67,13 +69,24 @@ CREATE TABLE `orders` (
 -- Dumping data untuk tabel `orders`
 --
 
-INSERT INTO `orders` (`id`, `order_number`, `invoice_number`, `invoice_date`, `member_id`, `total_price`, `discount`, `status`, `is_invoice`, `created_at`, `updated_at`, `catatan`) VALUES
-(1, 'NR-20260510-A976E', NULL, NULL, 3, 130000.00, 0.00, 'Pending', 0, '2026-05-10 13:59:43', '2026-05-12 08:02:44', NULL),
-(2, 'NR-20260510-0EB43', NULL, NULL, 3, 30000.00, 0.00, 'Pending', 0, '2026-05-10 14:20:16', '2026-05-10 14:20:16', NULL),
-(3, 'NR-20260510-948AE', '0002-2026-05-14', '2026-05-14', 3, 173000.00, 0.00, 'Finished', 1, '2026-05-10 14:48:18', '2026-05-14 15:21:08', ''),
-(4, 'NR-20260511-22966', '0001-2026-05-14', '2026-05-14', 3, 35000.00, 0.00, 'Finished', 1, '2026-05-11 07:28:47', '2026-05-14 07:53:19', NULL),
-(5, 'NR-20260511-37D37', NULL, NULL, 3, 30000.00, 0.00, 'Finished', 1, '2026-05-11 12:33:52', '2026-05-14 04:30:45', 'tes'),
-(6, 'NR-20260514-57EB8', '0003-20260514-1041', '2026-05-14', 7, 45000.00, 25000.00, 'Finished', 1, '2026-05-14 15:53:55', '2026-05-14 16:20:04', 'lets go');
+INSERT INTO `orders` (`id`, `order_number`, `invoice_number`, `invoice_date`, `member_id`, `guest_name`, `guest_address`, `total_price`, `discount`, `status`, `is_invoice`, `created_at`, `updated_at`, `catatan`) VALUES
+(1, 'NR-20260510-A976E', NULL, NULL, 3, NULL, NULL, 130000.00, 0.00, 'Pending', 0, '2026-05-10 13:59:43', '2026-05-12 08:02:44', NULL),
+(2, 'NR-20260510-0EB43', '0007-20260516-6577', '2026-05-16', 3, NULL, NULL, 30000.00, 0.00, 'Finished', 1, '2026-05-10 14:20:16', '2026-05-16 11:55:50', NULL),
+(3, 'NR-20260510-948AE', '0002-2026-05-14', '2026-05-14', 3, NULL, NULL, 173000.00, 0.00, 'Finished', 1, '2026-05-10 14:48:18', '2026-05-14 15:21:08', ''),
+(4, 'NR-20260511-22966', '0001-2026-05-14', '2026-05-14', 3, NULL, NULL, 35000.00, 0.00, 'Finished', 1, '2026-05-11 07:28:47', '2026-05-14 07:53:19', NULL),
+(5, 'NR-20260511-37D37', NULL, NULL, 3, NULL, NULL, 30000.00, 0.00, 'Finished', 1, '2026-05-11 12:33:52', '2026-05-14 04:30:45', 'tes'),
+(6, 'NR-20260514-57EB8', '0003-20260514-1041', '2026-05-14', 7, NULL, NULL, 45000.00, 25000.00, 'Finished', 1, '2026-05-14 15:53:55', '2026-05-14 16:20:04', 'lets go'),
+(7, 'ORD-1778937712', '0007-NR-20260516-A490', NULL, 3, NULL, NULL, 18000.00, 0.00, 'Finished', 0, '2026-05-16 13:21:52', '2026-05-16 13:21:52', NULL),
+(8, 'ORD-1778937750', '0007-NR-20260516-A490', NULL, 3, NULL, NULL, 18000.00, 0.00, 'Finished', 0, '2026-05-16 13:22:30', '2026-05-16 13:22:30', NULL),
+(11, 'ORD-1778940423', '0008-NR-20260516-7306', NULL, NULL, 'Fulan', NULL, 55000.00, 10000.00, 'Finished', 0, '2026-05-16 14:07:03', '2026-05-16 14:07:03', NULL),
+(12, 'ORD-1778941561', '0009-NR-20260516-78A9', NULL, NULL, 'Zakaria', NULL, 28000.00, 50000.00, 'Finished', 0, '2026-05-16 14:26:01', '2026-05-16 14:26:01', NULL),
+(13, 'ORD-1778949966', '0009-NR-20260516-5C20', NULL, NULL, 'Syab', NULL, 48000.00, 0.00, 'Finished', 0, '2026-05-16 16:46:06', '2026-05-16 16:46:06', NULL),
+(14, 'ORD-1779029377', '0010-NR-20260517-8227', NULL, NULL, 'yahaha', 'yntkts', 55000.00, 10000.00, 'Finished', 0, '2026-05-17 14:49:37', '2026-05-17 14:49:37', 'cek dulu'),
+(15, 'ORD-1779029428', '0010-NR-20260517-8227', NULL, NULL, 'yahaha', 'yntkts', 55000.00, 10000.00, 'Finished', 0, '2026-05-17 14:50:28', '2026-05-17 14:50:28', 'cek dulu'),
+(16, 'ORD-1779029516', '0011-NR-20260517-1688', NULL, NULL, 'budi', 'ciledug', 50000.00, 15000.00, 'Finished', 0, '2026-05-17 14:51:56', '2026-05-17 14:51:56', 'tester'),
+(17, 'ORD-1779030050', 'INV-NR-20260517-7CFC', NULL, NULL, 'heru', 'bogor', 35000.00, 25000.00, 'Finished', 0, '2026-05-17 15:00:50', '2026-05-17 15:00:50', 'tes'),
+(18, 'ORD-1779030567', '0011-NR-20260517-CCAC', NULL, 3, NULL, NULL, 20000.00, 10000.00, 'Finished', 0, '2026-05-17 15:09:27', '2026-05-17 15:09:27', 'tes'),
+(19, 'ORD-1779079659', '0011-NR-20260518-5DE4', NULL, NULL, 'yudi', 'dimana aja', 58000.00, 25000.00, 'Finished', 0, '2026-05-18 04:47:39', '2026-05-18 04:47:39', 'cek n ricek');
 
 -- --------------------------------------------------------
 
@@ -106,7 +119,25 @@ INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `qty`, `price_at_orde
 (12, 3, 12, 1, 30000.00, ''),
 (13, 3, 10, 1, 30000.00, ''),
 (14, 3, 7, 1, 30000.00, ''),
-(15, 6, 11, 2, 35000.00, 'mantab');
+(15, 6, 11, 2, 35000.00, 'mantab'),
+(16, 8, 9, 1, 18000.00, NULL),
+(17, 11, 8, 1, 30000.00, NULL),
+(18, 11, 11, 1, 35000.00, NULL),
+(19, 12, 12, 1, 30000.00, NULL),
+(20, 12, 9, 1, 18000.00, NULL),
+(21, 12, 10, 1, 30000.00, NULL),
+(22, 13, 12, 1, 30000.00, NULL),
+(23, 13, 9, 1, 18000.00, NULL),
+(24, 15, 11, 1, 35000.00, ''),
+(25, 15, 7, 1, 30000.00, ''),
+(26, 16, 11, 1, 35000.00, 'cek dulu'),
+(27, 16, 10, 1, 30000.00, 'cek dulu'),
+(28, 17, 10, 1, 30000.00, ''),
+(29, 17, 7, 1, 30000.00, ''),
+(30, 18, 8, 1, 30000.00, 'cek dulu'),
+(31, 19, 9, 1, 18000.00, 'yahaha'),
+(32, 19, 11, 1, 35000.00, 'ntabz'),
+(33, 19, 12, 1, 30000.00, 'lets go');
 
 -- --------------------------------------------------------
 
@@ -222,7 +253,7 @@ CREATE TABLE `site_portfolio` (
 --
 
 INSERT INTO `site_portfolio` (`id`, `product_id`, `image_path`, `link_url`, `title_id`, `title_en`, `title_jp`, `desc_id`, `desc_en`, `desc_jp`, `price_original`, `upload_date`, `price_display`, `date_created`) VALUES
-(3, 1, '1777433180_Cetak_X_Banner.jpg', 'http://localhost/phpmyadmin/', 'Warung Kopi Vytera', 'Vytera Coffee Shop', 'ワルン・コピ・ヴィテラ (Warung Kopi Vytera)', 'Warnai harimu dengan suasana cozy ala Warkop Vytera! ☕🌟 Nikmati secangkir kopi berkualitas sambil merenung dan menemukan ketenangan di sini. Sudahkah Anda merasakan kehangatan yang kami tawarkan?\r\n\r\nButuh sarana promosi serupa? Pesan X-Banner hanya seharga Rp100.000 (biaya desain terpisah).', 'Brighten your day with the cozy vibes of Vytera! ☕🌟 Enjoy a cup of premium coffee while reflecting in a peaceful atmosphere. Have you experienced this warmth yet?\r\n\r\nNeed similar promotional media? Order an X-Banner for only Rp100.000 (design fee excluded).', 'ヴィテラの心地よい雰囲気で、一日を彩りましょう！☕🌟 上質なコーヒーを飲みながら、ここで静かなひとときを過ごしませんか。この温もりをもう体験しましたか？\r\n\r\nこのようなプロモーションツールが必要ですか？ Xバナー (X-Banner) をわずか10万ルピアで注文できます（デザイン料別）。', 100000, '2026-04-29 04:18:40', NULL, '2026-04-28 15:02:42'),
+(3, 1, '1777433180_Cetak_X_Banner.jpg', 'http://localhost/phpmyadmin/', 'Warung Kopi Vytera', 'Vytera Coffee Shop', 'ワルン・コピ・ヴィテラ (Warung Kopi Vytera)', 'Warnai harimu dengan suasana cozy ala Warkop Vytera! Nikmati secangkir kopi berkualitas sambil merenung dan menemukan ketenangan di sini. Sudahkah Anda merasakan kehangatan yang kami tawarkan?\r\n\r\nButuh sarana promosi serupa? Pesan X-Banner hanya seharga Rp100.000 (biaya desain terpisah).', 'Brighten your day with the cozy vibes of Vytera! Enjoy a cup of premium coffee while reflecting in a peaceful atmosphere. Have you experienced this warmth yet?\r\n\r\nNeed similar promotional media? Order an X-Banner for only Rp100.000 (design fee excluded).', 'ヴィテラの心地よい雰囲気で、一日を彩りましょう！ 上質なコーヒーを飲みながら、ここで静かなひとときを過ごしませんか。この温もりをもう体験しましたか？\r\n\r\nこのようなプロモーションツールが必要ですか？ Xバナー (X-Banner) をわずか10万ルピアで注文できます（デザイン料別）。', 100000, '2026-04-29 04:18:40', NULL, '2026-04-28 15:02:42'),
 (4, 1, '1777435931_Takoyaki_Nurhasanah.jpg', '', 'Takoyaki Nurhasanah', 'Nurhasanah Takoyaki', 'タコヤキ・ヌルハサナ (Takoyaki Nurhasanah)', 'Takoyaki lezat ala Hasanah 45! 🐙 Nikmati perpaduan tekstur lembut dan isian premium yang siap membuat lidah Anda bergoyang. Sudahkah Anda mencoba kelezatan autentik dari kami hari ini?\r\n\r\nButuh media promosi seperti ini? Pesan Banner berkualitas hanya Rp18.000/m (biaya desain terpisah).', 'Delicious takoyaki by Hasanah 45! 🐙 Savory, soft, and packed with premium fillings, ready to dance on your tongue. Have you tasted our authentic flavor today?\r\n\r\nNeed promotional media like this? Get your Banner for just Rp18.000/m (design fee excluded).', 'ハサナ45の絶品たこ焼き！🐙 ふんわり食感と贅沢な具材のハーモニーが、あなたの舌を躍らせます。今日の至福の一口はもう体験しましたか？\r\n\r\nこのような宣伝ツールが必要ですか？高品質な バナー (Banner) が1メートルあたりわずか1.8万ルピア（デザイン料別）。', 18000, '2026-04-29 04:18:40', NULL, '2026-04-29 04:12:11'),
 (5, 1, '1777437181_Es_Lumut_Nurhasanah.jpg', 'http://localhost/phpmyadmin/', 'Es Lumut Nurhasanah', 'Nurhasanah Moss Ice', 'エス・ルムット・ヌルハサナ', 'Es yang sempurna untuk hari yang sempurna! 🍧❤️ Rasakan kesegaran autentik dengan tekstur lembut yang memanjakan tenggorokan. Pilihan tepat untuk menemani momen spesial Anda agar lebih ceria dan menyegarkan.\r\n\r\nButuh media promosi menarik? Pesan Banner berkualitas hanya seharga Rp100.000 (biaya desain terpisah).', 'The perfect ice for a perfect day! 🍧❤️ Experience authentic freshness with a smooth texture that delights your palate. The ideal choice to make your special moments even more refreshing.\r\n\r\nNeed eye-catching promotional media? Order a high-quality Banner for only Rp100.000 (design fee excluded).', '最高の日のための最高のアイス！🍧❤️ 喉越しを愉しませる滑らかな食感と、本物の爽快感をお届けします。特別なひとときをより鮮やかに彩る、究極の選択です。\r\n\r\n魅力的な宣伝ツールが必要ですか？高品質な バナー (Banner) をわずか10万ルピアで作成いたします（デザイン料別）。', 100000, '2026-04-29 04:33:01', NULL, '2026-04-29 04:33:01'),
 (6, 1, '1777437731_Nasi_Liwet_Nurhasanah.jpg', 'http://localhost/phpmyadmin/', 'Nasi Liwet Nurhasanah', 'Nasi Liwet Nurhasanah', 'ナシ・リウェット・ヌルハサナ (Nasi Liwet Nurhasanah)', 'Taklukkan laparmu dengan kelezatan nasi liwet Hasanah 45! 🍛😋 Diracik dengan bumbu rempah autentik dan aroma yang menggugah selera, setiap suapannya menjanjikan kepuasan tiada tara bagi pecinta kuliner tradisional.\r\n\r\nBuat bisnismu lebih menonjol dengan Banner berkualitas hanya Rp18.000/m (biaya desain terpisah).', 'Conquer your hunger with the delicious Nasi Liwet Hasanah 45! 🍛😋 Crafted with authentic spices and a mouth-watering aroma, every bite promises unparalleled satisfaction for traditional food lovers.\r\n\r\nMake your business stand out with a high-quality Banner for just Rp18.000/m (design fee excluded).', 'ハサナ45の絶品ナシ・リウェットで空腹を征服しましょう！🍛😋 本格的なスパイスと食欲をそそる香りで、伝統料理ファンを虜にする至福の味わいをお届けします。\r\n\r\n高品質な バナー (Banner) でビジネスを目立たせませんか？ 1メートルあたりわずか1.8万ルピア（デザイン料別）。', 18000, '2026-04-29 04:42:11', NULL, '2026-04-29 04:42:11'),
@@ -234,7 +265,6 @@ INSERT INTO `site_portfolio` (`id`, `product_id`, `image_path`, `link_url`, `tit
 (12, 1, '1777444307_Paket_Khitan_dr__Suzie_BAS.jpg', 'http://localhost/phpmyadmin/', 'Paket Khitan dr. Suzie BAS', 'dr. Suzie BAS Circumcision Package', 'ドクター・スージーBAS 割礼パッケージ (Circumcision Package)', 'Paket Khitan dr. Suzie BAS, solusi komprehensif untuk kebaikan anak Anda! 🌟✂️ Kami menghadirkan layanan medis profesional dengan metode modern yang aman dan nyaman, memastikan proses pemulihan si kecil berjalan optimal dan penuh perhatian.\r\n\r\nDapatkan informasi lengkap dengan X-Banner menarik kami hanya seharga Rp100.000 (biaya desain terpisah). Solusi promosi praktis untuk klinik Anda!', 'dr. Suzie BAS Circumcision Package, a comprehensive solution for your child\'s well-being! 🌟✂️ We provide professional medical services with safe and comfortable modern methods, ensuring an optimal and attentive recovery process for your little one.\r\n\r\nGet all the details with our eye-catching X-Banner for only Rp100.000 (design fee excluded). A practical promotional solution for your clinic!', 'ドクター・スージーBASの割礼パッケージは、お子様の健康のための総合的なソリューションです！🌟✂️ 安全で快適な最新手法を用いた専門的な医療サービスを提供し、お子様の回復プロセスを丁寧かつ最適にサポートします。\r\n\r\n詳細情報は魅力的な Xバナー (X-Banner) でご確認いただけます。わずか10万ルピアで作成可能です（デザイン料別）。クリニックの宣伝にぜひ！', 100000, '2026-04-29 06:31:47', NULL, '2026-04-29 06:31:47'),
 (13, 7, '1777648975_Paket_Khitan_dr__Suzie_BAS.jpg', 'http://localhost/phpmyadmin/', 'Paket Khitan dr. Suzie BAS', 'dr. Suzie BAS Circumcision Package', 'ドクター・スージーBAS 割礼パッケージ (Circumcision Package)', 'Dapatkan Sertifikat Khitan yang berkesan di Klinik dr. Suzie BAS! 🎉✨ Jadikan momen khitan lebih istimewa dengan desain elegan sebagai bukti keberanian si kecil yang bisa dikenang selamanya. Kualitas cetak premium kami memastikan setiap detail tampak istimewa.\r\n\r\nPesan Sertifikat kustom ini dengan biaya desain hanya Rp30.000 (belum termasuk biaya finishing). Hubungi kami hari ini! 📜😊', 'Get a memorable Circumcision Certificate at dr. Suzie BAS Clinic! 🎉✨ Make this milestone extra special with an elegant design as a lasting tribute to your little one\'s bravery. Our premium quality ensures every detail looks stunning.\r\n\r\nOrder this custom Certificate with a design fee of only Rp30.000 (finishing fees excluded). Contact us today! 📜😊', 'Berikut adalah draf caption untuk promosi Anda:\r\n\r\nPaket Khitan dr. Suzie BAS\r\nDapatkan Sertifikat Khitan yang berkesan di Klinik dr. Suzie BAS! 🎉✨ Jadikan momen khitan lebih istimewa dengan desain elegan sebagai bukti keberanian si kecil yang bisa dikenang selamanya. Kualitas cetak premium kami memastikan setiap detail tampak istimewa.\r\n\r\nPesan Sertifikat kustom ini dengan biaya desain hanya Rp30.000 (belum termasuk biaya finishing). Hubungi kami hari ini! 📜😊\r\n\r\ndr. Suzie BAS Circumcision Package\r\nGet a memorable Circumcision Certificate at dr. Suzie BAS Clinic! 🎉✨ Make this milestone extra special with an elegant design as a lasting tribute to your little one\'s bravery. Our premium quality ensures every detail looks stunning.\r\n\r\nOrder this custom Certificate with a design fee of only Rp30.000 (finishing fees excluded). Contact us today! 📜😊\r\n\r\nドクター・スージーBAS 割礼パッケージ (Circumcision Package)\r\nドクター・スージーBASクリニックで、心に残る割礼証書を！🎉✨ お子様の勇気の証として、エレガントなデザインで特別な瞬間を永遠に残しましょう。高品質な仕上がりで、大切な思い出を彩ります。\r\n\r\nこのカスタム 証書 (Certificate) のデザイン料はわずか3万ルピアです（仕上げ費用別）。詳細はお気軽にお問い合わせください！📜😊', 30000, '2026-05-01 15:22:55', NULL, '2026-05-01 15:22:55'),
 (14, 5, '1777649867_Singkongeuy_Promo.jpg', 'http://localhost/phpmyadmin/', 'Singkongeuy Flyer Promo', 'Singkongeuy Flyer Promo', 'シンコンウイ・フライヤープロモ (Singkongeuy Flyer Promo)', 'Jajanan unik Singkongeuy siap bikin ngiler! 🤤✨ Nagih euy dengan cita rasa singkong yang renyah dan bumbu melimpah. Nikmati kelezatan camilan kekinian yang diracik khusus untuk memanjakan lidah Anda di setiap gigitan. 🎨🔥\r\n\r\nSampaikan pesan bisnismu lewat Flyer menarik dengan biaya desain hanya Rp30.000 (belum termasuk biaya finishing).', 'The unique Singkongeuy snack is ready to make your mouth water! 🤤✨ It\'s addictive with its crispy texture and rich seasonings. Enjoy the deliciousness of this modern snack, specially crafted to pamper your taste buds in every bite. 🎨🔥\r\n\r\nSpread your business message with an eye-catching Flyer for a design fee of only Rp30.000 (finishing fees excluded).', 'ユニークなスナック、シンコンウイが食欲をそそります！🤤✨ カリカリの食感と豊かな味付けで、一口ごとに至福の味わいをお届け。現代風にアレンジされたキャッサバの美味しさをぜひ体験してください。🎨🔥', 30000, '2026-05-01 15:37:32', NULL, '2026-05-01 15:37:32'),
-(15, 1, '1777649967_Singkongeuy_Promo.jpg', 'http://localhost/phpmyadmin/', 'Singkongeuy X-Banner Promo', 'Singkongeuy X-Banner Promo', 'シンコンウイ Xバナープロモ (Singkongeuy X-Banner Promo)', 'Tampil beda, jualan makin laris! 🌈✨ X-banner Singkongeuy memberikan sentuhan magis pada promosi dengan visual produk yang menggoda selera, bikin nagih euy! 😍🚀 Jadikan gerai Anda pusat perhatian dengan desain yang mencolok dan profesional.\r\n\r\nTingkatkan daya tarik tokomu dengan X-Banner berkualitas. Biaya desain hanya Rp30.000 (belum termasuk biaya finishing).', 'Stand out and boost your sales! 🌈✨ Singkongeuy X-banner adds a magical touch to your promotion with mouth-watering visuals that keep customers coming back! 😍🚀 Make your stall the center of attention with a bold and professional look.\r\n\r\nBoost your store\'s appeal with a high-quality X-Banner. Design fee is only Rp30.000 (finishing fees excluded).', '他と差をつけて、売り上げを伸ばしましょう！🌈✨ シンコンウイのXバナーは、食欲をそそるビジュアルでプロモーションに魔法をかけ、リピーター続出間違いなし！😍🚀 大胆でプロフェッショナルなデザインで、お店を注目の的に。\r\n\r\n高品質な Xバナー (X-Banner) で集客力をアップ！デザイン料はわずか10万ルピアです（仕上げ費用別）。', 100000, '2026-05-01 15:39:27', NULL, '2026-05-01 15:39:27'),
 (16, 5, '1777650452_Tasyakuran___Aqiqah_Info.jpg', 'http://localhost/phpmyadmin/', 'Tasyakuran & Aqiqah Info', 'Tasyakuran & Aqiqah Info', '感謝祭＆アキカ情報 (Tasyakuran & Aqiqah Info)', 'Ciptakan momen bahagia yang tak terlupakan dengan flyer spesial untuk tasyakuran dan aqiqah! 🎉✨ Kami menghadirkan desain eksklusif di atas kertas art paper berkualitas setebal karton untuk mengabadikan rasa syukur Anda dengan tampilan yang elegan dan premium. 🌈👶\r\n\r\nBagikan kebahagiaan dengan Flyer satu lembar yang praktis. Biaya desain hanya Rp30.000 (belum termasuk biaya finishing). Pesan sekarang!', 'Create unforgettable happy moments with our special flyers for Tasyakuran and Aqiqah! 🎉✨ We provide exclusive designs on premium, cardstock-like art paper to commemorate your gratitude with an elegant and high-quality look. 🌈👶\r\n\r\nShare your joy with a practical, single-sheet Flyer. Design fee is only Rp30.000 (finishing fees excluded). Order now!', '感謝祭（タシャクラン）やアキカのための特別なフライヤーで、忘れられない幸せな瞬間を！🎉✨ 高品質なアートペーパーを使用し、あなたの感謝の気持ちをエレガントでプレミアムなデザインに仕上げます。🌈👶\r\n\r\n実用的な1枚刷りの フライヤー (Flyer) で喜びを分かち合いましょう。デザイン料はわずか3万ルピアです（仕上げ費用別）。今すぐご注文を！', 30000, '2026-05-01 15:47:32', NULL, '2026-05-01 15:47:32'),
 (17, 8, '1777650731_Label_Makanan___Superfood.jpg', 'http://localhost/phpmyadmin/', 'Label Makanan - Superfood', 'Superfood Food Label', 'スーパーフード 食品ラベル (Food Label)', 'Berikan makananmu sentuhan super dengan label berkualitas tinggi! 🌿✨ Label makanan superfood kami membantu produkmu bersinar di pasaran dengan material premium yang tahan lama dan desain yang memikat. Jadikan identitas brand Anda terlihat lebih profesional dan terpercaya di mata pelanggan! 🏷️💚\r\n\r\nTingkatkan nilai jual produk dengan Label kustom. Biaya desain hanya Rp30.000 (belum termasuk biaya finishing).', 'Give your food a super touch with high-quality labels! 🌿✨ Our superfood food labels help your products shine in the market with premium, durable materials and captivating designs. Make your brand identity look more professional and trusted by customers! 🏷️💚\r\n\r\nEnhance your product\'s value with custom Labels. Design fee is only Rp30.000 (finishing fees excluded).', '高品質なラベルで、あなたの食品に特別な輝きを！🌿✨ 私たちのスーパーフード食品ラベルは、耐久性に優れたプレミアム素材と魅力的なデザインで、製品の市場価値を高めます。プロフェッショナルで信頼されるブランドアイデンティティを築きましょう！🏷️💚\r\n\r\nカスタム ラベル (Label) で商品の魅力をアップ。デザイン料はわずか3万ルピアです（仕上げ費用別）。', 30000, '2026-05-01 15:52:11', NULL, '2026-05-01 15:52:11'),
 (18, 5, '1777651017_Promosi_Ala_Ala_Nyaleg.jpg', 'http://localhost/phpmyadmin/', 'Promosi Ala-Ala Nyaleg', 'Election-Style Promotion', '選挙風プロモーション (Election-Style Promotion)', 'Berikan sentuhan nyaleg pada bisnis Anda! 🚀✨ Dapatkan jasa desain ala-ala nyaleg yang memukau untuk membangun citra yang kuat dan berwibawa di mata pelanggan. Dengan gaya unik yang ikonik, bisnis Anda pasti mencuri perhatian dan menjadi pusat pembicaraan! 💼🎨\r\n\r\nSampaikan visi bisnismu melalui Flyer satu lembar berbahan art paper tebal. Biaya desain hanya Rp30.000 (belum termasuk biaya finishing).', 'Give your business an election-style touch! 🚀✨ Get stunning election-themed designs to build a strong and authoritative image. With an iconic and unique style, your business will definitely grab attention and become the talk of the town! 💼🎨\r\n\r\nSpread your vision with a premium, single-sheet Flyer made of thick art paper. Design fee is only Rp30.000 (finishing fees excluded).', 'あなたのビジネスに選挙風のインパクトを！🚀✨ 強力で権威あるイメージを築く、魅力的な選挙風デザインを提供します。アイコニックでユニークなスタイルで、注目を集めること間違いなし！💼🎨\r\n\r\n厚手のアートペーパーを使用した1枚刷りの フライヤー (Flyer) でビジョンを伝えましょう。デザイン料はわずか3万ルピアです（仕上げ費用別）。', 30000, '2026-05-01 15:56:57', NULL, '2026-05-01 15:56:57'),
@@ -242,7 +272,8 @@ INSERT INTO `site_portfolio` (`id`, `product_id`, `image_path`, `link_url`, `tit
 (20, 1, '1777651476_Summer_Trip_SMK_Yadika_5_x_PT__Hobi_Wisata.jpg', 'http://localhost/phpmyadmin/', 'Summer Trip SMK Yadika 5 x PT. Hobi Wisata', 'Summer Trip SMK Yadika 5 x PT. Hobi Wisata', 'SMKヤディカ5 サマートリップ x PT. ホビ・ウィサタ (Summer Trip)', 'Sukseskan Summer Trip SMK Yadika 5 dengan banner eksklusif dari PT Hobi Wisata! 🌴🚌 Kami menghadirkan media informasi berkualitas tinggi yang tidak cepat pudar untuk mengabadikan momen perjalanan sekolah Anda agar lebih berkesan, profesional, dan tak terlupakan. 🌞🎓\r\n\r\nPesan Banner kustom ukuran bebas dengan biaya desain hanya Rp30.000 (biaya finishing terpisah). Kami menerima segala desain dengan metode Amati-Tiru-Modifikasi!', 'Make the SMK Yadika 5 Summer Trip a success with an exclusive banner from PT Hobi Wisata! 🌴🚌 We provide high-quality, fade-resistant information media to make your school trip more memorable, professional, and unforgettable. 🌞🎓\r\n\r\nOrder a custom-sized Banner for a design fee of only Rp30.000 (finishing fees excluded). We accept all designs using the Observe-Imitate-Modify method!', 'PT. ホビ・ウィサタの専用バナーで、SMKヤディカ5のサマートリップを成功させましょう！🌴🚌 色あせしにくい高品質な素材で、学校の旅行をより印象深く、プロフェッショナルで忘れられない思い出にします。🌞🎓\r\n\r\nサイズオーダー可能な バナー (Banner) のデザイン料はわずか3万ルピアです（仕上げ費用別）。お客様の参考資料を元にした制作も承っております！', 30000, '2026-05-01 16:04:36', NULL, '2026-05-01 16:04:36'),
 (21, 1, '1777651580_Summer_Trip_PT_Bina_Flora_x_PT_Hobi_Wisata.jpg', 'http://localhost/phpmyadmin/', 'Summer Trip PT Bina Flora x PT Hobi Wisata', 'PT Bina Flora x PT Hobi Wisata Summer Trip', 'PTビナ・フローラ x PTホビ・ウィサタ サマートリップ (Summer Trip)', 'Jadikan liburanmu berkesan dengan banner keren dari saya! 🌺🚌 Kolaborasi seru PT Bina Flora & PT Hobi Wisata ini menghadirkan perjalanan tak terlupakan dengan kualitas cetak premium yang tajam, berbahan baik, dan tidak cepat pudar. 🌟🏖️\r\n\r\nPesan Banner ukuran kustom dengan biaya desain hanya Rp30.000 (biaya finishing terpisah). Kami menerima desain kustom dengan metode Amati-Tiru-Modifikasi!', 'Make your holiday memorable with my cool banner! 🌺🚌 This exciting collaboration between PT Bina Flora & PT Hobi Wisata offers an unforgettable journey with premium, sharp print quality that is durable and fade-resistant. 🌟🏖️\r\n\r\nOrder a custom-sized Banner for a design fee of only Rp30.000 (finishing fees excluded). We accept all designs using the Observe-Imitate-Modify method!', '素敵なバナーで、最高の思い出を！🌺🚌 PTビナ・フローラとPTホビ・ウィサタのコラボレーションにより、色あせしにくい高品質な素材で忘れられない旅を彩ります。🌟🏖️\r\n\r\nサイズオーダー可能な バナー (Banner) のデザイン料はわずか3万ルピアです（仕上げ費用別）。お客様の参考資料を元にした制作も承っております！', 30000, '2026-05-01 16:06:20', NULL, '2026-05-01 16:06:20'),
 (22, 3, '1777651941_Cetak_Buku_Custom_Cerpen_Novel.jpg', 'http://localhost/phpmyadmin/', 'Cetak Buku Custom Cerpen/Novel', 'Custom Short Story/Novel Book Printing', '短編小説・小説のカスタムブック制作 (Custom Book Printing)', 'Birukan impianmu dengan cerpenmu sendiri! 📘🌈 Kami hadir untuk mewujudkan kisah unik atau tugas Anda menjadi buku fisik yang elegan dengan pilihan kertas HVS atau book paper berkualitas. Abadikan cerita kehidupan Anda dalam cetakan yang rapi, profesional, dan berkelas!\r\n\r\nDapatkan layanan Cetak Buku custom ukuran bebas dengan harga mulai Rp50.000 (tergantung ketebalan halaman). Kami juga menerima jasa desain buku untuk Anda.', 'Bring your dreams to life with your own short stories! 📘🌈 We are here to turn your unique tales or assignments into elegant physical books with quality HVS or book paper options. Immortalize your life stories in a neat, professional, and classy print!\r\n\r\nGet our custom-sized Book Printing service starting from Rp50.000 (depending on page thickness). We also offer professional book design services.', 'あなた自身の短編小説で夢を形にしましょう！📘🌈 独自の物語や課題を、高品質なHVSまたはブックペーパーを使用したエレガントな実体本に仕上げます。 あなたの人生の物語を、整ったプロフェッショナルで高級感のある印刷で永遠に残しましょう！\r\n\r\n自由なサイズの 本制作 (Book Printing) サービスは5万ルピアから（ページの厚さによる）。 本のデザイン制作も承っております！', 50000, '2026-05-01 16:12:21', NULL, '2026-05-01 16:12:21'),
-(23, 6, '1777652083_Kalender_Duduk_2024___Naufal_FzFr_Limited_Edition.jpg', 'http://localhost/phpmyadmin/', 'Kalender Duduk 2024 - Naufal FzFr Limited Edition', '2024 Desk Calendar - Naufal FzFr Limited Edition', '2024年 卓上カレンダー - Naufal FzFr 限定版', 'Selamat tinggal 2023, sambut tahun baru dengan kalender 2024 yang keren dan informatif! 📅✨ Edisi terbatas ini hadir dengan desain visioner-perfeksionis pada kertas artpaper 120g berkualitas tinggi. Setiap lembarnya penuh inspirasi untuk menemani produktivitas Anda sepanjang tahun dengan tampilan yang elegan dan eksklusif. 🌟🎉\r\n\r\nDapatkan Kalender Duduk dalam berbagai ukuran dengan pilihan laminasi glossy atau doff mulai dari Rp30.000/kalender.', 'Goodbye 2023, welcome the new year with a cool and informative 2024 calendar! 📅✨ This limited edition features a visionary-perfectionist design on high-quality 120g artpaper. Every page is full of inspiration to accompany your productivity throughout the year with an elegant and exclusive look. 🌟🎉\r\n\r\nGet this Desk Calendar in various sizes with glossy or doff lamination starting from Rp30.000/calendar.', 'さよなら2023年、クールで情報満載の2024年カレンダーで新年を迎えましょう！📅✨ この限定版は、高品質な120gアートペーパーに完璧主義的なデザイン を施しています。エレガントで独創的な外観で、一年中あなたの創造性を刺激し続けます。🌟🎉\r\n\r\n様々なサイズとグロス・マット加工が選べる 卓上カレンダー (Desk Calendar) は、1冊3万ルピアから。', 50000, '2026-05-01 16:14:43', NULL, '2026-05-01 16:14:43');
+(23, 6, '1777652083_Kalender_Duduk_2024___Naufal_FzFr_Limited_Edition.jpg', 'http://localhost/phpmyadmin/', 'Kalender Duduk 2024 - Naufal FzFr Limited Edition', '2024 Desk Calendar - Naufal FzFr Limited Edition', '2024年 卓上カレンダー - Naufal FzFr 限定版', 'Selamat tinggal 2023, sambut tahun baru dengan kalender 2024 yang keren dan informatif! 📅✨ Edisi terbatas ini hadir dengan desain visioner-perfeksionis pada kertas artpaper 120g berkualitas tinggi. Setiap lembarnya penuh inspirasi untuk menemani produktivitas Anda sepanjang tahun dengan tampilan yang elegan dan eksklusif. 🌟🎉\r\n\r\nDapatkan Kalender Duduk dalam berbagai ukuran dengan pilihan laminasi glossy atau doff mulai dari Rp30.000/kalender.', 'Goodbye 2023, welcome the new year with a cool and informative 2024 calendar! 📅✨ This limited edition features a visionary-perfectionist design on high-quality 120g artpaper. Every page is full of inspiration to accompany your productivity throughout the year with an elegant and exclusive look. 🌟🎉\r\n\r\nGet this Desk Calendar in various sizes with glossy or doff lamination starting from Rp30.000/calendar.', 'さよなら2023年、クールで情報満載の2024年カレンダーで新年を迎えましょう！📅✨ この限定版は、高品質な120gアートペーパーに完璧主義的なデザイン を施しています。エレガントで独創的な外観で、一年中あなたの創造性を刺激し続けます。🌟🎉\r\n\r\n様々なサイズとグロス・マット加工が選べる 卓上カレンダー (Desk Calendar) は、1冊3万ルピアから。', 50000, '2026-05-01 16:14:43', NULL, '2026-05-01 16:14:43'),
+(24, 1, '1779118248_Singkongeuy_X_Banner_Promo.jpg', 'http://localhost/naufaru-website/', 'Singkongeuy X-Banner Promo', 'Singkongeuy X-Banner Promo', 'シンコンウイ Xバナープロモ (Singkongeuy X-Banner Promo)', 'Tampil beda, jualan makin laris! X-banner Singkongeuy memberikan sentuhan magis pada promosi dengan visual produk yang menggoda selera, bikin nagih euy! Jadikan gerai Anda pusat perhatian dengan desain yang mencolok dan profesional.\r\n\r\nTingkatkan daya tarik tokomu dengan X-Banner berkualitas. Biaya desain hanya Rp30.000 (belum termasuk biaya finishing).\r\n', 'Stand out and boost your sales! Singkongeuy X-banner adds a magical touch to your promotion with mouth-watering visuals that keep customers coming back!  Make your stall the center of attention with a bold and professional look.\r\n\r\nBoost your store\'s appeal with a high-quality X-Banner. Design fee is only Rp30.000 (finishing fees excluded).\r\n', '他と差をつけて、売り上げを伸ばしましょう！ シンコンウイのXバナーは、食欲をそそるビジュアルでプロモーションに魔法をかけ、リピーター続出間違いなし！ 大胆でプロフェッショナルなデザインで、お店を注目の的に。\r\n\r\n高品質な Xバナー (X-Banner) で集客力をアップ！デザイン料はわずか10万ルピアです（仕上げ費用別）。', 100000, '2026-05-18 15:30:48', NULL, '2026-05-18 15:30:48');
 
 -- --------------------------------------------------------
 
@@ -475,6 +506,63 @@ CREATE TABLE `site_users` (
 -- --------------------------------------------------------
 
 --
+-- Struktur dari tabel `site_video_alerts`
+--
+
+CREATE TABLE `site_video_alerts` (
+  `id` int(11) NOT NULL,
+  `text_id` text NOT NULL,
+  `text_en` text DEFAULT NULL,
+  `text_jp` text DEFAULT NULL,
+  `link_text_id` varchar(255) DEFAULT NULL,
+  `link_text_en` varchar(255) DEFAULT NULL,
+  `link_text_jp` varchar(255) DEFAULT NULL,
+  `link_url` text DEFAULT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `site_video_alerts`
+--
+
+INSERT INTO `site_video_alerts` (`id`, `text_id`, `text_en`, `text_jp`, `link_text_id`, `link_text_en`, `link_text_jp`, `link_url`, `is_active`, `created_at`) VALUES
+(1, 'Ada banyak konten menarik di akun YouTube saya.', 'There\'s a lot of cool content on my YouTube channel.', '私のYouTubeチャンネル、面白いコンテンツがたくさんあるよ。', 'Cek sekarang!', 'Check it out now!', '今すぐチェックしてみてね！', 'https://www.youtube.com/@NaufalFzFr/videos', 1, '2026-05-19 14:46:21'),
+(2, 'Jangan lupa untuk klik subscribe channel saya.', 'Make sure to hit that subscribe button!', 'チャンネル登録も忘れずにね。', 'Visit sekarang!', 'Head over to my channel now!', '今すぐ見に来て！', 'https://www.youtube.com/channel/UCpxYQZBR9XxDMRLRr3nhR4w', 1, '2026-05-19 14:53:32');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `site_video_portfolio`
+--
+
+CREATE TABLE `site_video_portfolio` (
+  `id` int(11) NOT NULL,
+  `video_url` varchar(255) NOT NULL,
+  `title_id` varchar(255) NOT NULL,
+  `title_en` varchar(255) DEFAULT NULL,
+  `title_jp` varchar(255) DEFAULT NULL,
+  `desc_id` text NOT NULL,
+  `desc_en` text DEFAULT NULL,
+  `desc_jp` text DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `site_video_portfolio`
+--
+
+INSERT INTO `site_video_portfolio` (`id`, `video_url`, `title_id`, `title_en`, `title_jp`, `desc_id`, `desc_en`, `desc_jp`, `is_active`, `created_at`) VALUES
+(1, 'https://youtu.be/4gPA1-J_4l8?si=strZ7qOjj3bURODe', 'Birthday Party - Gendhis Nayyara Sigi || Cinematic Documentation Video', 'Birthday Party - Gendhis Nayyara Sigi || Cinematic Documentation Video', 'バースデーパーティー - ゲンディス・ナイヤラ・シギ || シネマティック・ドキュメンテーション・ビデオ', 'Saksikan sebuah kegiatan lucu dan berkesan dari kegiatan ulang tahun/milad adik Gendhis Nayyara Sigi. Semoga diulang tahunnya ini menjadi anak yang shalihah, cerdas, dan berbakti kepada kedua orangtuanya, aamiin. Bagaimanakah kegiatannya, saksikan sekarang!', 'Witness the adorable and memorable moments from the birthday/milad celebration of little sister Gendhis Nayyara Sigi. May she grow up to be a pious (shalihah), smart, and devoted daughter to her parents, Aamiin. How did the celebration go? Watch it now!', 'ゲンディス・ナイヤラ・シギちゃんの、可愛くて思い出に残るバースデー（誕生祭）の様子をぜひご覧ください。この素晴らしい1年が、彼女にとって賢く、信仰深く（シャリハ）、そして両親を大切にする優しい子へと成長する歩みとなりますように。アミーン。\r\nどんな素敵なパーティーになったのでしょうか？今すぐご覧ください！', 1, '2026-05-19 15:34:39'),
+(2, 'https://youtu.be/ByfndHvp9Fg?si=HocES7ClliLWXO_L', 'Wedding - Dinda & Tegar || Cinematic Documentation Video', 'Wedding - Dinda & Tegar || Cinematic Documentation Video', 'ウェディング - ディンダ ＆ テガール || シネマティック・ドキュメンテーション・ビデオ', 'Sebuah dokumentasi pernikahan yang berkesan, dikemas dalam bentuk video dokumentasi sinematik yang belum pernah anda lihat sebelumnya. Video ini berisikan prosesi akad nikah hingga resepsi. Bagaimanakah kegiatannya, saksikan sekarang!', 'A truly memorable wedding documentation, beautifully captured in a cinematic video like you\'ve never seen before. This video covers the entire journey, from the solemn wedding vow (Akad Nikah) to the beautiful reception. How did the celebration unfold? Watch it now!', 'これまでに見たことのないような、美しいシネマティック映像で綴る感動的な結婚式の記録です。厳かな挙式（アカ・ニカ）から華やかな披露宴までの特別な瞬間をたっぷりと収録しています。お二人の素晴らしい門出の様子を、ぜひ今すぐご覧ください！', 1, '2026-05-19 15:52:03'),
+(3, 'https://youtu.be/VzZ4DVH7akU?si=0gpztiHjU8GS6vq1', 'Aqiqah Thanksgiving - Hilman Jamil Prasya || Cinematic Documentation Video', 'Aqiqah Thanksgiving - Hilman Jamil Prasya || Cinematic Documentation Video', 'アキカ生誕祝賀会 - ヒルマン・ジャミル・プラシャ || シネマティック・ドキュメンテーション・ビデオ', 'Saksikan sebuah dokumentasi berharga dari acara syukuran aqiqah adik Hilman Jamil Prasya. Semoga menjadi adik yang cerdas, pintar, dan shalih, aamiin. Bagaimanakah kegiatan aqiqahnya, saksikan sekarang!', 'Witness a precious documentation of the Aqiqah thanksgiving celebration for baby brother Hilman Jamil Prasya. May he grow up to be a smart, clever, and pious (shalih) boy, Aamiin. How did the Aqiqah celebration go? Watch it now!', 'ヒルマン・ジャミル・プラシャくんの、大切なアキカ（生誕記念・感謝祭）の記録をぜひご覧ください。これからの成長の中で、賢く、聡明で、信仰深い（サリフ）男の子になりますように。アミーン。\r\nどのような温かいお祝いになったのでしょうか？今すぐご覧ください！', 1, '2026-05-19 15:53:46'),
+(4, 'https://youtu.be/9ZP8_F6H37k?si=FFWhF-kgnEYi8L2x', 'Cinematic PKM - Universitas Pamulang x SMKN 1 Tangerang Selatan || Cinematic Documentation Video', 'Cinematic PKM - Universitas Pamulang x SMKN 1 Tangerang Selatan || Cinematic Documentation Video', 'シネマティック PKM - パムラン大学 × タンゲラン・スラタン第1職業高校 || シネマティック・ドキュメンテーション・ビデオ', 'Berikut adalah sebuah video dokumentasi sinematik sebuah kegiatan PKM atau Program Kreativitas Mahasiswa dari mahasiswa Universitas Pamulang (Unpam) prodi Teknik Informatika semester 5 yang dilaksanakan di SMKN 1 Tangerang Selatan (NESTAN). Keseruan dan kreativitas menjadi nilai plus dalam kegiatan kali ini, dipenuhi oleh momen-momen yang inspiratif yang diharapkan menjadi kenangan dimasa yang akan datang.', 'Here is a cinematic documentation video of the PKM (Student Creativity Program) activity, presented by the 5th-semester Informatics Engineering students from Universitas Pamulang (Unpam), held at SMKN 1 Tangerang Selatan (NESTAN). Excitement and creativity truly highlighted this event, filled with inspiring moments that will hopefully become cherished memories for the future.', 'パムラン大学（Unpam）情報工学科の5学期生が、タンゲラン・スラタン第1職業高校（NESTAN）で実施した「PKM（学生創意工夫プログラム）」のシネマティック・ドキュメンテーション映像です。今回の活動は、楽しさとクリエイティビティが最大の魅力であり、将来の大切な思い出となるような、インスピレーションに満ちた瞬間がたくさん詰まっています。ぜひご覧ください！', 1, '2026-05-21 04:41:44'),
+(5, 'https://youtu.be/SYjhhGC2GDY?si=2koVp7X5ux4-I764', 'Behind The Scenes & Result - Soft Selling & Hard Selling Video Promo || STIKes Pertamedika', 'Behind The Scenes & Result - Soft Selling & Hard Selling Video Promo || STIKes Pertamedika', 'メイキング＆完成映像 - ソフトセリング＆ハードセリング プロモーションビデオ || STIKesペルタメディカ', 'Berikut adalah dokumentasi dibuang sayang, behind the scenes, dan result dari sebuah video promo (soft selling & hard selling) yang dilaksanakan di STIKes Pertamedika. Yuk intip keseruannya.', 'Here is the \"too good to throw away\" documentation, behind-the-scenes footage, and the final results of a promotional video project (featuring both soft-selling & hard-selling concepts) filmed at STIKes Pertamedika. Let’s take a sneak peek at all the excitement and fun!', 'STIKesペルタメディカで実施されたプロモーションビデオ（ソフトセリング＆ハードセリング）の、未公開の蔵出し映像、メイキング（舞台裏）、そして完成した本編映像の記録です。撮影現場の楽し気で熱気あふれる様子を、ぜひ覗いてみてください！', 1, '2026-05-21 04:54:07');
+
+-- --------------------------------------------------------
+
+--
 -- Struktur dari tabel `site_wallpaper`
 --
 
@@ -536,8 +624,8 @@ CREATE TABLE `users_member` (
 --
 
 INSERT INTO `users_member` (`id`, `username`, `password`, `nama_lengkap`, `foto_profil`, `no_hp`, `alamat`, `created_at`) VALUES
-(3, 'Naufal', 'Naufal', 'Naufal', 'member_1777986554.jpg', '0895330141019', 'Ciputat', '2026-05-05 13:09:14'),
-(7, 'Syabila09', 'Syabila09', 'Syabila', 'member_1778773941.jpg', '1234', 'Sukabumi', '2026-05-14 15:52:21');
+(3, 'Naufal', 'Naufal', 'Naufal FzFr', 'member_1777986554.jpg', '0895330141019', 'Ciputat', '2026-05-05 13:09:14'),
+(7, 'Syabila09', 'Syabila09', 'Syabila', 'member_1778773941.jpg', '081234567890', 'Sukabumi', '2026-05-14 15:52:21');
 
 --
 -- Indexes for dumped tables
@@ -557,7 +645,7 @@ ALTER TABLE `cart`
 ALTER TABLE `orders`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `order_number` (`order_number`),
-  ADD KEY `member_id` (`member_id`);
+  ADD KEY `orders_ibfk_1` (`member_id`);
 
 --
 -- Indeks untuk tabel `order_items`
@@ -650,6 +738,18 @@ ALTER TABLE `site_users`
   ADD UNIQUE KEY `email` (`email`);
 
 --
+-- Indeks untuk tabel `site_video_alerts`
+--
+ALTER TABLE `site_video_alerts`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeks untuk tabel `site_video_portfolio`
+--
+ALTER TABLE `site_video_portfolio`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indeks untuk tabel `site_wallpaper`
 --
 ALTER TABLE `site_wallpaper`
@@ -682,13 +782,13 @@ ALTER TABLE `cart`
 -- AUTO_INCREMENT untuk tabel `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT untuk tabel `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT untuk tabel `site_about`
@@ -712,13 +812,13 @@ ALTER TABLE `site_hero_slides`
 -- AUTO_INCREMENT untuk tabel `site_portfolio`
 --
 ALTER TABLE `site_portfolio`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT untuk tabel `site_portfolio_alerts`
 --
 ALTER TABLE `site_portfolio_alerts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT untuk tabel `site_products`
@@ -763,6 +863,18 @@ ALTER TABLE `site_users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT untuk tabel `site_video_alerts`
+--
+ALTER TABLE `site_video_alerts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT untuk tabel `site_video_portfolio`
+--
+ALTER TABLE `site_video_portfolio`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT untuk tabel `site_wallpaper`
 --
 ALTER TABLE `site_wallpaper`
@@ -795,7 +907,7 @@ ALTER TABLE `cart`
 -- Ketidakleluasaan untuk tabel `orders`
 --
 ALTER TABLE `orders`
-  ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`member_id`) REFERENCES `users_member` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`member_id`) REFERENCES `users_member` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Ketidakleluasaan untuk tabel `order_items`
