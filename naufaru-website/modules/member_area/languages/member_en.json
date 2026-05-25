@@ -57,5 +57,13 @@
   "label_order_time": "Order Time",
   "lock_title": "Feature Locked",
   "lock_desc": "The data change request function is currently closed or requires verification from the NaufaRu Admin.",
-  "btn_close": "Close"
+  "btn_close": "Close",
+  "table_order_date": "Order Date",
+  "table_received_admin": "Received by Admin",
+  "table_total_item": "Total Item",
+  "alert_success_title": "Added Successfully!",
+  "alert_success_desc": "Service has been successfully added to My Orders.",
+  "alert_delete_title": "Delete item?",
+  "alert_delete_confirm": "Yes, Delete",
+  "alert_delete_cancel": "Cancel"
 }

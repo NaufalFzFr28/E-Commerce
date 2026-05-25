@@ -303,31 +303,42 @@ window.onclick = function(event) {
  */
 
 // A. Fungsi Memuat Isi Keranjang ke Section "Pesanan Saya"
-// function loadCart() {
-//     $('#cart-content').load('proses_keranjang.php?action=view', function() {
-//         const totalItems = $('.cart-item-row').length;
-//         $('#total-orders-count').text(totalItems);
-//     });
-// }
+function loadCart() {
+    $('#cart-content').load('proses_keranjang.php?action=view', function() {
+        const totalItems = $('.cart-item-row').length;
+        $('#total-orders-count').text(totalItems);
+    });
+}
 
 // B. Fungsi Tambah ke Keranjang
 function addToCart(productId) {
+    const isDarkMode = document.body.classList.contains('dark-mode');
+
     $.ajax({
         url: 'proses_keranjang.php',
         type: 'POST',
         data: { action: 'add', product_id: productId },
         success: function(response) {
-            const res = JSON.parse(response);
-            if(res.status === 'success') {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Berhasil',
-                    text: res.message,
-                    timer: 1500,
-                    showConfirmButton: false
-                });
-                closeNaufaruModal();
-                loadCart(); // Refresh section Pesanan Saya
+            try {
+                const res = JSON.parse(response);
+                if(res.status === 'success') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: res.title,   // Mengambil judul terjemahan aktif dari JSON server
+                        text: res.message,  // Mengambil deskripsi terjemahan aktif dari JSON server
+                        timer: 1500,
+                        showConfirmButton: false,
+                        background: isDarkMode ? 'rgba(25, 25, 25, 0.98)' : '#ffffff',
+                        color: isDarkMode ? '#ffffff' : '#222222',
+                        customClass: {
+                            popup: isDarkMode ? 'glass-card border border-secondary' : 'shadow-lg border-0 rounded-4'
+                        }
+                    });
+                    closeNaufaruModal();
+                    loadCart(); // Refresh section Pesanan Saya secara real-time
+                }
+            } catch (e) {
+                console.error("Gagal membaca enkapsulasi respon JSON:", e);
             }
         }
     });
@@ -341,18 +352,34 @@ function updateQty(cartId, change) {
 }
 
 // D. Fungsi Hapus Item
-function removeFromCart(cartId) {
+function removeFromCart(cartId, alertTitle, confirmText, cancelText) {
+    if (typeof Swal === 'undefined') return;
+    const isDarkMode = document.body.classList.contains('dark-mode');
+
     Swal.fire({
-        title: 'Hapus item?',
+        title: alertTitle, // Menampilkan judul terjemahan (Hapus item? / Delete item? / アイテムを削除しますか？)
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#EF4C4D',
         cancelButtonColor: '#666',
-        confirmButtonText: 'Ya, Hapus'
+        confirmButtonText: confirmText, // Label tombol konfirmasi dari JSON
+        cancelButtonText: cancelText,   // Label tombol batal dari JSON
+        background: isDarkMode ? 'rgba(25, 25, 25, 0.98)' : '#ffffff',
+        color: isDarkMode ? '#ffffff' : '#222222',
+        customClass: {
+            popup: isDarkMode ? 'glass-card border border-secondary' : 'shadow-lg border-0 rounded-4'
+        }
     }).then((result) => {
         if (result.isConfirmed) {
-            $.post('proses_keranjang.php', { action: 'delete', cart_id: cartId }, function() {
-                loadCart();
+            $.ajax({
+                url: 'proses_keranjang.php',
+                type: 'POST',
+                data: { action: 'delete', cart_id: cartId },
+                success: function() {
+                    if (typeof loadCart === "function") {
+                        loadCart(); // Sinkronisasi ulang data setelah penghapusan
+                    }
+                }
             });
         }
     });
@@ -363,24 +390,45 @@ $(document).ready(function() {
     loadCart();
 });
 
-function checkoutToAdmin() {
+// MENJADI INI:
+function checkoutToAdmin(alertTitle, confirmText, cancelText) {
+    const isDarkMode = document.body.classList.contains('dark-mode');
+    
     Swal.fire({
-        title: 'Kirim ke Admin?',
-        text: "Pesanan Anda akan ditinjau oleh Admin NaufaRu.",
+        title: alertTitle || 'Kirim ke Admin?',
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#4cd137',
-        confirmButtonText: 'Kirim Sekarang'
+        cancelButtonColor: '#666',
+        confirmButtonText: confirmText || 'Kirim Sekarang',
+        cancelButtonText: cancelText || 'Batal',
+        background: isDarkMode ? 'rgba(25, 25, 25, 0.98)' : '#ffffff',
+        color: isDarkMode ? '#ffffff' : '#222222',
+        customClass: {
+            popup: isDarkMode ? 'glass-card border border-secondary' : 'shadow-lg border-0 rounded-4'
+        }
     }).then((result) => {
         if (result.isConfirmed) {
             $.post('proses_buat_pesanan.php', function(response) {
-                const res = JSON.parse(response);
-                if(res.status === 'success') {
-                    Swal.fire('Terkirim!', res.message, 'success').then(() => {
-                        location.reload(); // Refresh untuk melihat status di riwayat
-                    });
+                try {
+                    const res = JSON.parse(response);
+                    if(res.status === 'success') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: res.message,
+                            timer: 2000,
+                            showConfirmButton: false
+                        }).then(() => {
+                            location.reload();
+                        });
+                    }
+                } catch(e) {
+                    location.reload();
                 }
             });
         }
     });
 }
+
+// Fungsi untuk testimonial member
+

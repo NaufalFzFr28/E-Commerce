@@ -1771,10 +1771,9 @@ body:not(.dark-mode) .text-white-adaptive {
     height: 42px;
     background: rgba(239, 76, 77, 0.1);
     color: #EF4C4D;
-    border: 1px solid rgba(239, 76, 77, 0.2);
     border-radius: 12px;
     text-decoration: none;
-    transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 0.50);
 }
 
 .btn-download-invoice:hover {
@@ -1793,4 +1792,49 @@ body:not(.dark-mode) .text-white-adaptive {
 /* Berikan lapisan yang lebih tinggi untuk modal/popup fitur terkunci agar selalu di atas */
 #featureLockedModal, .locked-feature-popup {
     z-index: 1060 !important; /* Di atas 1050 */
+}
+
+/* pembaruan testimoni */
+
+/* Style Seragam untuk Tombol Aksi di Tabel Riwayat */
+.btn-action-square {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: rgba(239, 76, 77, 0.15); /* Latar merah pastel */
+    color: #EF4C4D; /* Ikon merah gelap NaufaRu */
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    outline: none;
+}
+
+.btn-action-square:hover {
+    background: #EF4C4D;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(239, 76, 77, 0.3);
+}
+
+body.dark-mode .btn-action-square {
+    background: rgba(239, 76, 77, 0.2);
+}
+
+/* Style Khusus untuk Tombol yang Dinonaktifkan (Blocked) */
+.btn-download-invoice:disabled {
+    background: #e0e0e0 !important;
+    color: #999999 !important;
+    cursor: not-allowed !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Penyesuaian saat mode gelap aktif */
+body.dark-mode .btn-download-invoice:disabled {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: rgba(255, 255, 255, 0.3) !important;
 }

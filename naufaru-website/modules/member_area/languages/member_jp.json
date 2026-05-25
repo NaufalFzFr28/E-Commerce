@@ -57,5 +57,13 @@
   "label_order_time": "注文時刻",
   "lock_title": "機能制限中",
   "lock_desc": "データ変更リクエスト機能は現在無効になっているか、NaufaRu管理者の承認が必要です。",
-  "btn_close": "閉じる"
+  "btn_close": "閉じる",
+  "table_order_date": "注文日時",
+  "table_received_admin": "管理者受付",
+  "table_total_item": "アイテム合計",
+  "alert_success_title": "追加されました！",
+  "alert_success_desc": "商品はカートに追加されました！",
+  "alert_delete_title": "アイテムを削除しますか？",
+  "alert_delete_confirm": "はい、削除します",
+  "alert_delete_cancel": "キャンセル"
 }

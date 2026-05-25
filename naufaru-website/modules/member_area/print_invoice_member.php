@@ -15,13 +15,6 @@ $order = mysqli_fetch_assoc($query_order);
 
 if (!$order) { die("Invoice tidak ditemukan."); }
 
-/* |--------------------------------------------------------------------------
-| LOGIKA PENAMAAN & NOMOR INVOICE
-|--------------------------------------------------------------------------
-| 1. display_order_number: Dipakai untuk tampilan di dalam dokumen.
-| 2. filename_slug: Dipakai untuk nama file export agar rapi (Tanpa Spasi).
-*/
-
 // Cek apakah ada nomor invoice manual yang baru diinput atau sudah ada di DB
 $display_order_number = !empty($order['invoice_number']) ? $order['invoice_number'] : $order['order_number'];
 
@@ -93,18 +86,19 @@ $total_pages = count($chunked_items);
             width: 33.33%; border: 2px solid #EF4C4D; border-radius: 15px;
             background: #fff; text-align: center; font-size: 10pt; font-weight: bold;
             padding: 12px 5px; min-height: 40px; vertical-align: middle;
+            color: #333;
         }
 
         /* Tabel Produk */
         .product-table { width: 100%; border-collapse: collapse; margin-top: 30px; }
         .product-table th { background: #333; color: #fff; padding: 12px; font-size: 9pt; text-transform: uppercase; }
-        .product-table td { padding: 12px 10px; border-bottom: 1px solid #eee; font-size: 9pt; vertical-align: top; }
+        .product-table td { padding: 12px 10px; border-bottom: 1px solid #eee; font-size: 9pt; vertical-align: top; color: #333; }
 
         /* Summary Area */
         .summary-section { margin-top: 30px; display: flex; justify-content: space-between; }
         .left-notes { width: 55%; }
         .right-totals { width: 40%; text-align: center; }
-        .red-box { border: 1.5px solid #EF4C4D; border-radius: 12px; padding: 10px; margin-bottom: 10px; font-size: 8pt; line-height: 1.4; color: #444; }
+        .red-box { border: 1.5px solid #EF4C4D; border-radius: 12px; padding: 10px; margin-bottom: 10px; font-size: 8pt; line-height: 1.4; color: #444; background: #fff; }
         
         .stat-label { background: #333; color: #fff; padding: 8px; border-radius: 6px; font-size: 9pt; font-weight: bold; margin-top: 5px; }
         .stat-val { padding: 10px; font-size: 12pt; font-weight: bold; color: #000; margin-bottom: 5px; }
@@ -112,12 +106,10 @@ $total_pages = count($chunked_items);
         /* Signature */
         .signature-box { text-align: center; margin-top: 20px; }
         .ttd-image { width: 120px; margin: 10px auto; display: block; }
-        .owner-text { font-size: 10pt; font-weight: bold; }
+        .owner-text { font-size: 10pt; font-weight: bold; color: #333; }
 
-        /* Editable Feedback */
-        [contenteditable="true"] { cursor: text; outline: none; transition: 0.2s; }
-        [contenteditable="true"]:hover { background: rgba(239, 76, 77, 0.05); border-radius: 4px; }
-        [contenteditable="true"]:focus { background: rgba(239, 76, 77, 0.1); border-bottom: 1px dashed #EF4C4D; }
+        /* Kebal Gaya Preview (Ganti cursor pointer ke default karena teks terkunci) */
+        [contenteditable="false"] { cursor: default; outline: none; }
 
         @media print {
             body { background: white; margin: 0; }
@@ -130,11 +122,11 @@ $total_pages = count($chunked_items);
 <body>
 
     <div class="no-print-zone">
-        <p style="margin:0 0 12px 0; font-size: 13px; font-weight:900; letter-spacing:1px;">MODE EDIT AKTIF</p>
+        <p style="margin:0 0 12px 0; font-size: 12px; font-weight:900; letter-spacing:1px; text-transform: uppercase;">Pratinjau Invoice</p>
         <button class="btn-print" onclick="triggerPrint()">
             <i class="fas fa-print me-2"></i> SIMPAN PDF
         </button>
-        <p style="margin:12px 0 0 0; font-size: 10px; opacity: 0.9; line-height:1.4;">Silakan edit teks secara langsung sebelum mencetak.</p>
+        <p style="margin:12px 0 0 0; font-size: 10px; opacity: 0.9; line-height:1.4;">Tekan tombol di atas untuk mengunduh arsip fisik dokumen digital Anda.</p>
     </div>
 
     <?php foreach ($chunked_items as $index => $page_items) : 
@@ -156,9 +148,10 @@ $total_pages = count($chunked_items);
                     </thead>
                     <tbody>
                         <tr>
-                            <td class="info-box" contenteditable="true"><?= htmlspecialchars($order['nama_lengkap']) ?></td>
-                            <td class="info-box" contenteditable="true"><?= htmlspecialchars($order['alamat']) ?></td>
-                            <td class="info-box" contenteditable="true"><?= htmlspecialchars($display_order_number) ?></td>
+                            <!-- AMAN: Hak sunting teks dimatikan total bagi user level member -->
+                            <td class="info-box" contenteditable="false"><?= htmlspecialchars($order['nama_lengkap']) ?></td>
+                            <td class="info-box" contenteditable="false"><?= htmlspecialchars($order['alamat']) ?></td>
+                            <td class="info-box" contenteditable="false"><?= htmlspecialchars($display_order_number) ?></td>
                         </tr>
                     </tbody>
                 </table>
@@ -179,11 +172,11 @@ $total_pages = count($chunked_items);
                 <tbody>
                     <?php foreach ($page_items as $it) : ?>
                     <tr>
-                        <td contenteditable="true"><b><?= htmlspecialchars($it['product_name']) ?></b></td>
-                        <td align="center" contenteditable="true">Rp <?= number_format($it['price_at_order'], 0, ',', '.') ?></td>
-                        <td align="center" contenteditable="true"><?= $it['qty'] ?></td>
-                        <td align="right" contenteditable="true"><b>Rp <?= number_format(($it['qty'] * $it['price_at_order']), 0, ',', '.') ?></b></td>
-                        <td style="color:#666; font-style:italic;" contenteditable="true"><?= htmlspecialchars($it['catatan_item'] ?? '-') ?></td>
+                        <td contenteditable="false"><b><?= htmlspecialchars($it['product_name']) ?></b></td>
+                        <td align="center" contenteditable="false">Rp <?= number_format($it['price_at_order'], 0, ',', '.') ?></td>
+                        <td align="center" contenteditable="false"><?= $it['qty'] ?></td>
+                        <td align="right" contenteditable="false"><b>Rp <?= number_format(($it['qty'] * $it['price_at_order']), 0, ',', '.') ?></b></td>
+                        <td style="color:#666; font-style:italic;" contenteditable="false"><?= htmlspecialchars($it['catatan_item'] ?? '-') ?></td>
                     </tr>
                     <?php endforeach; ?>
                 </tbody>
@@ -192,27 +185,27 @@ $total_pages = count($chunked_items);
             <?php if ($is_last_page) : ?>
             <div class="summary-section">
                 <div class="left-notes">
-                    <div class="red-box" contenteditable="true">
+                    <div class="red-box" contenteditable="false">
                         TERIMA KASIH ATAS PESANAN ANDA. JANGAN LUPA MEMBERIKAN TESTIMONI DI GOOGLE MAPS KAMI.
                     </div>
-                    <div class="red-box" contenteditable="true">
+                    <div class="red-box" contenteditable="false">
                         BARANG YANG SUDAH DIBELI TIDAK DAPAT DIKEMBALIKAN / DITUKAR. HARAP MAKLUM.
                     </div>
                     <div style="font-size:9pt; margin-top:15px; border-left: 3px solid #EF4C4D; padding-left: 10px;">
                         <b>Catatan Khusus:</b><br>
-                        <span contenteditable="true"><?= (!empty($order['catatan']) ? nl2br(htmlspecialchars($order['catatan'])) : 'Tidak ada catatan tambahan.') ?></span>
+                        <span contenteditable="false"><?= (!empty($order['catatan']) ? nl2br(htmlspecialchars($order['catatan'])) : 'Tidak ada catatan tambahan.') ?></span>
                     </div>
                 </div>
 
                 <div class="right-totals">
                     <div class="stat-label">SUBTOTAL</div>
-                    <div class="stat-val" contenteditable="true">Rp <?= number_format($subtotal, 0, ',', '.') ?></div>
+                    <div class="stat-val" contenteditable="false">Rp <?= number_format($subtotal, 0, ',', '.') ?></div>
                     
                     <div class="stat-label">DISKON</div>
-                    <div class="stat-val" contenteditable="true">Rp <?= number_format($order['discount'], 0, ',', '.') ?></div>
+                    <div class="stat-val" contenteditable="false">Rp <?= number_format($order['discount'], 0, ',', '.') ?></div>
                     
                     <div class="stat-label" style="background:#EF4C4D">TOTAL AKHIR</div>
-                    <div class="stat-val" style="color:#EF4C4D; font-size:16pt" contenteditable="true">Rp <?= number_format($order['total_price'], 0, ',', '.') ?></div>
+                    <div class="stat-val" style="color:#EF4C4D; font-size:16pt" contenteditable="false">Rp <?= number_format($order['total_price'], 0, ',', '.') ?></div>
 
                     <div class="signature-box">
                         <p style="font-size:12pt; margin-bottom:5px;">Hormat Kami,</p>
@@ -229,20 +222,11 @@ $total_pages = count($chunked_items);
 </body>
 
 <script>
-    // Fungsi cetak yang lebih stabil
     function triggerPrint() {
-        // Opsional: Hilangkan focus dari elemen contenteditable sebelum print
         if (document.activeElement) {
             document.activeElement.blur();
         }
-        
-        // Picu perintah print browser
         window.print();
     }
-
-    // Menutup dropdown atau modal jika ada yang terbuka (opsional)
-    window.onafterprint = function() {
-        console.log("Proses cetak selesai atau dibatalkan.");
-    };
 </script>
 </html>

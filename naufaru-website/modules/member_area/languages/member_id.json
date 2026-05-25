@@ -57,5 +57,13 @@
   "label_order_time": "Waktu Order",
   "lock_title": "Fitur Terkunci",
   "lock_desc": "Fungsi pengajuan perubahan data saat ini sedang ditutup atau memerlukan verifikasi Admin NaufaRu.",
-  "btn_close": "Tutup"
+  "btn_close": "Tutup",
+  "table_order_date": "Tanggal Order",
+  "table_received_admin": "Diterima Admin",
+  "table_total_item": "Total Item",
+  "alert_success_title": "Berhasil Ditambahkan!",
+  "alert_success_desc": "Layanan berhasil dimasukkan ke dalam daftar Pesanan Saya.",
+  "alert_delete_title": "Hapus item?",
+  "alert_delete_confirm": "Ya, Hapus",
+  "alert_delete_cancel": "Batal"
 }

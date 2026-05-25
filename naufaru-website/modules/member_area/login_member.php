@@ -47,6 +47,19 @@ $translations = [
 ];
 
 $text = $translations[$lang];
+
+// --- TARIK DATA WALLPAPER AKTIF DARI DATABASE ---
+$wallpapers = [];
+$q_wall = mysqli_query($conn, "SELECT image_path FROM site_wallpaper WHERE is_active = 1 ORDER BY id ASC");
+if ($q_wall && mysqli_num_rows($q_wall) > 0) {
+    while ($row = mysqli_fetch_assoc($q_wall)) {
+        // Jalur relatif dari modules/member_area/ menuju folder assets utama
+        $wallpapers[] = "../../assets/imgs/" . $row['image_path'];
+    }
+} else {
+    // Fallback cadangan jikalau tabel data kosong
+    $wallpapers[] = "../../assets/imgs/bg-1.jpg";
+}
 ?>
 
 <!DOCTYPE html>
@@ -56,7 +69,8 @@ $text = $translations[$lang];
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>NaufaRu | Member Login</title>
     
-    <link rel="stylesheet" href="../../assets/vendors/bootstrap/css/bootstrap.min.css">
+    <!-- FIX UTAMA: Mengganti link lokal yang kosong ke CDN Bootstrap v5 Publik (Mencegah Error 404) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
@@ -76,13 +90,22 @@ $text = $translations[$lang];
             overflow: hidden;
         }
 
-        /* Perbaikan Background & Transisi */
-        .login-bg {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url('../../assets/imgs/bg-1.jpg');
+        /* HARD-FIX BACKDROP SLIDESHOW COMPONENT */
+        .login-bg-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; overflow: hidden;
+        }
+        
+        .login-bg-layer {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background-size: cover; background-position: center;
-            z-index: 1;
-            transition: transform 10s ease-in-out;
+            opacity: 0;
+            transform: scale(1);
+            transition: opacity 2s ease-in-out, transform 8s ease-in-out; /* Pergerakan zoom dan cross-fade lembut */
+        }
+
+        .login-bg-layer.active {
+            opacity: 1;
+            transform: scale(1.05); /* Memicu efek ken-burns skala mikro */
         }
         
         .overlay-dark {
@@ -96,7 +119,6 @@ $text = $translations[$lang];
             justify-content: center; align-items: center;
         }
 
-        /* Card Container */
         .login-card-member {
             background: rgba(20, 10, 10, 0.4);
             backdrop-filter: blur(25px);
@@ -118,14 +140,13 @@ $text = $translations[$lang];
             filter: drop-shadow(0 0 15px rgba(239, 76, 77, 0.3));
         }
 
-        /* Perbaikan Presisi Textbox */
         .form-group-custom {
             width: 100%;
             margin-bottom: 15px;
         }
 
         .login-input {
-            box-sizing: border-box; /* Kunci presisi lebar */
+            box-sizing: border-box;
             width: 100%; 
             background: rgba(255, 255, 255, 0.1) !important;
             border: 1px solid var(--glass-border) !important;
@@ -144,7 +165,6 @@ $text = $translations[$lang];
             box-shadow: 0 0 20px rgba(239, 76, 77, 0.2);
         }
 
-        /* Tombol Utama */
         .btn-member-action {
             box-sizing: border-box;
             width: 100%;
@@ -166,7 +186,6 @@ $text = $translations[$lang];
             box-shadow: 0 10px 25px rgba(239, 76, 77, 0.4);
         }
 
-        /* Footer & Link */
         .footer-text { font-size: 0.85rem; margin-top: 25px; opacity: 0.8; }
         .footer-link { color: var(--accent); font-weight: bold; text-decoration: none; transition: 0.3s; }
         .footer-link:hover { text-decoration: underline; color: white; }
@@ -181,7 +200,6 @@ $text = $translations[$lang];
         }
         .back-home:hover { color: white; }
 
-        /* Custom SweetAlert NaufaRu Style */
         .swal2-popup {
             background: rgba(25, 25, 25, 0.95) !important;
             backdrop-filter: blur(15px);
@@ -196,7 +214,13 @@ $text = $translations[$lang];
 </head>
 <body>
 
-    <div class="login-bg">
+    <!-- CONTAINER MULTI-LAYER BACKDROP BACKGROUND SLIDESHOW -->
+    <div class="login-bg-container">
+        <?php foreach ($wallpapers as $index => $imageUrl): ?>
+            <div class="login-bg-layer <?php echo $index === 0 ? 'active' : ''; ?>" 
+                 style="background-image: url('<?php echo htmlspecialchars($imageUrl); ?>');">
+            </div>
+        <?php endforeach; ?>
         <div class="overlay-dark"></div>
     </div>
 
@@ -240,10 +264,30 @@ $text = $translations[$lang];
 
     <script>
         $(document).ready(function() {
-            // Efek background zoom pelan
-            setTimeout(() => { $('.login-bg').css('transform', 'scale(1.1)'); }, 100);
+            // --- LOGIKA ANIMASI CROSS-FADE BACKGROUND SLIDESHOW ---
+            const layers = document.querySelectorAll('.login-bg-layer');
+            let currentLayerIndex = 0;
+            const changeInterval = 6000; // Interval pergantian gambar slideshow (6 detik)
 
-            // AJAX Login
+            function nextSlideBackground() {
+                if (layers.length <= 1) return;
+
+                // Hilangkan kelas aktif dari gambar saat ini
+                layers[currentLayerIndex].classList.remove('active');
+
+                // Geser ke urutan indeks gambar berikutnya
+                currentLayerIndex = (currentLayerIndex + 1) % layers.length;
+
+                // Picu transisi kemunculan gambar baru
+                layers[currentLayerIndex].classList.add('active');
+            }
+
+            // Jalankan perulangan otomatis jika total aset gambar aktif lebih dari satu
+            if (layers.length > 1) {
+                setInterval(nextSlideBackground, changeInterval);
+            }
+
+            // AJAX Login Form Submit Handler
             $('#memberLoginForm').on('submit', function(e) {
                 e.preventDefault();
                 $.ajax({
