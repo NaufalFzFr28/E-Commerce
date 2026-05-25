@@ -20,6 +20,7 @@
     "menu_home": "ホーム",
     "menu_about": "私について",
     "menu_service": "サービス",
+    "menu_team": "NaufaRuチーム",
     "menu_gallery_work": "作品ギャラリー",
     "menu_gallery_video": "ビデオギャラリー",
     "menu_testimonial": "お客様の声",
@@ -83,5 +84,17 @@
     "filter_flyer": "チラシとポスター",
     "filter_kalender": "カレンダー",
     "filter_sertifikat": "証明書",
-    "filter_lainnya": "その他"
+    "filter_lainnya": "その他",
+    "video_portfolio_subtitle": "ビデオギャラリー",
+    "video_portfolio_title": "あなたを魅了するビジュアル",
+    "video_portfolio_desc": "私の素晴らしいビデオポートフォリオをご覧ください。",
+    "team_subtitle": "クリエイティブ仲間",
+    "team_title": "NaufaRuチーム",
+    "team_desc": "マルチメディア分野のクリエイティブな仲間たちによってサポートされています。",
+    "team_history_title": "チームの歴史",
+    "team_history_text": "All Team of Hello Multimediaは、バンテン州南タンゲランのSMK Nusantara 1 Ciputatでの学生時代に結成されたクリエイティブグループです。当初、このグループは学校内外のさまざまなイベントを取材するドキュメンテーションチームとして特別に結成されました。時間が経つにつれて、特にメンバーがBedah Lapakと呼ばれる制作会社（PH）でフィールドワーク実習（PKL）を受けたときに、グループは成長し続けました。この経験を通じて、チームはさまざまな大規模なイベントで現場に直接飛び込むことで訓練と開発を続け、写真やビデオの編集スキルを一貫して向上させました。卒業後、彼らは同じ母校から新しい才能を採用し始めました。このステップは、Hello Multimediaのキャラクターを強化し、メディアパートナーとしてのリーチを拡大し、最終的にAll Team of Hello Multimediaという名前で正式に結成されるために取られました。このイニシアチブから、創設メンバーの1人がNaufaRuを設立しました。NaufaRuは、写真やビデオの編集、グラフィックデザイン、写真の分野での専門的なサービスプロバイダーです。その運営において、NaufaRuはAll Team of Hello Multimediaのメンバーをフリーランスの専門家として活用し、さまざまなプロジェクトやイベントを処理しています。",
+    "team_history_btn": "リンクへ移動",
+    "testi_subtitle": "お客様の声",
+    "testi_title": "私の作品についてのお客様の声",
+    "testi_desc": "お客様の満足は私のコミットメントの表れです。以下は彼らの正直なレビューです。"
 }

@@ -20,6 +20,7 @@
     "menu_home": "Home",
     "menu_about": "About",
     "menu_service": "Services",
+    "menu_team": "NaufaRu Team",
     "menu_gallery_work": "Works Gallery",
     "menu_gallery_video": "Video Gallery",
     "menu_testimonial": "Testimonials",
@@ -83,5 +84,17 @@
     "filter_flyer": "Flyer & Poster",
     "filter_kalender": "Calendar",
     "filter_sertifikat": "Certificate",
-    "filter_lainnya": "Others"
+    "filter_lainnya": "Others",
+    "video_portfolio_subtitle": "Video Gallery",
+    "video_portfolio_title": "Visuals That Amaze You",
+    "video_portfolio_desc": "Explore My Stunning Video Portfolio.",
+    "team_subtitle": "Creative Collaborator",
+    "team_title": "NaufaRu Team",
+    "team_desc": "Supported by creative peers in the multimedia field.",
+    "team_history_title": "Our Team History",
+    "team_history_text": "All Team of Hello Multimedia is a creative group formed during our school days at SMK Nusantara 1 Ciputat, South Tangerang, Banten. Initially, this group was specifically formed as a documentation team to cover various events, both inside and outside the school environment. Over time, the group continued to grow, especially when its members underwent Field Work Practice (PKL) at a Production House (PH) called Bedah Lapak. Through this experience, the team continued to train and develop by plunging directly into the field in various major events, and consistently improving their skills in photo and video editing. After graduating, they began recruiting new talents from the same alma mater. This step was taken to strengthen the character of Hello Multimedia, expand its reach as a media partner, until it was finally officially formed under the name All Team of Hello Multimedia. From this initiative, one of the founding members established NaufaRu, a professional service provider in photo and video editing, graphic design, and photography. In its operations, NaufaRu also empowers members of the All Team of Hello Multimedia as freelance professionals to handle various projects and events.",
+    "team_history_btn": "Visit Link",
+    "testi_subtitle": "Testimonials",
+    "testi_title": "What They Say About My Work",
+    "testi_desc": "Your satisfaction is a reflection of my commitment. Here are their honest reviews."
 }
