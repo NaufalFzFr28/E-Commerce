@@ -63,6 +63,20 @@
             font-family: inherit; /* Gunakan font yang sama dengan teks asli */
         }
 
+        /* Scrabmble Text Promo Section */
+        /* Pastikan warna teks judul promo murni putih saat diam/selesai */
+        #promo-section .scramble-text {
+            color: #ffffff !important;
+        }
+
+        /* Intervensi karakter acak (.dud) saat animasi scramble sedang berputar */
+        #promo-section .scramble-text .dud {
+            color: #cb1010 !important; /* Warna maroon gelap agar terlihat kontras di atas background merah */
+            font-weight: 900;
+            text-shadow: none; /* Hilangkan shadow terang jika ada */
+            opacity: 0.8;
+        }
+
         /* Reveal Effect */
         /* Keadaan awal elemen sebelum terlihat */
         .reveal {
@@ -1811,26 +1825,6 @@ body.dark-mode .glass-dropdown .dropdown-item:hover {
     transition: all 0.3s ease;
 }
 
-/* Styling Dasar Tombol (Mode Desktop) */
-#btn-load-more {
-    min-width: 280px; /* Menjaga agar tombol tidak terlalu kecil secara horizontal */
-    padding: 15px 40px;
-    font-size: 1rem;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px; /* Jarak antara icon dan teks */
-}
-
-#btn-load-more:hover {
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 10px 20px rgba(239, 76, 77, 0.3);
-}
-
 /* Penyesuaian untuk Mode Android/Mobile (max-width: 768px) */
 @media (max-width: 768px) {
     #btn-load-more {
@@ -1885,3 +1879,812 @@ body.dark-mode #modalCat {
     font-size: 0.75rem;
     opacity: 0.8;
 } 
+
+/* =========================================
+   LOAD MORE BUTTON MINI STYLE
+========================================= */
+
+.btn-load-more-mini {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    background: var(--accent);
+    color: #fff;
+
+    border: none;
+    border-radius: 999px;
+
+    padding: 12px 28px;
+    font-size: 0.95rem;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.3s cubic-bezier(0.2, 1, 0.3, 1),
+        box-shadow 0.3s ease,
+        background 0.3s ease;
+
+    box-shadow:
+        0 8px 20px rgba(239, 76, 77, 0.25);
+
+    position: relative;
+    overflow: hidden;
+}
+
+/* Hover Zoom Effect */
+.btn-load-more-mini:hover {
+    transform: scale(1.06);
+    box-shadow:
+        0 14px 28px rgba(239, 76, 77, 0.35);
+}
+
+/* Click Effect */
+.btn-load-more-mini:active {
+    transform: scale(0.96);
+}
+
+/* Icon Animation */
+.btn-load-more-mini i {
+    transition: transform 0.3s ease;
+}
+
+.btn-load-more-mini:hover i {
+    transform: rotate(90deg) scale(1.15);
+}
+
+/* Dark Mode */
+body.dark-mode .btn-load-more-mini {
+    background: linear-gradient(
+        135deg,
+        rgba(239, 76, 77, 0.95),
+        rgba(255, 90, 90, 0.95)
+    );
+
+    box-shadow:
+        0 10px 25px rgba(239, 76, 77, 0.25);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .btn-load-more-mini {
+        padding: 10px 22px;
+        font-size: 0.88rem;
+    }
+}
+
+/* ========================================= */
+/* UNIFIED LOAD MORE BUTTON */
+/* Portfolio Karya & Video */
+/* ========================================= */
+
+.btn-video-load-more {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    background: var(--accent);
+    color: #fff !important;
+
+    border: none;
+    border-radius: 999px;
+
+    padding: 12px 26px;
+    font-size: 0.95rem;
+    font-weight: 700;
+
+    box-shadow: 0 10px 25px rgba(239, 76, 77, 0.25);
+
+    transition:
+        transform 0.28s cubic-bezier(0.2, 1, 0.3, 1),
+        box-shadow 0.28s ease,
+        background 0.28s ease;
+
+    position: relative;
+    overflow: hidden;
+}
+
+/* Icon */
+.btn-video-load-more i {
+    font-size: 0.9rem;
+    transition: transform 0.3s ease;
+}
+
+/* Hover Effect */
+.btn-video-load-more:hover {
+    transform: scale(1.07);
+    box-shadow: 0 14px 35px rgba(239, 76, 77, 0.4);
+    background: #ff5c5d;
+}
+
+/* Hover Icon */
+.btn-video-load-more:hover i {
+    transform: rotate(90deg) scale(1.1);
+}
+
+/* Click Effect */
+.btn-video-load-more:active {
+    transform: scale(0.96);
+}
+
+/* Dark Mode */
+body.dark-mode .btn-video-load-more {
+    box-shadow: 0 12px 30px rgba(239, 76, 77, 0.18);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .btn-video-load-more {
+        padding: 10px 22px;
+        font-size: 0.88rem;
+    }
+}
+
+
+/* Portfolio Video Section */
+
+/* --- VARIABEL THEME ADAPTIF & PENGHALUSAN HOVER CARD --- */
+    .nfr-video-section-wrapper {
+        color: var(--text-color, #111111);
+        transition: color 0.3s ease;
+    }
+
+    .box-video-card {
+        background: var(--glass-bg, rgba(255, 255, 255, 0.03));
+        /* Stroke merah tipis semi transparan di sekeliling border kartu */
+        border: 1px solid rgba(239, 76, 77, 0.25) !important;
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        /* FIX: Transisi diperlambat menjadi 0.6s agar efek hover halus & tidak terlalu cepat */
+        transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), 
+                    border-color 0.6s ease-in-out, 
+                    box-shadow 0.6s ease-in-out;
+    }
+
+    .box-video-card:hover {
+        transform: translateY(-8px);
+        border-color: rgba(239, 76, 77, 0.8) !important;
+        box-shadow: 0 20px 40px rgba(239, 76, 77, 0.2);
+    }
+
+    .video-media-container-wrapper {
+        position: relative;
+        width: 100%;
+        padding-top: 56.25%; /* Aspek rasio sinematik 16:9 */
+        background: #000;
+        border-bottom: 1px solid rgba(239, 76, 77, 0.15);
+    }
+
+    .youtube-video-frame {
+        position: absolute;
+        top: 0; left: 0; bottom: 0; right: 0;
+        width: 100%; height: 100%;
+        border: none;
+    }
+
+    /* FIX WARNA TEKS MODE TERANG/GELAP: Dipetakan langsung ke variabel induk warna sistem */
+    .caption-video-content h4 {
+        font-size: 1.05rem;
+        font-weight: 700;
+        line-height: 1.4;
+        color: var(--text-color, #111111) !important;
+        margin-bottom: 10px;
+    }
+
+    .text-muted-kustom {
+        font-size: 0.85rem;
+        line-height: 1.6;
+        color: var(--text-color, #222222) !important;
+        opacity: 0.75;
+    }
+
+    .nfr-video-main-desc {
+        color: var(--text-color, #333333) !important;
+        opacity: 0.85;
+    }
+
+    /* --- SINKRONISASI DROPDOWN GLASS STYLE (ANTI-BENTROK) --- */
+    .video-custom-dropdown .dropdown-menu.glass-dropdown {
+        background: rgba(20, 20, 20, 0.92) !important;
+        backdrop-filter: blur(20px) !important;
+        -webkit-backdrop-filter: blur(20px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 12px;
+        padding: 6px;
+    }
+
+    .video-custom-dropdown .dropdown-item {
+        color: rgba(255, 255, 255, 0.8) !important;
+        font-size: 0.85rem;
+        padding: 10px 16px;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+    }
+
+    .video-custom-dropdown .dropdown-item:hover {
+        background: rgba(239, 76, 77, 0.15) !important;
+        color: #fff !important;
+        padding-left: 20px;
+    }
+
+    /* Pastikan teks di dalam card video mengikuti mode warna */
+    .box-video-card h4, 
+    .box-video-card p {
+        color: var(--text-color, #333) !important;
+    }
+
+    /* Efek Hover lebih smooth (0.6s) */
+    .box-video-card {
+        transition: transform 0.6s ease-in-out, box-shadow 0.6s ease-in-out !important;
+    }
+
+    /* Justify teks deskripsi */
+    .text-muted-kustom {
+        text-align: justify;
+        line-height: 1.6;
+    }
+
+    /* Penyesuaian mode gelap agar teks tetap putih */
+    body.dark-mode .box-video-card h4,
+    body.dark-mode .box-video-card p {
+        color: #ffffff !important;
+    }
+
+    /* ==============================================================
+   NAUFARU MODULE: MY TEAM PREMIUM STYLING (FLEX SYSTEM)
+   ============================================================== */
+
+.team-flex-container.centered-dynamic-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Memastikan baris pertama (5) dan baris kedua (4) otomatis rata tengah */
+    align-items: stretch;
+    gap: 20px;
+    width: 100%;
+    max-width: 1100px; /* Batasi lebar maksimal agar pas terbagi 5 kolom di desktop */
+    margin: 0 auto;
+}
+
+/* Kunci Utama Grid: Memaksa 5 Kolom per Baris di Layar Lebar Desktop */
+.team-premium-card.structural-5-col {
+    flex: 0 1 calc(20% - 20px); /* 100% / 5 kolom = 20% murni per kartu */
+    min-width: 160px;
+    max-width: 190px;
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.02);
+    /* Menggunakan batas tipis bawaan kaca jika tidak di-hover */
+    border: 1px solid rgba(255, 255, 255, 0.1); 
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUpTeam 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.team-card-inner-box {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+/* PERBAIKAN STROKE MODE TERANG / GELAP: Memberikan batas frame merah tegas sesuai contoh image_aecabd.jpg */
+.team-avatar-frame.image-stroke-active {
+    width: 100%;
+    height: 230px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+    overflow: hidden;
+    background: transparent;
+    /* Memberikan efek stroke merah tipis yang membungkus gambar */
+    border: 1.5px solid var(--accent) !important; 
+    border-radius: 16px;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+.team-img-png {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Dirubah ke cover agar frame melengkung merah terisi penuh & rapi */
+    transition: all 0.5s ease;
+}
+
+/* Overlay Teks Informasi Nama & Keahlian */
+.team-profile-info-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 15px 10px;
+    text-align: center;
+    background: linear-gradient(to top, rgba(0,0,0,0.92) 70%, transparent);
+    z-index: 5;
+    transform: translateY(100%);
+    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.team-member-name {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.team-member-role {
+    font-size: 0.7rem;
+    color: var(--accent);
+    margin-bottom: 0;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+/* INTERAKSI MIKRO HOVER EFFECTS */
+.team-premium-card.structural-5-col:hover {
+    transform: translateY(-6px);
+    border-color: var(--hover-grad-1);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(135deg, var(--hover-grad-2), rgba(0,0,0,0.5));
+}
+
+.team-premium-card.structural-5-col:hover .team-img-png {
+    transform: scale(1.05);
+}
+
+.team-premium-card.structural-5-col:hover .team-profile-info-overlay {
+    transform: translateY(0);
+}
+
+/* ==============================================================
+   RESPONSIVE LOGIC: ANDROID / MOBILE 2 GRID LAYOUT
+   ============================================================== */
+@media (max-width: 992px) {
+    .team-premium-card.structural-5-col {
+        /* Menyesuaikan menjadi 3 grid di tablet/medium screen */
+        flex: 1 1 calc(33.33% - 20px);
+        max-width: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .team-flex-container.centered-dynamic-grid {
+        gap: 15px;
+        padding: 0 10px;
+    }
+
+    .team-premium-card.structural-5-col {
+        /* Mengunci tampilan 2 grid per baris di handphone Android */
+        flex: 1 1 calc(50% - 15px);
+        max-width: none;
+        height: 240px;
+    }
+
+    /* Aturan Ganjil Android: Jika ganjil, item terakhir otomatis melebar penuh */
+    .team-premium-card.structural-5-col:last-child:nth-child(odd) {
+        flex: 1 1 100%;
+    }
+
+    .team-avatar-frame.image-stroke-active {
+        height: 100%;
+    }
+
+    .team-profile-info-overlay {
+        transform: translateY(0);
+        padding: 10px;
+        background: linear-gradient(to top, rgba(0,0,0,0.92) 50%, transparent);
+    }
+}
+
+@keyframes fadeInUpTeam {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* My Team Section */
+
+/* =========================================
+   STYLE TOMBOL LINGKARAN (HISTORY TEAM)
+========================================= */
+.btn-history-circle {
+    width: 55px; 
+    height: 55px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(10px);
+    outline: none;
+    margin-top: 15px; 
+    
+    /* Konfigurasi Light Mode (Default) */
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    color: rgba(0, 0, 0, 0.7);
+}
+
+/* Konfigurasi Dark Mode */
+body.dark-mode .btn-history-circle {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.history-arrow {
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.btn-history-circle:hover {
+    background: rgba(239, 76, 77, 0.1); 
+    border-color: #EF4C4D;
+    box-shadow: 0 0 20px rgba(239, 76, 77, 0.3);
+}
+
+.btn-history-circle:hover .history-arrow {
+    transform: translateX(6px); 
+    color: #EF4C4D; 
+}
+
+
+/* =========================================
+   STYLE CUSTOM MODAL & ANIMASI
+========================================= */
+.custom-modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 9999;
+    display: none; 
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.custom-modal-overlay.show {
+    opacity: 1;
+}
+
+.glass-modal-history {
+    width: 90%;
+    max-width: 1000px;
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border-radius: 24px;
+    padding: 40px;
+    position: relative;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+    
+    transform: scale(0.8) translateY(30px);
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    
+    /* Konfigurasi Light Mode (Default) */
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+body.dark-mode .glass-modal-history {
+    background: rgba(20, 20, 20, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.custom-modal-overlay.show .glass-modal-history {
+    transform: scale(1) translateY(0);
+}
+.custom-modal-overlay.hiding .glass-modal-history {
+    transform: scale(0.9) translateY(-15px);
+    opacity: 0;
+}
+
+/* =========================================
+   STYLE LOGO KOLABORASI
+========================================= */
+.modal-logo-collab-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px; /* Jarak antar logo dan ikon X */
+}
+
+.logo-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.collab-cross-icon {
+    font-size: 1rem;
+    color: rgba(0, 0, 0, 0.3); /* Light Mode */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body.dark-mode .collab-cross-icon {
+    color: rgba(255, 255, 255, 0.3); /* Dark Mode */
+}
+
+/* Penyesuaian Konten Teks untuk Mobile */
+.modal-scroll-content {
+    max-height: 50vh; 
+    overflow-y: auto;
+    padding-right: 15px; 
+    margin-bottom: 20px;
+}
+
+.modal-scroll-content::-webkit-scrollbar { width: 6px; }
+.modal-scroll-content::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.05); border-radius: 10px; }
+body.dark-mode .modal-scroll-content::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); }
+.modal-scroll-content::-webkit-scrollbar-thumb { background: rgba(239, 76, 77, 0.5); border-radius: 10px; }
+.modal-scroll-content::-webkit-scrollbar-thumb:hover { background: #EF4C4D; }
+
+.modal-text-history {
+    text-align: justify; 
+    font-size: 0.95rem; 
+    line-height: 1.8;
+    color: rgba(0, 0, 0, 0.8); 
+}
+body.dark-mode .modal-text-history { color: rgba(255, 255, 255, 0.8); }
+
+/* Tombol Close Modal */
+.btn-close-custom {
+    position: absolute;
+    top: 20px; right: 20px;
+    width: 35px; height: 35px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: 0.3s;
+    outline: none;
+    
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: #333;
+}
+body.dark-mode .btn-close-custom {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+}
+.btn-close-custom:hover {
+    background: #EF4C4D;
+    color: white;
+    border-color: #EF4C4D;
+    transform: rotate(90deg);
+}
+
+.border-top-custom { border-top: 1px solid rgba(0, 0, 0, 0.1); }
+body.dark-mode .border-top-custom { border-top: 1px solid rgba(255, 255, 255, 0.1); }
+
+.btn-glass-link {
+    display: inline-block;
+    padding: 12px 30px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+    
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    color: #333;
+}
+body.dark-mode .btn-glass-link {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: white;
+}
+.btn-glass-link:hover {
+    background: rgba(239, 76, 77, 0.15);
+    border-color: #EF4C4D;
+    color: #EF4C4D;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(239, 76, 77, 0.25);
+}
+
+body.dark-mode .logo-light-mode { display: none !important; }
+body.dark-mode .logo-dark-mode { display: inline-block !important; }
+
+/* Testimonial Section */
+
+/* =========================================
+   STYLE TESTIMONIAL & ALERT (style.css)
+========================================= */
+.alert-custom-green {
+    background-color: #EAF4D3; 
+    color: #556B2F;
+    border: 1px solid #D5E8B5;
+    border-radius: 8px;
+    padding: 15px 20px;
+}
+
+body.dark-mode .alert-custom-green {
+    background-color: rgba(46, 204, 113, 0.1);
+    color: #2ecc71;
+    border: 1px solid rgba(46, 204, 113, 0.2);
+}
+
+.btn-close-custom-alert {
+    background: none;
+    border: none;
+    color: inherit;
+    opacity: 0.5;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 1.2rem;
+}
+
+.btn-close-custom-alert:hover {
+    opacity: 1;
+}
+
+/* Card Testimoni */
+.testimonial-card {
+    background: #ffffff;
+    border: 1px solid #eaeaea;
+    border-radius: 12px;
+    padding: 40px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    margin: 10px; 
+    transition: all 0.3s ease;
+}
+
+body.dark-mode .testimonial-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+.testi-avatar-wrapper {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: 0 auto 25px auto;
+    padding: 3px;
+    background: linear-gradient(135deg, #EF4C4D, #ffb800); 
+}
+
+.testi-avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #fff;
+}
+
+body.dark-mode .testi-avatar { border-color: #1a1a1a; }
+
+.testi-text {
+    font-size: 0.95rem;
+    color: #555;
+    line-height: 1.8;
+    margin-bottom: 30px;
+    font-style: italic;
+}
+
+body.dark-mode .testi-text { color: rgba(255,255,255,0.75); }
+
+.testi-name {
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: #222;
+    margin-bottom: 5px;
+}
+
+body.dark-mode .testi-name { color: #fff; }
+
+.testi-job {
+    font-size: 0.8rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* =========================================
+   NAVIGASI SLIDER (PANAH & TITIK)
+========================================= */
+.custom-swiper-nav {
+    color: #EF4C4D !important;
+    opacity: 0.3; /* Tipis saat default */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+}
+
+.custom-swiper-nav:hover {
+    opacity: 1; /* Agak tebal saat di-hover */
+    transform: scale(1.15);
+}
+
+.custom-swiper-nav:active {
+    transform: scale(0.9); /* Animasi klik menggeser */
+}
+
+.custom-swiper-nav::after {
+    display: none; /* Hilangkan panah default bawaan Swiper */
+}
+
+/* Penyesuaian posisi panah agar menjorok keluar card */
+.swiper-button-prev.custom-swiper-nav { left: -50px; font-size: 2rem; }
+.swiper-button-next.custom-swiper-nav { right: -50px; font-size: 2rem; }
+
+.swiper-pagination-bullet {
+    background: #ccc !important;
+    opacity: 0.5;
+    transition: all 0.3s ease;
+}
+
+.swiper-pagination-bullet-active {
+    background: #EF4C4D !important;
+    opacity: 1;
+    transform: scale(1.3);
+}
+
+@media (max-width: 768px) {
+    .swiper-button-prev, .swiper-button-next { display: none; }
+    .testimonial-card { padding: 30px 20px; }
+}
+
+/* =========================================
+   PERBAIKAN POSISI TITIK NAVIGASI (DOTS)
+========================================= */
+
+/* 1. Beri ruang kosong di bawah kontainer swiper agar titik tidak menabrak card */
+.testimonialSwiper {
+    padding-bottom: 30px !important; 
+}
+
+/* 2. Paksa titik-titik navigasi untuk turun ke area kosong tersebut */
+.testimonialSwiper .swiper-pagination {
+    bottom: 0 !important; 
+}
+
+/* 3. (Opsional) Sesuaikan margin bawah card agar lebih rapi */
+.testimonial-card {
+    margin-bottom: 20px; 
+}
+
+/* Wrapper Foto Profil Testimoni */
+.testi-avatar-wrapper {
+    width: 85px; 
+    height: 85px;
+    border-radius: 50%;
+    margin: 0 auto 25px auto;
+    padding: 4px; /* Ruang untuk efek gradasi melingkar */
+    background: linear-gradient(135deg, #EF4C4D, #ffb800);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Foto Profil (Kunci Crop Persegi/Lingkaran) */
+.testi-avatar {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important; /* KUNCI UTAMA: Memotong gambar secara proporsional tanpa mengubah rasio asli */
+    object-position: center top !important; /* Fokus pemotongan di area tengah agak ke atas (wajah) */
+    border-radius: 50%;
+    border: 3px solid #fff;
+    display: block;
+}

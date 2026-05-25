@@ -434,227 +434,412 @@
         });
     });
     
-// === PORTFOLIO SECTION FINAL (WITH ANIMATION) ===
-$(document).ready(function() {
-    
-    // === 0. Manual Dropdown Trigger dengan Animasi ===
-    $(document).on('click', '.custom-dropdown .dropdown-toggle', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
+    // === PORTFOLIO SECTION FINAL (WITH ANIMATION) ===
+    $(document).ready(function() {
         
-        const parent = $(this).parent();
-        const menu = parent.find('.dropdown-menu');
-        
-        // Tutup dropdown lain dengan animasi fadeOut
-        $('.dropdown-menu').not(menu).removeClass('show');
-        $('.dropdown').not(parent).removeClass('show');
+        // === 0. Manual Dropdown Trigger dengan Animasi ===
+        $(document).on('click', '.custom-dropdown .dropdown-toggle', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const parent = $(this).parent();
+            const menu = parent.find('.dropdown-menu');
+            
+            // Tutup dropdown lain dengan animasi fadeOut
+            $('.dropdown-menu').not(menu).removeClass('show');
+            $('.dropdown').not(parent).removeClass('show');
 
-        // Toggle dropdown yang diklik
-        parent.toggleClass('show');
-        menu.toggleClass('show');
-    });
+            // Toggle dropdown yang diklik
+            parent.toggleClass('show');
+            menu.toggleClass('show');
+        });
 
-    // Tutup dropdown jika klik di luar area menu
-    $(document).on('click', function(e) {
-        if (!$(e.target).closest('.custom-dropdown').length) {
+        // Tutup dropdown jika klik di luar area menu
+        $(document).on('click', function(e) {
+            if (!$(e.target).closest('.custom-dropdown').length) {
+                $('.dropdown-menu, .dropdown').removeClass('show');
+            }
+        });
+
+        // === 1. Grid Switcher ===
+        $(document).on('click', '.grid-switcher', function(e) {
+            e.preventDefault();
+            const gridValue = $(this).data('grid');
+            const container = $('#portfolio-container-parent');
+            
+            // Beri animasi transisi saat grid berubah
+            container.fadeOut(200, function() {
+                container.find('.portfolio-item')
+                    .removeClass('col-lg-6 col-lg-4 col-lg-3')
+                    .addClass('col-lg-' + gridValue);
+                container.fadeIn(300);
+            });
+
+            // Update teks tombol
+            $(this).closest('.dropdown').find('.dropdown-toggle').html('<i class="fas fa-th-large me-2"></i>' + $(this).text());
             $('.dropdown-menu, .dropdown').removeClass('show');
-        }
+        });
+
+
+        // === 2. Filter Katalog ===
+        $(document).on('click', '.filter-portfolio-item', function(e) {
+            e.preventDefault();
+            const filter = $(this).data('filter');
+
+            $('.filter-portfolio-item').removeClass('active');
+            $(this).addClass('active');
+            
+            $('#filterDropdown').html('<i class="fas fa-filter me-2"></i>' + $(this).text());
+
+            if (filter === 'all') {
+                $('.portfolio-item').stop(true, true).fadeIn(400);
+            } else {
+                $('.portfolio-item').stop(true, true).hide();
+                $(`.portfolio-item[data-filter-type="${filter}"]`).stop(true, true).fadeIn(400);
+            }
+
+            $('.dropdown-menu, .dropdown').removeClass('show');
+        });
+
+        // === 3. Sorting Engine (Paten: Dinamis Multi-Bahasa) ===
+        $(document).on('click', '.sort-portfolio', function(e) {
+            e.preventDefault();
+            const $btn = $(this);
+            const container = $('#portfolio-container-parent');
+            const items = container.children('.portfolio-item').get();
+            const currentSort = $btn.data('sort');
+            
+            // AMBIL TEKS DARI ATRIBUT DATA (HASIL PHP JSON)
+            const txtNewest = $btn.attr('data-lang-newest');
+            const txtOldest = $btn.attr('data-lang-oldest');
+
+            $btn.css('pointer-events', 'none');
+
+            container.animate({ opacity: 0, marginTop: '-20px' }, 400, function() {
+                container.hide();
+
+                items.sort(function(a, b) {
+                    const keyA = parseInt($(a).data('id'));
+                    const keyB = parseInt($(b).data('id'));
+                    return (currentSort === 'newest') ? (keyA - keyB) : (keyB - keyA);
+                });
+
+                $.each(items, function(i, li) { container.append(li); });
+
+                // UPDATE TEKS BERDASARKAN BAHASA JSON
+                if (currentSort === 'newest') {
+                    $btn.data('sort', 'oldest').html('<i class="fas fa-sort-amount-down-alt me-2"></i>' + txtOldest);
+                } else {
+                    $btn.data('sort', 'newest').html('<i class="fas fa-sort-amount-down me-2"></i>' + txtNewest);
+                }
+
+                container.show().css('marginTop', '20px').animate({ opacity: 1, marginTop: '0px' }, 500, function() {
+                    $btn.css('pointer-events', 'auto');
+                });
+            });
+        });
+
+        // === 4. Modal Handlers (Tetap Paten) ===
+        $(document).on('click', '.close-modal, .portfolio-modal-overlay', function(e) {
+            if (e.target !== this && !$(e.target).hasClass('close-modal')) return;
+            closePortfolioDetail();
+        });
     });
 
-    // === 1. Grid Switcher ===
-    $(document).on('click', '.grid-switcher', function(e) {
-        e.preventDefault();
-        const gridValue = $(this).data('grid');
-        const container = $('#portfolio-container-parent');
+    /**
+     * 5. Global Functions (Show/Close Portfolio)
+     */
+    function showPortfolioDetail(data) {
+        $('#modalImg').attr('src', '').hide(); 
+        $('#modalTitle').text(data.title);
+        $('#modalCat').text(data.category); // Menampilkan kategori yang sudah diterjemahkan
+        $('#modalDesc').text(data.desc || 'No description available.');
+        $('#modalPrice').text(data.price);
         
-        // Beri animasi transisi saat grid berubah
+        // Update Teks Tombol Modal
+        $('#modalLink').text(data.btnText); 
+        
+        $('#modalImg').attr('src', data.img).on('load', function() { $(this).fadeIn(500); });
+        
+        if(data.link && data.link !== '#') $('#modalLink').attr('href', data.link).show();
+        else $('#modalLink').hide();
+        
+        $('#portfolioModal').css('display', 'flex').hide().fadeIn(300);
+        $('body').addClass('modal-open-blur');
+    }
+
+    function closePortfolioDetail() {
+        $('#portfolioModal').fadeOut(300, function() {
+            $(this).css('display', 'none');
+            $('body').removeClass('modal-open-blur');
+        });
+    }
+
+    // Opsional: Logika agar Alert tetap tertutup dalam satu sesi (Session Storage)
+    document.addEventListener('DOMContentLoaded', function() {
+        const alerts = document.querySelectorAll('.alert-naufaru');
+        
+        alerts.forEach((alert, index) => {
+            const alertId = "alert_closed_" + index; // Sederhana, bisa diganti dengan ID dari DB
+            
+            if (sessionStorage.getItem(alertId)) {
+                alert.style.display = 'none';
+            }
+
+            // PERBAIKAN UTAMA: Amankan tombol ke dalam variabel terlebih dahulu
+            const closeBtn = alert.querySelector('.btn-close-custom');
+            
+            // Jalankan listener HANYA JIKA tombol close ditemukan fisik di HTML
+            if (closeBtn) {
+                closeBtn.addEventListener('click', () => {
+                    sessionStorage.setItem(alertId, 'true');
+                });
+            }
+        });
+    });
+
+    // Cukup gunakan skrip ini jika ingin fungsi close bekerja standar tanpa menyimpan status 'hidden'
+    document.addEventListener('DOMContentLoaded', function() {
+        // Tidak ada sessionStorage.setItem di sini.
+        // Alert akan hilang saat di-klik (fungsi bawaan bootstrap), 
+        // tapi karena tidak disimpan di storage, saat refresh PHP akan merender ulang dari DB.
+        console.log("Alerts system ready. Data fetched from DB.");
+    });
+
+    // Close Button
+    document.addEventListener('DOMContentLoaded', function() {
+        // Menangani penutupan alert secara manual jika Bootstrap JS tidak termuat sempurna
+        const closeButtons = document.querySelectorAll('.btn-close-naufaru');
+        
+        closeButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const alertBox = this.parentElement;
+                alertBox.classList.remove('show');
+                setTimeout(() => {
+                    alertBox.remove();
+                }, 300);
+            });
+        });
+    });
+
+    // Load More - Galeri Karya (Foto)
+    $(document).ready(function() {
+        const itemsPerPage = 10; // Sesuaikan jumlah awal foto yang ingin ditampilkan (misal: 6)
+        let currentVisible = itemsPerPage;
+
+        function updateGalleryVisibility() {
+            // Ambil semua item yang tidak sedang disembunyikan oleh FILTER kategori
+            const filteredItems = $('.portfolio-item').filter(function() {
+                return $(this).css('display') !== 'none' || $(this).hasClass('d-none-load-more');
+            });
+
+            // Sembunyikan semua item terlebih dahulu dari sistem load more
+            filteredItems.addClass('d-none-load-more');
+
+            // Tampilkan hanya sebanyak currentVisible
+            filteredItems.slice(0, currentVisible).removeClass('d-none-load-more').addClass('animate-load-more');
+
+            // PERBAIKAN: Targetkan kontainer tombol yang benar di HTML Anda
+            if (currentVisible >= filteredItems.length) {
+                $('#video-load-more-btn-container').fadeOut(300); 
+            } else {
+                $('#video-load-more-btn-container').fadeIn(300);
+            }
+        }
+
+        // Inisialisasi awal saat refresh
+        updateGalleryVisibility();
+
+        // Event Klik Tombol Lihat Selengkapnya (Foto)
+        $('#btn-load-more').on('click', function(e) {
+            e.preventDefault();
+            currentVisible += itemsPerPage;
+            updateGalleryVisibility();
+        });
+
+        // SINKRONISASI DENGAN FILTER 
+        $(document).on('click', '.filter-portfolio-item', function() {
+            // Reset pandangan ke nilai awal setiap kali ganti filter kategori
+            currentVisible = itemsPerPage;
+            setTimeout(updateGalleryVisibility, 450); // Delay menunggu animasi fade filter selesai
+        });
+    });
+ 
+    // Portfolio Video Section
+
+    $(document).ready(function() {
+        // 2. EVENT FILTER URUTAN DATA (TERBARU <-> TERLAMA)
+        $(document).on('click', '#sort-video-portfolio-btn', function(e) {
+            e.preventDefault();
+            const $btn = $(this);
+            const parentContainer = $('#video-portfolio-parent-container');
+            const items = parentContainer.children('.video-portfolio-card-item').get();
+            const currentSort = $btn.attr('data-sort');
+            const iconSort = $('#sort-video-icon');
+            const textSort = $('#sort-video-text');
+
+            // Ambil string bahasa dari atribut data (sudah disiapkan oleh PHP tadi)
+            const txtNewest = $btn.attr('data-lang-newest');
+            const txtOldest = $btn.attr('data-lang-oldest');
+
+            if (!parentContainer.length || items.length === 0) return;
+
+            // Animasi transisi agar perubahan terasa "halus"
+            parentContainer.animate({ opacity: 0 }, 300, function() {
+                items.reverse();
+                parentContainer.empty().append(items);
+                
+                // Toggle state dan ubah teks ke bahasa Indonesia (sesuai data-lang)
+                if (currentSort === 'newest') {
+                    $btn.attr('data-sort', 'oldest');
+                    iconSort.removeClass('fa-sort-amount-down').addClass('fa-sort-amount-up');
+                    textSort.text(txtOldest); // Update ke bahasa yang sesuai
+                } else {
+                    $btn.attr('data-sort', 'newest');
+                    iconSort.removeClass('fa-sort-amount-up').addClass('fa-sort-amount-down');
+                    textSort.text(txtNewest); // Update ke bahasa yang sesuai
+                }
+                
+                parentContainer.animate({ opacity: 1 }, 300);
+            });
+        });
+
+        // 3. EVENT ACTION TOMBOL LIHAT SELENGKAPNYA (VIDEO)
+        $('#btn-video-load-more').on('click', function(e) {
+            e.preventDefault();
+            
+            // Tampilkan video secara bertahap atau langsung semua yang tersembunyi
+            const hiddenItems = $('.video-item-hidden-state');
+
+            if (hiddenItems.length) {
+                // Mengurangi atau langsung memunculkan item tersembunyi dengan efek smooth
+                hiddenItems.removeClass('d-none video-item-hidden-state')
+                        .addClass('animate__animated animate__fadeInUp');
+            }
+            
+            // Otomatis hilangkan tombol container karena semua konten video sudah termuat
+            $('#video-portfolio .text-center.mt-5').fadeOut(350);
+        });
+    });
+
+    // === 1B. Grid Switcher (KHUSUS VIDEO) ===
+    $(document).on('click', '.video-grid-switcher', function(e) {
+        e.preventDefault();
+        const gridValue = $(this).data('grid'); // 6 atau 4
+        const container = $('#video-portfolio-parent-container'); // Pastikan ID ini sesuai
+        
+        // Animasi transisi
         container.fadeOut(200, function() {
-            container.find('.portfolio-item')
-                .removeClass('col-lg-6 col-lg-4 col-lg-3')
-                .addClass('col-lg-' + gridValue);
+            container.find('.video-portfolio-card-item')
+                .removeClass('col-lg-6 col-lg-4') // Bersihkan kelas lama
+                .addClass('col-lg-' + gridValue);  // Pasang kelas baru
             container.fadeIn(300);
         });
 
         // Update teks tombol
-        $(this).closest('.dropdown').find('.dropdown-toggle').html('<i class="fas fa-th-large me-2"></i>' + $(this).text());
-        $('.dropdown-menu, .dropdown').removeClass('show');
-    });
-
-    // === 2. Filter Katalog ===
-    $(document).on('click', '.filter-portfolio-item', function(e) {
-        e.preventDefault();
-        const filter = $(this).data('filter');
-
-        $('.filter-portfolio-item').removeClass('active');
-        $(this).addClass('active');
+        $('#video-grid-label').text($(this).text());
         
-        $('#filterDropdown').html('<i class="fas fa-filter me-2"></i>' + $(this).text());
-
-        if (filter === 'all') {
-            $('.portfolio-item').stop(true, true).fadeIn(400);
-        } else {
-            $('.portfolio-item').stop(true, true).hide();
-            $(`.portfolio-item[data-filter-type="${filter}"]`).stop(true, true).fadeIn(400);
-        }
-
-        $('.dropdown-menu, .dropdown').removeClass('show');
+        // Menutup menu dropdown
+        $(this).closest('.dropdown').removeClass('show');
+        $(this).closest('.dropdown-menu').removeClass('show');
     });
 
-    // === 3. Sorting Engine (Paten: Dinamis Multi-Bahasa) ===
-    $(document).on('click', '.sort-portfolio', function(e) {
-        e.preventDefault();
-        const $btn = $(this);
-        const container = $('#portfolio-container-parent');
-        const items = container.children('.portfolio-item').get();
-        const currentSort = $btn.data('sort');
-        
-        // AMBIL TEKS DARI ATRIBUT DATA (HASIL PHP JSON)
-        const txtNewest = $btn.attr('data-lang-newest');
-        const txtOldest = $btn.attr('data-lang-oldest');
-
-        $btn.css('pointer-events', 'none');
-
-        container.animate({ opacity: 0, marginTop: '-20px' }, 400, function() {
-            container.hide();
-
-            items.sort(function(a, b) {
-                const keyA = parseInt($(a).data('id'));
-                const keyB = parseInt($(b).data('id'));
-                return (currentSort === 'newest') ? (keyA - keyB) : (keyB - keyA);
-            });
-
-            $.each(items, function(i, li) { container.append(li); });
-
-            // UPDATE TEKS BERDASARKAN BAHASA JSON
-            if (currentSort === 'newest') {
-                $btn.data('sort', 'oldest').html('<i class="fas fa-sort-amount-down-alt me-2"></i>' + txtOldest);
-            } else {
-                $btn.data('sort', 'newest').html('<i class="fas fa-sort-amount-down me-2"></i>' + txtNewest);
-            }
-
-            container.show().css('marginTop', '20px').animate({ opacity: 1, marginTop: '0px' }, 500, function() {
-                $btn.css('pointer-events', 'auto');
-            });
-        });
-    });
-
-    // === 4. Modal Handlers (Tetap Paten) ===
-    $(document).on('click', '.close-modal, .portfolio-modal-overlay', function(e) {
-        if (e.target !== this && !$(e.target).hasClass('close-modal')) return;
-        closePortfolioDetail();
-    });
-});
-
-/**
- * 5. Global Functions (Show/Close Portfolio)
+    /**
+ * File: modules/main_site/script.js
+ * Deskripsi: Skrip Penanganan Interaksi Mikro Sentuhan Komponen Team Mobile Android
  */
-function showPortfolioDetail(data) {
-    $('#modalImg').attr('src', '').hide(); 
-    $('#modalTitle').text(data.title);
-    $('#modalCat').text(data.category); // Menampilkan kategori yang sudah diterjemahkan
-    $('#modalDesc').text(data.desc || 'No description available.');
-    $('#modalPrice').text(data.price);
-    
-    // Update Teks Tombol Modal
-    $('#modalLink').text(data.btnText); 
-    
-    $('#modalImg').attr('src', data.img).on('load', function() { $(this).fadeIn(500); });
-    
-    if(data.link && data.link !== '#') $('#modalLink').attr('href', data.link).show();
-    else $('#modalLink').hide();
-    
-    $('#portfolioModal').css('display', 'flex').hide().fadeIn(300);
-    $('body').addClass('modal-open-blur');
-}
 
-function closePortfolioDetail() {
-    $('#portfolioModal').fadeOut(300, function() {
-        $(this).css('display', 'none');
-        $('body').removeClass('modal-open-blur');
-    });
-}
-
-// Opsional: Logika agar Alert tetap tertutup dalam satu sesi (Session Storage)
-document.addEventListener('DOMContentLoaded', function() {
-    const alerts = document.querySelectorAll('.alert-naufaru');
-    alerts.forEach((alert, index) => {
-        const alertId = "alert_closed_" + index; // Sederhana, bisa diganti dengan ID dari DB
-        if (sessionStorage.getItem(alertId)) {
-            alert.style.display = 'none';
-        }
-
-        alert.querySelector('.btn-close-custom').addEventListener('click', () => {
-            sessionStorage.setItem(alertId, 'true');
-        });
-    });
-});
-
-// Cukup gunakan skrip ini jika ingin fungsi close bekerja standar tanpa menyimpan status 'hidden'
-document.addEventListener('DOMContentLoaded', function() {
-    // Tidak ada sessionStorage.setItem di sini.
-    // Alert akan hilang saat di-klik (fungsi bawaan bootstrap), 
-    // tapi karena tidak disimpan di storage, saat refresh PHP akan merender ulang dari DB.
-    console.log("Alerts system ready. Data fetched from DB.");
-});
-
-// Close Button
-document.addEventListener('DOMContentLoaded', function() {
-    // Menangani penutupan alert secara manual jika Bootstrap JS tidak termuat sempurna
-    const closeButtons = document.querySelectorAll('.btn-close-naufaru');
-    
-    closeButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const alertBox = this.parentElement;
-            alertBox.classList.remove('show');
-            setTimeout(() => {
-                alertBox.remove();
-            }, 300);
-        });
-    });
-});
-
-// Load More
 $(document).ready(function() {
-    const itemsPerPage = 10;
-    let currentVisible = itemsPerPage;
-
-    function updateGalleryVisibility() {
-        // Ambil semua item yang tidak sedang disembunyikan oleh FILTER kategori
-        const filteredItems = $('.portfolio-item').filter(function() {
-            return $(this).css('display') !== 'none' || $(this).hasClass('d-none-load-more');
+    
+    // Deteksi jika pengguna membuka website melalui perangkat Touchscreen (Android/iOS)
+    if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+        
+        // Pemicu interaksi saat kartu tim di-tap/sentuh di Android
+        $('.team-premium-card').on('click', function(e) {
+            // Cek jika kartu yang diklik sudah memiliki state aktif
+            if ($(this).hasClass('mobile-touched')) {
+                // Jika ditekan kembali, biarkan aksi normal berjalan (lepas state)
+                $(this).removeClass('mobile-touched');
+            } else {
+                // Bersihkan seluruh status aktif dari kartu tim lainnya
+                $('.team-premium-card').removeClass('mobile-touched');
+                
+                // Berikan kelas aktif khusus sentuhan pada kartu yang sedang di-tap
+                $(this).addClass('mobile-touched');
+                
+                // Cegah penutupan instan akibat bubble event click
+                e.stopPropagation();
+            }
         });
 
-        // Sembunyikan semua item terlebih dahulu dari sistem load more
-        filteredItems.addClass('d-none-load-more');
-
-        // Tampilkan hanya sebanyak currentVisible
-        filteredItems.slice(0, currentVisible).removeClass('d-none-load-more').addClass('animate-load-more');
-
-        // Sembunyikan tombol jika item yang tersisa sudah habis
-        if (currentVisible >= filteredItems.length) {
-            $('#load-more-container').fadeOut();
-        } else {
-            $('#load-more-container').fadeIn();
-        }
+        // Hapus efek hover keluar jika kasir/pembeli menyentuh area luar kartu di screen
+        $(document).on('click', function() {
+            $('.team-premium-card').removeClass('mobile-touched');
+        });
     }
+});
 
-    // Inisialisasi awal saat refresh (Kembali ke 10)
-    updateGalleryVisibility();
+// My Team Section
 
-    // Event Klik Tombol Lihat Selengkapnya
-    $('#btn-load-more').on('click', function() {
-        currentVisible += itemsPerPage;
-        updateGalleryVisibility();
-    });
+// Membuka Modal Sejarah Tim
+function openHistoryModal() {
+    const modal = document.getElementById('customHistoryModal');
+    modal.style.display = 'flex';
+    
+    // Force reflow
+    void modal.offsetWidth; 
+    
+    modal.classList.add('show');
+    modal.classList.remove('hiding');
+    
+    // Kunci scroll halaman belakang
+    document.body.style.overflow = 'hidden';
+}
 
-    // SINKRONISASI DENGAN FILTER (Penting!)
-    // Update fungsi filter Anda yang sudah ada agar memanggil updateGalleryVisibility(true)
-    $(document).on('click', '.filter-portfolio-item', function() {
-        // ... (kode filter lama Anda) ...
-        
-        // Reset pandangan ke 10 setiap kali ganti filter
-        currentVisible = itemsPerPage;
-        setTimeout(updateGalleryVisibility, 450); // Delay sedikit menunggu animasi fade filter selesai
+// Menutup Modal Sejarah Tim
+function closeHistoryModal() {
+    const modal = document.getElementById('customHistoryModal');
+    modal.classList.remove('show');
+    modal.classList.add('hiding');
+    
+    // Sinkronisasi durasi transisi CSS (400ms)
+    setTimeout(() => {
+        modal.style.display = 'none';
+        modal.classList.remove('hiding');
+        document.body.style.overflow = 'auto'; 
+    }, 400);
+}
+
+// Menutup modal jika klik dilakukan pada area overlay luar
+window.addEventListener('click', function(e) {
+    const modal = document.getElementById('customHistoryModal');
+    if (e.target === modal) {
+        closeHistoryModal();
+    }
+});
+
+// Testimonial Section
+
+// Inisialisasi Slider (Tambahkan di script.js)
+document.addEventListener("DOMContentLoaded", function() {
+    const testimonialSwiper = new Swiper(".testimonialSwiper", {
+        slidesPerView: 1, 
+        spaceBetween: 30,
+        loop: true, 
+        autoplay: {
+            delay: 10000, // Geser otomatis setiap 10 detik
+            disableOnInteraction: false, 
+        },
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true, 
+        },
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+        effect: "slide", 
+        speed: 800, 
+        grabCursor: true // Memudahkan pengguna mobile menggeser layar
     });
 });
- 
