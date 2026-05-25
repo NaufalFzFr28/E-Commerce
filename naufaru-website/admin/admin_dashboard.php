@@ -48,7 +48,6 @@ $total_pending = $pending_data['total'] ?? 0;
             <a href="logout.php" class="nav-link logout-link"><i class="fas fa-sign-out-alt"></i> <span class="scramble-text" data-value="Logout">Logout</span></a>
         </nav>
     </aside>
-// test fal
     
     <main class="main-content">
         <div class="glass-card welcome-card">
