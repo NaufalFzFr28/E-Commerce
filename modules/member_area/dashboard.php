@@ -878,3 +878,9 @@ if (mysqli_num_rows($check_survey) === 0) {
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 </body>
 </html>
+<?php
+// ... (Biarkan seluruh kode dashboard bawaan kamu yang sudah ada tetap di atas) ...
+
+// Tambahkan kode ini di baris paling akhir file dashboard.php
+include '../../includes/footer.php';
+?>

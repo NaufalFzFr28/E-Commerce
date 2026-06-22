@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 22 Bulan Mei 2026 pada 08.53
+-- Waktu pembuatan: 08 Jun 2026 pada 14.42
 -- Versi server: 10.4.32-MariaDB
 -- Versi PHP: 8.2.12
 
@@ -40,7 +40,32 @@ CREATE TABLE `cart` (
 --
 
 INSERT INTO `cart` (`id`, `member_id`, `product_id`, `qty`, `created_at`) VALUES
-(22, 3, 8, 1, '2026-05-11 12:36:18');
+(25, 7, 10, 1, '2026-05-24 03:46:53'),
+(26, 7, 7, 1, '2026-05-24 03:46:56'),
+(27, 7, 11, 1, '2026-05-24 03:47:16'),
+(28, 7, 8, 1, '2026-05-24 03:47:21');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `member_surveys`
+--
+
+CREATE TABLE `member_surveys` (
+  `id` int(11) NOT NULL,
+  `member_id` int(11) NOT NULL,
+  `source_answer` varchar(100) NOT NULL,
+  `custom_answer` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `member_surveys`
+--
+
+INSERT INTO `member_surveys` (`id`, `member_id`, `source_answer`, `custom_answer`, `created_at`) VALUES
+(1, 3, 'Lainnya', 'gk tau', '2026-05-23 15:06:01'),
+(2, 7, 'Teman / Sahabat', '', '2026-05-24 03:25:45');
 
 -- --------------------------------------------------------
 
@@ -70,7 +95,7 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `order_number`, `invoice_number`, `invoice_date`, `member_id`, `guest_name`, `guest_address`, `total_price`, `discount`, `status`, `is_invoice`, `created_at`, `updated_at`, `catatan`) VALUES
-(1, 'NR-20260510-A976E', NULL, NULL, 3, NULL, NULL, 130000.00, 0.00, 'Pending', 0, '2026-05-10 13:59:43', '2026-05-12 08:02:44', NULL),
+(1, 'NR-20260510-A976E', 'NR-20260523-8168', '2026-05-23', 3, NULL, NULL, 130000.00, 0.00, 'Finished', 1, '2026-05-10 13:59:43', '2026-05-23 16:46:14', NULL),
 (2, 'NR-20260510-0EB43', '0007-20260516-6577', '2026-05-16', 3, NULL, NULL, 30000.00, 0.00, 'Finished', 1, '2026-05-10 14:20:16', '2026-05-16 11:55:50', NULL),
 (3, 'NR-20260510-948AE', '0002-2026-05-14', '2026-05-14', 3, NULL, NULL, 173000.00, 0.00, 'Finished', 1, '2026-05-10 14:48:18', '2026-05-14 15:21:08', ''),
 (4, 'NR-20260511-22966', '0001-2026-05-14', '2026-05-14', 3, NULL, NULL, 35000.00, 0.00, 'Finished', 1, '2026-05-11 07:28:47', '2026-05-14 07:53:19', NULL),
@@ -86,7 +111,12 @@ INSERT INTO `orders` (`id`, `order_number`, `invoice_number`, `invoice_date`, `m
 (16, 'ORD-1779029516', '0011-NR-20260517-1688', NULL, NULL, 'budi', 'ciledug', 50000.00, 15000.00, 'Finished', 0, '2026-05-17 14:51:56', '2026-05-17 14:51:56', 'tester'),
 (17, 'ORD-1779030050', 'INV-NR-20260517-7CFC', NULL, NULL, 'heru', 'bogor', 35000.00, 25000.00, 'Finished', 0, '2026-05-17 15:00:50', '2026-05-17 15:00:50', 'tes'),
 (18, 'ORD-1779030567', '0011-NR-20260517-CCAC', NULL, 3, NULL, NULL, 20000.00, 10000.00, 'Finished', 0, '2026-05-17 15:09:27', '2026-05-17 15:09:27', 'tes'),
-(19, 'ORD-1779079659', '0011-NR-20260518-5DE4', NULL, NULL, 'yudi', 'dimana aja', 58000.00, 25000.00, 'Finished', 0, '2026-05-18 04:47:39', '2026-05-18 04:47:39', 'cek n ricek');
+(19, 'ORD-1779079659', '0011-NR-20260518-5DE4', NULL, NULL, 'yudi', 'dimana aja', 58000.00, 25000.00, 'Finished', 0, '2026-05-18 04:47:39', '2026-05-18 04:47:39', 'cek n ricek'),
+(20, 'ORD-1779445072', '0012-NR-20260522-0390', NULL, NULL, 'yanto', 'papua', 20000.00, 10000.00, 'Finished', 0, '2026-05-22 10:17:52', '2026-05-22 10:17:52', 'mantab'),
+(21, 'ORD-1779445129', '0013-NR-20260522-EF42', NULL, 7, NULL, NULL, 25000.00, 5000.00, 'Finished', 0, '2026-05-22 10:18:49', '2026-05-22 10:18:49', 'oke'),
+(22, 'ORD-1779592943', '0014-NR-20260524-1BCA', NULL, NULL, 'aldi', 'aldi', 50000.00, 10000.00, 'Finished', 0, '2026-05-24 03:22:23', '2026-05-24 03:22:23', 'tester'),
+(23, 'ORD-1779593111', 'INV-NR-20260524-708B', NULL, 7, NULL, NULL, 30000.00, 5000.00, 'Finished', 0, '2026-05-24 03:25:11', '2026-05-24 03:25:11', 'nah'),
+(24, 'NR-20260524-7D160', 'NR-20260524-2582', '2026-05-24', 3, NULL, NULL, 160000.00, 20000.00, 'Finished', 1, '2026-05-24 03:58:51', '2026-05-24 04:00:53', 'okehh');
 
 -- --------------------------------------------------------
 
@@ -137,7 +167,14 @@ INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `qty`, `price_at_orde
 (30, 18, 8, 1, 30000.00, 'cek dulu'),
 (31, 19, 9, 1, 18000.00, 'yahaha'),
 (32, 19, 11, 1, 35000.00, 'ntabz'),
-(33, 19, 12, 1, 30000.00, 'lets go');
+(33, 19, 12, 1, 30000.00, 'lets go'),
+(34, 20, 12, 1, 30000.00, 'oke'),
+(35, 21, 7, 1, 30000.00, ''),
+(36, 22, 12, 1, 30000.00, 'tester'),
+(37, 22, 8, 1, 30000.00, 'cek'),
+(38, 23, 11, 1, 35000.00, 'nah'),
+(39, 24, 8, 3, 30000.00, 'okehh'),
+(40, 24, 7, 3, 30000.00, 'okehh');
 
 -- --------------------------------------------------------
 
@@ -178,6 +215,19 @@ CREATE TABLE `site_about` (
 
 INSERT INTO `site_about` (`id`, `img_front`, `img_back`, `about_title_id`, `about_title_en`, `about_title_jp`, `about_subtitle_id`, `about_subtitle_en`, `about_subtitle_jp`, `p1_id`, `p2_id`, `p3_id`, `p4_id`, `p5_id`, `p1_en`, `p2_en`, `p3_en`, `p4_en`, `p5_en`, `p1_jp`, `p2_jp`, `p3_jp`, `p4_jp`, `p5_jp`) VALUES
 (1, 'avatar-naufaru-1.jpg', 'avatar-naufaru-2.jpg', 'Naufal FzFr', 'Naufal FzFr', 'ナウファル (能法留)', 'Editor & Fotografer', 'Editor & Photographer', 'エディター、フォトグラファー', 'Assalamu’alaikum. Saya Naufal, atau nama kerennya “Naufal FzFr”. Saat ini, saya sedang menempuh pendidikan di program studi Teknik Informatika. Meskipun memiliki latar belakang di bidang editing seperti foto dan video, saya memutuskan untuk mengejar karier di dunia teknologi informasi yang penuh dengan tantangan pemrograman. Meskipun terbilang sulit, saya berusaha menjadikan pengalaman ini sebagai tambahan keterampilan baru.', 'Selain itu, saya juga memiliki pengalaman dalam pembuatan film pendek, pengeditan foto dan video, desain grafis, seni lukis kaligrafi Arab, dan lain-lain. Terkadang, saya juga mendapatkan panggilan sebagai fotografer atau kameramen dalam berbagai acara. Saya juga memiliki channel YouTube dengan nama “Naufal FzFr”. Meskipun awalnya bercita-cita menjadi seorang masinis, saya justru terjun ke dunia editing, yang kemudian berkembang ke bidang teknologi informasi.', 'Membangun sebuah usaha sendiri bukanlah hal yang mudah. Banyak tantangan yang saya hadapi seiring waktu dalam mengembangkan jasa fotografi. Perjalanan ini dimulai dari menyewa hingga meminjam peralatan, hingga akhirnya, alhamdulillah, sedikit demi sedikit saya mampu membeli perlengkapan yang cukup untuk membangun usaha ini. Setelah memiliki kamera DSLR, saya memberanikan diri untuk mendirikan jasa editor dan fotografi NaufaRu. Pada tanggal 25 Juli 2023, saya resmi menetapkan hari lahirnya jasa ini, yang bertepatan dengan pertama kalinya saya memasang layanan di Google Maps.', 'Mengapa memilih nama NaufaRu (sebelumnya bernama Naufal FzFr)? Sebagian orang merasa sulit melafalkan nama sebelumnya, sehingga saya menyederhanakannya agar lebih mudah diingat. Dalam bahasa Jepang, nama “Naufal” menjadi “Naufaru.” Saya memilih bahasa Jepang karena saya tertarik dengan nuansa dan karakteristik fotografi yang memiliki estetika khas ala Jepang.', 'Meskipun terkadang cukup melelahkan dan penuh tantangan, saya yakin bahwa dengan keikhlasan dan ketekunan, setiap usaha akan membawa berkah. Meskipun hasil karya saya mungkin belum sesuai ekspektasi, saya akan terus berlatih untuk menjadi lebih baik lagi. Saya memohon doa dari teman-teman agar saya dapat meraih kesuksesan dalam karier dan membahagiakan kedua orang tua. Semoga segala impian kita tercapai, termasuk salah satu impian saya untuk berkunjung ke Arab Saudi dan Jepang. Terima kasih. Wassalamu’alaikum.', 'Assalamu\'alaikum. My name is Naufal, or my cool name is \"Naufal FzFr.\" Currently, I am studying Informatics Engineering. Despite having a background in editing such as photo and video, I decided to pursue a career in the field of information technology, which is full of programming challenges. Although it is quite difficult, I am trying to make this experience a new skill.', 'In addition, I also have experience in making short films, editing photos and videos, graphic design, Arabic calligraphy, and others. Sometimes, I also get calls as a photographer or cameraman for various events. I also have a YouTube channel called \"Naufal FzFr.\" Although I initially aspired to be a train driver, I ended up in the world of editing, which then developed into the field of information technology.', 'Building my own business is not easy. I faced many challenges over time in developing photography services. This journey started from renting to borrowing equipment, until finally, alhamdulillah, little by little I was able to buy enough equipment to build this business. After owning a DSLR camera, I dared to establish the editor and photography service NaufaRu. On July 25, 2023, I officially set the birth of this service, which coincided with the first time I set up the service on Google Maps.', 'Why choose the name NaufaRu (previously named \"Naufal FzFr\")? Some people found it difficult to pronounce the previous name, so I simplified it to make it easier to remember. In Japanese, the name \"Naufal\" becomes \"Naufaru.\" I chose Japanese because I am interested in the nuances and characteristics of photography that have a unique Japanese aesthetic.', 'Although it is sometimes tiring and full of challenges, I am sure that with sincerity and perseverance, every effort will bring blessings. Even though my work may not yet meet expectations, I will continue to practice to be even better. I ask for prayers from my friends so that I can achieve success in my career and make my parents happy. May all our dreams come true, including one of my dreams to visit Saudi Arabia and Japan. Thank you. Wassalamu\'alaikum.', 'アッサラーム・アライクム（あなたの上に平安がありますように）。私の名前はナウファル、クールな名前は「Naufal FzFr」です。現在、情報技術工学の学部で学んでいます。 写真やビデオ編集のバックグラウンドがありますが、プログラミングの課題に満ちた情報技術の世界でキャリアを追求することを決めました。 これは難しいことですが、この経験を新しいスキルとして身につけようと努力しています。', 'それ以外にも、私は短編映画制作、写真やビデオ編集、グラフィックデザイン、アラビア語カリグラフィー、その他にも経験があります。 時々、さまざまなイベントでフォトグラファーやカメラマンとして呼ばれることもあります。また、「Naufal FzFr」という名のYouTubeチャンネルも持っています。最初は 機関士になることを夢見ていましたが、編集の世界に入り、その後情報技術の分野へと発展しました。', '自分自身のビジネスを築くことは簡単なことではありませんでした。写真サービスを開発する上で、時間とともに多くの課題に直面しました。この旅は 機材を借りたり、少しずつ買い揃えたりすることから始まり、最終的に、アルハムドゥリッラー（アッラーに感謝）、このビジネスを立ち上げるのに十分な機材を少しずつ購入することができました。一眼レフカメラを手に入れてから、 NaufaRuというエディターおよび写真サービスを立ち上げる勇気を出しました。2023年7月25日に、このサービスをGoogleマップに初めて登録した日に、正式に設立日と定めました。', 'なぜNaufaRu（以前は「Naufal FzFr」）という名前を選んだのですか？一部の人々は以前の名前を発音するのが難しいと感じていたので、 覚えやすいように簡素化しました。日本語では、「Naufal」という名前は「Naufaru」となります。日本語を選んだのは、日本の美学を持つ写真の雰囲気や特徴に興味があるからです。', '時には非常に疲れるし、多くの課題に満ちていますが、誠実さと忍耐があれば、どんな努力も祝福をもたらすと信じています。 私の作品はまだ期待通りではないかもしれませんが、私は常に向上するために練習し続けます。キャリアで成功し、両親を喜ばせることができるように、友人たちの祈りを お願いします。私たちのすべての夢が叶うことを願っています。サウジアラビアと日本を訪れるという私の夢も含まれています。 ありがとうございました。ワッサラーム・アライクム（そしてあなたの上に平安がありますように）。');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `site_bg_dark`
+--
+
+CREATE TABLE `site_bg_dark` (
+  `id` int(11) NOT NULL,
+  `image_path` varchar(255) NOT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -428,15 +478,17 @@ CREATE TABLE `site_settings` (
   `last_updated_event` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `last_updated_invoice` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `night_mode_default` tinyint(1) DEFAULT 0,
-  `portfolio_grid_desktop` int(1) DEFAULT 3
+  `portfolio_grid_desktop` int(1) DEFAULT 3,
+  `team_hover_color_1` varchar(20) DEFAULT '#EF4C4D',
+  `team_hover_color_2` varchar(20) DEFAULT '#f39c12'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `site_settings`
 --
 
-INSERT INTO `site_settings` (`id`, `site_name`, `last_updated_main`, `last_updated_cv`, `last_updated_event`, `last_updated_invoice`, `night_mode_default`, `portfolio_grid_desktop`) VALUES
-(1, 'NaufaRu', '2026-04-19 07:23:23', '2026-04-19 07:23:23', '2026-04-19 07:23:23', '2026-04-19 07:23:23', 0, 3);
+INSERT INTO `site_settings` (`id`, `site_name`, `last_updated_main`, `last_updated_cv`, `last_updated_event`, `last_updated_invoice`, `night_mode_default`, `portfolio_grid_desktop`, `team_hover_color_1`, `team_hover_color_2`) VALUES
+(1, 'NaufaRu', '2026-05-22 15:36:50', '2026-05-22 15:36:50', '2026-05-22 15:36:50', '2026-05-22 15:36:50', 0, 3, '#ef4c4d', '#f39c12');
 
 -- --------------------------------------------------------
 
@@ -484,6 +536,92 @@ CREATE TABLE `site_stats` (
 
 INSERT INTO `site_stats` (`id`, `subscribers`, `followers`, `orders`) VALUES
 (1, '675', '796', '150+');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `site_team`
+--
+
+CREATE TABLE `site_team` (
+  `id` int(11) NOT NULL,
+  `photo_path` varchar(255) NOT NULL,
+  `name_id` varchar(100) NOT NULL,
+  `name_en` varchar(100) NOT NULL,
+  `name_ja` varchar(100) NOT NULL,
+  `role_id` varchar(100) NOT NULL,
+  `role_en` varchar(100) NOT NULL,
+  `role_ja` varchar(100) NOT NULL,
+  `sort_order` int(11) DEFAULT 0,
+  `is_active` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `site_team`
+--
+
+INSERT INTO `site_team` (`id`, `photo_path`, `name_id`, `name_en`, `name_ja`, `role_id`, `role_en`, `role_ja`, `sort_order`, `is_active`, `created_at`) VALUES
+(4, 'team_e9fe8f3a1c.png', 'Naufal F. Firdaus', 'Naufal F. Firdaus', 'ナウファル・F・フィルダウス', 'Owner of NaufaRu & Lead of Hello Multimedia', 'Owner of NaufaRu & Lead of Hello Multimedia', '「NaufaRu」代表 兼「Hello Multimedia」リードディレクター', 1, 1, '2026-05-23 04:19:34'),
+(5, 'team_2cc7aa500b.png', 'Hanafi N. S. Wahid', 'Hanafi N. S. Wahid', 'ハナフィ・N・S・ワヒド', 'Social Media Specialist at Hello Multimedia', 'Social Media Specialist at Hello Multimedia', '「Hello Multimedia」コンテンツクリエイター', 2, 1, '2026-05-23 06:28:04'),
+(6, 'team_b36ba69301.png', 'Andri Saputra', 'Andri Saputra', 'アンドリ・サプトラ', 'Associate Photographer at Hello Multimedia', 'Associate Photographer at Hello Multimedia', '「Hello Multimedia」専属フォトグラファー', 3, 1, '2026-05-23 06:37:13'),
+(7, 'team_fcd9cd3856.png', 'Bahrudin Alfian', 'Bahrudin Alfian', 'バハルディン・アルフィアン', 'Aerial Videographer at Hello Multimedia', 'Aerial Videographer at Hello Multimedia', '「Hello Multimedia」空撮ビデオグラファー', 4, 1, '2026-05-23 06:39:46'),
+(8, 'team_7ba936a48f.png', 'Gilang D. Prasetya', 'Gilang D. Prasetya', 'ギラン・D・プラセティヤ', 'Videographer at Hello Multimedia', 'Videographer at Hello Multimedia', '「Hello Multimedia」ビデオグラファー', 5, 1, '2026-05-23 06:44:05'),
+(9, 'team_d9ef1c4f97.png', 'Dwiki Saputra', 'Dwiki Saputra', 'ドゥウィキ・サプトラ', '3D Artist at Hello Multimedia', '3D Artist at Hello Multimedia', '「Hello Multimedia」3Dアーティスト', 6, 1, '2026-05-23 06:45:38'),
+(10, 'team_c6b8b713ce.png', 'Hadid Abdillah AM.', 'Hadid Abdillah AM.', 'ハディッド・アブディラー・AM', 'Associate Photographer at Hello Multimedia', 'Associate Photographer at Hello Multimedia', '「Hello Multimedia」専属フォトグラファー', 7, 1, '2026-05-23 06:47:43'),
+(11, 'team_72eff9042f.png', 'Afriyan T. Prasetyo', 'Afriyan T. Prasetyo', 'アフリヤン・T・プラセティヤ', 'Production Assistant at Hello Multimedia', 'Production Assistant at Hello Multimedia', '「Hello Multimedia」プロダクションアシスタント', 8, 1, '2026-05-23 06:49:15'),
+(12, 'team_d40c1bc291.png', 'M. Fahri Rahmana', 'M. Fahri Rahmana', 'M・ファフリ・ラマナ', 'Multimedia Crew at Hello Multimedia', 'Multimedia Crew at Hello Multimedia', '「Hello Multimedia」照明＆特機技術スタッフ', 9, 1, '2026-05-23 06:55:04');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `site_testimonials`
+--
+
+CREATE TABLE `site_testimonials` (
+  `id` int(11) NOT NULL,
+  `order_id` int(11) DEFAULT NULL,
+  `member_id` int(11) DEFAULT NULL,
+  `manual_name` varchar(255) DEFAULT NULL,
+  `manual_photo` varchar(255) DEFAULT NULL,
+  `pekerjaan` varchar(100) NOT NULL,
+  `review_text` text NOT NULL,
+  `is_active` tinyint(1) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `site_testimonials`
+--
+
+INSERT INTO `site_testimonials` (`id`, `order_id`, `member_id`, `manual_name`, `manual_photo`, `pekerjaan`, `review_text`, `is_active`, `created_at`) VALUES
+(5, 24, 3, '', NULL, 'Pengusaha Ternak Lele', 'Desainnya bisa request, keren banget. Jangan ragu pesan disini ya.', 1, '2026-05-25 10:21:47'),
+(6, 6, 7, '', NULL, 'Guru Sekolah', 'Sangat berkualitas editing foto videonya. Semoga lancar usahanya :)', 1, '2026-05-25 10:23:12');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `site_testi_alerts`
+--
+
+CREATE TABLE `site_testi_alerts` (
+  `id` int(11) NOT NULL,
+  `text_id` text NOT NULL,
+  `text_en` text DEFAULT NULL,
+  `text_jp` text DEFAULT NULL,
+  `link_text_id` varchar(100) DEFAULT NULL,
+  `link_text_en` varchar(100) DEFAULT NULL,
+  `link_text_jp` varchar(100) DEFAULT NULL,
+  `link_url` varchar(255) DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `site_testi_alerts`
+--
+
+INSERT INTO `site_testi_alerts` (`id`, `text_id`, `text_en`, `text_jp`, `link_text_id`, `link_text_en`, `link_text_jp`, `link_url`, `is_active`) VALUES
+(2, 'Berikut review jujur para pelanggan saya.', 'Here are honest reviews from my customers.', 'これらは私の顧客からの正直なレビューです。', '', NULL, NULL, '', 1);
 
 -- --------------------------------------------------------
 
@@ -569,6 +707,7 @@ INSERT INTO `site_video_portfolio` (`id`, `video_url`, `title_id`, `title_en`, `
 CREATE TABLE `site_wallpaper` (
   `id` int(11) NOT NULL,
   `image_path` varchar(255) NOT NULL,
+  `theme_mode` varchar(10) NOT NULL DEFAULT 'all',
   `sort_order` int(11) DEFAULT 0,
   `is_active` tinyint(1) DEFAULT 1,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
@@ -578,10 +717,10 @@ CREATE TABLE `site_wallpaper` (
 -- Dumping data untuk tabel `site_wallpaper`
 --
 
-INSERT INTO `site_wallpaper` (`id`, `image_path`, `sort_order`, `is_active`, `created_at`) VALUES
-(1, 'bg-1.jpg', 1, 1, '2026-04-19 10:54:01'),
-(2, 'bg-2.jpg', 2, 1, '2026-04-19 10:54:01'),
-(3, 'bg-3.jpg', 3, 1, '2026-04-19 10:54:01');
+INSERT INTO `site_wallpaper` (`id`, `image_path`, `theme_mode`, `sort_order`, `is_active`, `created_at`) VALUES
+(1, 'splash_bg_1_8b3b65eb.jpg', 'all', 1, 1, '2026-04-19 10:54:01'),
+(2, 'splash_bg_2_0db7c935.jpg', 'all', 2, 1, '2026-04-19 10:54:01'),
+(3, 'splash_bg_3_72517c26.jpg', 'all', 3, 1, '2026-04-19 10:54:01');
 
 -- --------------------------------------------------------
 
@@ -616,6 +755,7 @@ CREATE TABLE `users_member` (
   `foto_profil` varchar(255) DEFAULT 'default-member.png',
   `no_hp` varchar(20) NOT NULL,
   `alamat` text NOT NULL,
+  `pekerjaan` varchar(100) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -623,9 +763,10 @@ CREATE TABLE `users_member` (
 -- Dumping data untuk tabel `users_member`
 --
 
-INSERT INTO `users_member` (`id`, `username`, `password`, `nama_lengkap`, `foto_profil`, `no_hp`, `alamat`, `created_at`) VALUES
-(3, 'Naufal', 'Naufal', 'Naufal FzFr', 'member_1777986554.jpg', '0895330141019', 'Ciputat', '2026-05-05 13:09:14'),
-(7, 'Syabila09', 'Syabila09', 'Syabila', 'member_1778773941.jpg', '081234567890', 'Sukabumi', '2026-05-14 15:52:21');
+INSERT INTO `users_member` (`id`, `username`, `password`, `nama_lengkap`, `foto_profil`, `no_hp`, `alamat`, `pekerjaan`, `created_at`) VALUES
+(3, 'Naufal', 'Naufal', 'Naufal FzFr', 'member_1777986554.jpg', '0895330141019', 'Ciputat', NULL, '2026-05-05 13:09:14'),
+(7, 'Syabila09', 'Syabila09', 'Syabila', 'member_1778773941.jpg', '081234567890', 'Sukabumi', NULL, '2026-05-14 15:52:21'),
+(18, 'tes', 'tes', 'Fulan', 'member_1779623228.png', '081234567890', 'Antartika', NULL, '2026-05-24 11:47:08');
 
 --
 -- Indexes for dumped tables
@@ -638,6 +779,13 @@ ALTER TABLE `cart`
   ADD PRIMARY KEY (`id`),
   ADD KEY `member_id` (`member_id`),
   ADD KEY `product_id` (`product_id`);
+
+--
+-- Indeks untuk tabel `member_surveys`
+--
+ALTER TABLE `member_surveys`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `member_id` (`member_id`);
 
 --
 -- Indeks untuk tabel `orders`
@@ -659,6 +807,12 @@ ALTER TABLE `order_items`
 -- Indeks untuk tabel `site_about`
 --
 ALTER TABLE `site_about`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeks untuk tabel `site_bg_dark`
+--
+ALTER TABLE `site_bg_dark`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -730,6 +884,25 @@ ALTER TABLE `site_stats`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indeks untuk tabel `site_team`
+--
+ALTER TABLE `site_team`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeks untuk tabel `site_testimonials`
+--
+ALTER TABLE `site_testimonials`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `order_id` (`order_id`);
+
+--
+-- Indeks untuk tabel `site_testi_alerts`
+--
+ALTER TABLE `site_testi_alerts`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indeks untuk tabel `site_users`
 --
 ALTER TABLE `site_users`
@@ -776,24 +949,36 @@ ALTER TABLE `users_member`
 -- AUTO_INCREMENT untuk tabel `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+
+--
+-- AUTO_INCREMENT untuk tabel `member_surveys`
+--
+ALTER TABLE `member_surveys`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT untuk tabel `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT untuk tabel `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT untuk tabel `site_about`
 --
 ALTER TABLE `site_about`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT untuk tabel `site_bg_dark`
+--
+ALTER TABLE `site_bg_dark`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
@@ -857,6 +1042,24 @@ ALTER TABLE `site_stats`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT untuk tabel `site_team`
+--
+ALTER TABLE `site_team`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT untuk tabel `site_testimonials`
+--
+ALTER TABLE `site_testimonials`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT untuk tabel `site_testi_alerts`
+--
+ALTER TABLE `site_testi_alerts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT untuk tabel `site_users`
 --
 ALTER TABLE `site_users`
@@ -878,7 +1081,7 @@ ALTER TABLE `site_video_portfolio`
 -- AUTO_INCREMENT untuk tabel `site_wallpaper`
 --
 ALTER TABLE `site_wallpaper`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT untuk tabel `users`
@@ -890,7 +1093,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT untuk tabel `users_member`
 --
 ALTER TABLE `users_member`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
@@ -902,6 +1105,12 @@ ALTER TABLE `users_member`
 ALTER TABLE `cart`
   ADD CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`member_id`) REFERENCES `users_member` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `cart_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `site_products_promo` (`id`) ON DELETE CASCADE;
+
+--
+-- Ketidakleluasaan untuk tabel `member_surveys`
+--
+ALTER TABLE `member_surveys`
+  ADD CONSTRAINT `member_surveys_ibfk_1` FOREIGN KEY (`member_id`) REFERENCES `users_member` (`id`) ON DELETE CASCADE;
 
 --
 -- Ketidakleluasaan untuk tabel `orders`
