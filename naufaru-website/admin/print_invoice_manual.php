@@ -239,7 +239,7 @@ $total_pages = count($chunked_items);
 
                 <div class="right-totals">
                     <div class="stat-label">SUBTOTAL ITEM</div>
-                    <div class="stat-val">Rp <?= number_format($subtotal, 0, ',', '.') ?></div>
+                    <div class="stat-val" contenteditable="true">Rp <?= number_format($subtotal, 0, ',', '.') ?></div>
                     
                     <div class="stat-label">POTONGAN DISKON</div>
                     <div class="stat-val" contenteditable="true">Rp <?= number_format($discount_final, 0, ',', '.') ?></div>
